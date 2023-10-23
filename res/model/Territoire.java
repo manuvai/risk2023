@@ -4,7 +4,11 @@ import java.util.List;
 
 public class Territoire {
     private String nom;
+<<<<<<< HEAD
    private List<Déploiement> unitésDéployées = new ArrayList<>(); // Nombre d'unités déployées sur le territoire
+=======
+   // private int unitésDéployées; // Nombre d'unités déployées sur le territoire
+>>>>>>> 6cf05247cc03dc88f73a3c88523806cabdb05fa8
     private List<Territoire> voisins = new ArrayList<>();
     private Joueur proprio; // Joueur propriétaire du territoire
     
