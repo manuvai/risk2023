@@ -22,6 +22,8 @@ public class Joueur {
     }
 
     public int calculerNbRenforts() {
+        // TODO Ajouter l'implémentation une fois la classe Territoire implémentée
+        
         return 0;
     }
 
