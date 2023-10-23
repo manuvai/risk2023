@@ -5,27 +5,62 @@
     !$included = %true()
 !endif
 
+<style>
+
+.Yifan {
+    BackgroundColor LightBlue
+}
+
+.Han {
+    BackgroundColor LightGreen
+}
+
+.Gauthier {
+    BackgroundColor LightYellow
+}
+
+.Fatima {
+    BackgroundColor LightPink
+}
+
+.Manu {
+    BackgroundColor LightGray
+}
+
+</style>
+
 package model {
-    class "CarteRisk" as Carte {
+    class "CarteRisk" as Carte <<Yifan>> {
         -member(TypePion, typePion)
         -member(Territoire, territoire)
     }
 
-    class Dé {
+    class Dé <<Manu>> {
         -int(valeur)
         +int("recupererValeur()")
         +void("lancerDé()")
     }
 
-    class Plateau {
-        
+    class Plateau <<Model>> <<Han>> {
+        -list(Continent, continents)
+        -list(Joueur, joueurs)
+        -member("Map<CarteRisk, Integer>", cartes)
+        +void("distribuerCartes()")
+        +void("initialiserParties()")
+        +list(Joueur, "getJoueurs()")
+        +member("Map<CarteRisk, Integer>", "getCartes()")
+        +void("enleverJoueur(Joueur)")
     }
 
-    class Continent {
-        
+    class Continent <<Han>> {
+        -string(nom)
+        -int(bonusRenforts)
+        -list(Territoire, territoires)
+        +list(Territoire, "getTerritoires()")
+        +int("getBonusTerritoires()")
     }
 
-    class Territoire {
+    class Territoire <<Fatima>> {
         -string(nom)
         -member("Déploiement", "unitésDéployées")
         +string("getNom()")
@@ -36,7 +71,7 @@ package model {
         +void("retirerRégiment(Pion, int)")
     }
 
-    class Joueur {
+    class Joueur <<Manu>> {
         -string(nom)
         -string(prenom) 
         -member("Map<CarteRisk, Integer>", cartes)
@@ -49,12 +84,12 @@ package model {
         +void("deplacerTroupes(Territoire, Territoire, int)")
     }
 
-    class Armée {
+    class Armée <<Manu>> {
         -string(couleur)
         -list(Pion, pions)
     }
 
-    class Pion {
+    class Pion <<Gauthier>> {
         -string(nomPion)
         -member(TypePion, typePion)
         +int("obtenirNbRégiment()")
@@ -64,20 +99,20 @@ package model {
     '     Le calcul du Nb de régiment sera fait
     ' end note
 
-    enum TypePion {
+    enum TypePion <<Gauthier>> {
         INFANTERIE
         CAVALERIE
         ARTILLERIE
     }
 
-    class Déploiement {
+    class Déploiement <<Fatima>> {
         -int("qtéDéployée")
         -member(Pion, "pionRattaché")
         +void("ajouterQuantité(int)")
         +void("retirerQuantité(int)")
     }
 
-    class Joker {
+    class Joker <<Yifan>> {
 
     }
     
@@ -98,6 +133,9 @@ package model {
     ' Infanterie -r-|> Pion
     ' Cavalerie -r-|> Pion
     ' Artillerie -r-|> Pion
+
+    Joueur "0..5" --o Plateau
+    Carte "0..30" --o Plateau
 
     Joker -l-|> Carte
 
