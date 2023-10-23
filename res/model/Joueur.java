@@ -1,53 +1,60 @@
 package res.model;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import res.model.exceptions.CanNotLaunchNegativeAmountOfDiceException;
+
+import java.util.*;
 
 public class Joueur {
     private String nom;
     private String prenom;
+    private Armee armee;
 
-    private List<Carte> cartes = new ArrayList<>();
+    private Map<Carte, Integer> cartes = new HashMap<>();
 
+    /**
+     * Génère un nombre donné de lancer de dés.
+     *
+     * @param nbDes
+     * @return
+     */
+    public List<De> lancerDes(int nbDes) {
+        if (nbDes < 0) {
+            throw new CanNotLaunchNegativeAmountOfDiceException();
+        }
+        List<De> desLances = new ArrayList<>();
+
+        for (int i = 0; i < nbDes; i++) {
+            De de = new De();
+            de.lancerDe();
+
+            desLances.add(de);
+        }
+
+        return desLances;
+    }
+
+    /**
+     * Calcule et renvoie le nombre de régiments de renforts censé être reçu
+     *
+     * @return
+     */
+    public int calculerNbRenforts() {
+        // TODO Ajouter l'implémentation une fois la classe Territoire implémentée
+
+        return 0;
+    }
+
+    /**
+     * Ajoute une nouvelle carte à ses cartes possédées
+     *
+     * @param carte
+     */
     public void ajouterCarte(Carte carte) {
         if (Objects.nonNull(carte)) {
-            cartes.add(carte);
+            cartes.computeIfAbsent(carte, carteKey -> cartes.put(carteKey, 0));
+
+            cartes.put(carte, cartes.get(carte) + 1);
         }
-    }
-
-    public void echangerCarte() {
-        // TODO Auto-generated constructor stub
-    }
-
-    public void distribuerRegiment(int nbRegiment) {
-        // TODO Auto-generated constructor stub
-    }
-
-    public void lancesLesDes(int nbDes) {
-        // TODO Auto-generated constructor stub
-    }
-
-    public void choisirNombreDeDesPourAttaque(int nbDesPourAttaque) {
-        // TODO Auto-generated constructor stub
-    }
-
-    public int getNbRegiments() {
-        return 0; // TODO Ajouter ensuite le calcul avec les territoires
-    }
-
-    public void modifierNbRegiment() {
-        // TODO
-    }
-
-    public List<Object> chercherTerritoire() {
-        // TODO Modifier le type de la liste à Territoire une fois complétée
-
-        return new ArrayList<>();
-    }
-
-    public void choixCouleur(String inCouleur) {
-        // TODO Implémenter
     }
 
 }
