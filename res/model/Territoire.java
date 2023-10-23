@@ -1,21 +1,20 @@
 package res.model;
 
+import res.model.exceptions.InvalidQuantityDeploymentException;
+import res.model.exceptions.UnpossessedTroupRemovalException;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Territoire {
     private String nom;
-<<<<<<< HEAD
    private List<Déploiement> unitésDéployées = new ArrayList<>(); // Nombre d'unités déployées sur le territoire
-=======
-   // private int unitésDéployées; // Nombre d'unités déployées sur le territoire
->>>>>>> 6cf05247cc03dc88f73a3c88523806cabdb05fa8
     private List<Territoire> voisins = new ArrayList<>();
     private Joueur proprio; // Joueur propriétaire du territoire
-    
 
     public Territoire(String nom) {
         this.nom = nom;
-        this.unitésDéployées = 0; // Initialement aucune unité déployée
     }
 
     // Getters et setters pour les attributs
@@ -25,11 +24,13 @@ public class Territoire {
 
 
     public int getNombreUnites() {
-        return unitésDéployées;
-    }
+        int nbUnites = 0;
 
-    public void setNombreUnites(int unitésDéployées) {
-        this.unitésDéployées = unitésDéployées;
+        for (Déploiement déploiement : unitésDéployées) {
+            nbUnites += déploiement.getQtéDéployée();
+        }
+
+        return nbUnites;
     }
 
     public List<Territoire> getVoisins() {
@@ -47,104 +48,68 @@ public class Territoire {
     public Joueur getProprietaire() {
         return proprio;
     }
-    
 
-
-
+    /**
+     * Ajoute des régiments déployés sur le territoire en question
+     *
+     * @param pionsToAdd
+     * @param qtyToAdd
+     */
     public void ajouterRegiment(Pion pionsToAdd, int qtyToAdd) {
-         List<Pion> listeUnites;
-            if (qtyToAdd > 0) {
-                for (int i = 0; i < qtyToAdd; i++) {
-                    listeUnites.add(pionsToAdd);
-                }
-                System.out.println(qtyToAdd + " pions ajoutés au régiment avec succès.");
-            } else {
-                System.out.println("La quantité à ajouter doit être supérieure à zéro.");
-            }
+        List<Pion> listeUnites = new ArrayList<>();
+
+        if (qtyToAdd <= 0) {
+            throw new InvalidQuantityDeploymentException();
         }
 
+        Déploiement déploiement = unitésDéployées.parallelStream()
+                .filter(déploiementFilter -> déploiementFilter.getPionRattachee().equals(pionsToAdd))
+                .findFirst()
+                .orElse(null);
 
-public void retirerRegiment(Pion pionsToRemove, int qtyToRemove) {
-    if (qtyToRemove > 0) {
-        int removedCount = 0;
-        Iterator<Pion> iterator = listeUnites.iterator();
-        while (iterator.hasNext() && removedCount < qtyToRemove) {
-            Pion pion = iterator.next();
-            if (pion.equals(pionsToRemove)) {
-                iterator.remove();
-                removedCount++;
-            }
+        if (Objects.isNull(déploiement)) {
+            déploiement = new Déploiement(pionsToAdd);
         }
+        déploiement.ajouterQuantites(qtyToAdd);
 
-        if (removedCount > 0) {
-            System.out.println(removedCount + " pions retirés du régiment avec succès.");
-        } else {
-            System.out.println("Aucun pion correspondant à retirer trouvé.");
-        }
-    } else {
-        System.out.println("La quantité à retirer doit être supérieure à zéro.");
-    }
-}
-
-    /*
-    public void ajouterRegiment(List<Pion> pions, int nombreUnites) {
-        if (nombreUnites <= 0) {
-            // Vérifiez que le nombre d'unités à ajouter est valide.
-            System.out.println("Le nombre d'unités à ajouter doit être supérieur à zéro.");
-            return;
-        }
-        
-        if (pions.size() >= nombreUnites) {
-            // S'il y a suffisamment de pions, ajoutez-les au territoire.
-            for (int i = 0; i < nombreUnites; i++) {
-                Pion pion = pions.remove(0);
-                // Ici, vous pouvez effectuer des opérations pour ajouter le pion au territoire,
-                // par exemple, en ajoutant le pion à une liste d'unités sur le territoire.
-            }
-            System.out.println("Régiment ajouté avec succès !");
-        } else {
-            // Gérez le cas où il n'y a pas suffisamment de pions.
-            System.out.println("Pas assez de pions pour former un régiment.");
+        if (!unitésDéployées.contains(déploiement)) {
+            unitésDéployées.add(déploiement);
         }
     }
 
+    /**
+     * Retire des régiments déployés sur le territoire en question
+     *
+     * @param pionsToRemove
+     * @param qtyToRemove
+     */
+    public void retirerRegiment(Pion pionsToRemove, int qtyToRemove) {
 
-    
-    public void retirerRegiment(List<Pion> pions, int nombreUnites) {
-        if (nombreUnites <= 0) {
-            // Vérifiez que le nombre d'unités à retirer est valide.
-            System.out.println("Le nombre d'unités à retirer doit être supérieur à zéro.");
-            return;
+        if (qtyToRemove <= 0) {
+            throw new InvalidQuantityDeploymentException();
         }
-        
-        if (nombreUnites <= nombreUnites) {
-            // Vérifiez que le nombre d'unités à retirer est inférieur ou égal au nombre d'unités sur le territoire.
-            if (nombreUnites > this.nombreUnites) {
-                System.out.println("Le nombre d'unités à retirer est supérieur au nombre d'unités sur le territoire.");
-                return;
-            }
 
-            for (int i = 0; i < nombreUnites; i++) {
-                String listeUnites;
-				// Obtenez le pion du territoire, par exemple, en supprimant le premier pion de la liste d'unités sur le territoire.
-                if (!listeUnites.isEmpty()) {
-                    Pion pion = listeUnites.remove(0);
-                    // Effectuez des opérations pour retirer le pion du territoire, par exemple, en le stockant dans une liste de pions disponibles.
-                    pions.add(pion);
-                } else {
-                    // Gérez le cas où il n'y a plus de pions à retirer
-                    System.out.println("Il n'y a plus de pions à retirer.");
-                    break;
-                }
-            }
-            System.out.println("Régiment retiré avec succès !");
-        } else {
-            // Gérez le cas où le nombre d'unités à retirer n'est pas valide
-            System.out.println("Le nombre d'unités à retirer n'est pas valide.");
+        Déploiement déploiement = unitésDéployées.parallelStream()
+                .filter(déploiementFilter -> déploiementFilter.getPionRattachee().equals(pionsToRemove))
+                .findFirst()
+                .orElse(null);
+
+        if (Objects.isNull(déploiement)) {
+            throw new UnpossessedTroupRemovalException();
         }
+
+        déploiement.retirerQuantites(qtyToRemove);
     }
 
-*/
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Territoire that)) return false;
+        return Objects.equals(getNom(), that.getNom());
+    }
 
-    
+    @Override
+    public int hashCode() {
+        return Objects.hash(getNom());
+    }
 }

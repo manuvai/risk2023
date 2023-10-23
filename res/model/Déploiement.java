@@ -1,11 +1,13 @@
 package res.model;
 
 
-public class Deploiement {
+import res.model.exceptions.InvalidQuantityDeploymentException;
+
+public class Déploiement {
     private int qtéDéployée;
     private Pion pionRattachee;
 
-    public Deploiement(Pion pionRattachee) {
+    public Déploiement(Pion pionRattachee) {
         this.qtéDéployée = 0; // Initialement, aucune quantité déployée
         this.pionRattachee = pionRattachee;
     }
@@ -19,18 +21,16 @@ public class Deploiement {
     }
 
     public void ajouterQuantites(int quantite) {
-        if (quantite > 0) {
-            qtéDéployée += quantite;
-        } else {
-            System.out.println("La quantité à ajouter doit être supérieure à zéro.");
+        if (quantite <= 0) {
+            throw new InvalidQuantityDeploymentException();
         }
+        qtéDéployée += quantite;
     }
 
     public void retirerQuantites(int quantite) {
-        if (quantite > 0 && qtéDéployée >= quantite) {
-            qtéDéployée -= quantite;
-        } else {
-            System.out.println("La quantité à retirer n'est pas valide.");
+        if (quantite <= 0 || qtéDéployée < quantite) {
+            throw new InvalidQuantityDeploymentException();
         }
+        qtéDéployée -= quantite;
     }
 }
