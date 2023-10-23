@@ -63,6 +63,29 @@ public class Territoire {
             }
         }
 
+
+public void retirerRegiment(Pion pionsToRemove, int qtyToRemove) {
+    if (qtyToRemove > 0) {
+        int removedCount = 0;
+        Iterator<Pion> iterator = listeUnites.iterator();
+        while (iterator.hasNext() && removedCount < qtyToRemove) {
+            Pion pion = iterator.next();
+            if (pion.equals(pionsToRemove)) {
+                iterator.remove();
+                removedCount++;
+            }
+        }
+
+        if (removedCount > 0) {
+            System.out.println(removedCount + " pions retirés du régiment avec succès.");
+        } else {
+            System.out.println("Aucun pion correspondant à retirer trouvé.");
+        }
+    } else {
+        System.out.println("La quantité à retirer doit être supérieure à zéro.");
+    }
+}
+
     /*
     public void ajouterRegiment(List<Pion> pions, int nombreUnites) {
         if (nombreUnites <= 0) {
