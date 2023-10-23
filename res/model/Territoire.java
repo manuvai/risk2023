@@ -51,18 +51,6 @@ public class Territoire {
 
 
 
-    public void ajouterRegiment(Pion pionsToAdd, int qtyToAdd) {
-         List<Pion> listeUnites;
-            if (qtyToAdd > 0) {
-                for (int i = 0; i < qtyToAdd; i++) {
-                    listeUnites.add(pionsToAdd);
-                }
-                System.out.println(qtyToAdd + " pions ajoutés au régiment avec succès.");
-            } else {
-                System.out.println("La quantité à ajouter doit être supérieure à zéro.");
-            }
-        }
-
 
 public void retirerRegiment(Pion pionsToRemove, int qtyToRemove) {
     if (qtyToRemove > 0) {
