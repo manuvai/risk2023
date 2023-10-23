@@ -1,5 +1,5 @@
 package res.model;
 
-public class Armée {
+public class Armee {
     private String couleur;
 }
