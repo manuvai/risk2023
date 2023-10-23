@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Territoire {
     private String nom;
-    private int unitésDéployées; // Nombre d'unités déployées sur le territoire
+   private List<Déploiement> unitésDéployées = new ArrayList<>(); // Nombre d'unités déployées sur le territoire
     private List<Territoire> voisins = new ArrayList<>();
     private Joueur proprio; // Joueur propriétaire du territoire
     
@@ -44,6 +44,22 @@ public class Territoire {
         return proprio;
     }
     
+
+
+
+    public void ajouterRegiment(Pion pionsToAdd, int qtyToAdd) {
+         List<Pion> listeUnites;
+            if (qtyToAdd > 0) {
+                for (int i = 0; i < qtyToAdd; i++) {
+                    listeUnites.add(pionsToAdd);
+                }
+                System.out.println(qtyToAdd + " pions ajoutés au régiment avec succès.");
+            } else {
+                System.out.println("La quantité à ajouter doit être supérieure à zéro.");
+            }
+        }
+
+    /*
     public void ajouterRegiment(List<Pion> pions, int nombreUnites) {
         if (nombreUnites <= 0) {
             // Vérifiez que le nombre d'unités à ajouter est valide.
@@ -101,6 +117,7 @@ public class Territoire {
         }
     }
 
+*/
 
     
 }
