@@ -1,0 +1,12 @@
+
+!if (%not($included == %true()))
+    !include lib.iuml
+
+    !$included = %true()
+!endif
+
+package controler {
+    class Tour {
+        
+    }
+}
