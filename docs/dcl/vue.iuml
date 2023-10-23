@@ -1,0 +1,9 @@
+!if (%not($included == %true()))
+    !includeurl https://raw.githubusercontent.com/manuvai/plantuml-utils/master/class_diagram_utils.puml
+    !$included = %true()
+!endif
+
+package vue {
+    
+}
+

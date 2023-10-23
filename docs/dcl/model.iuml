@@ -1,0 +1,110 @@
+
+!if (%not($included == %true()))
+    !include lib.iuml
+
+    !$included = %true()
+!endif
+
+package model {
+    class "CarteRisk" as Carte {
+        -member(TypePion, typePion)
+        -member(Territoire, territoire)
+    }
+
+    class Dé {
+        -int(valeur)
+        +int("recupererValeur()")
+        +void("lancerDé()")
+    }
+
+    class Plateau {
+        
+    }
+
+    class Continent {
+        
+    }
+
+    class Territoire {
+        -string(nom)
+        -member("Déploiement", "unitésDéployées")
+        +string("getNom()")
+        +list(Territoire, "getVoisins()")
+        +boolean("estVoisin(Territoire)")
+        +member(Joueur, "getPropriétaire()")
+        +void("ajouterRégiment(Pion, int)")
+        +void("retirerRégiment(Pion, int)")
+    }
+
+    class Joueur {
+        -string(nom)
+        -string(prenom) 
+        -member("Map<CarteRisk, Integer>", cartes)
+        +list("Dé", "lancerDés(int)")
+        +int("calculerNbRenforts()")
+        +list(Territoire, "obtenirTerritoires()")
+        +void("ajouterCarte(CarteRisk)")
+        +void("échangerCartes(List<CarteRisk>)")
+        +void("attaquer(Territoire, Territoire, int)")
+        +void("deplacerTroupes(Territoire, Territoire, int)")
+    }
+
+    class Armée {
+        -string(couleur)
+        -list(Pion, pions)
+    }
+
+    class Pion {
+        -string(nomPion)
+        -member(TypePion, typePion)
+        +int("obtenirNbRégiment()")
+    }
+
+    ' note over Pion
+    '     Le calcul du Nb de régiment sera fait
+    ' end note
+
+    enum TypePion {
+        INFANTERIE
+        CAVALERIE
+        ARTILLERIE
+    }
+
+    class Déploiement {
+        -int("qtéDéployée")
+        -member(Pion, "pionRattaché")
+        +void("ajouterQuantité(int)")
+        +void("retirerQuantité(int)")
+    }
+
+    class Joker {
+
+    }
+    
+    ' Infanterie .[#hidden]. Cavalerie
+    ' Cavalerie .[#hidden]. Artillerie
+
+    Plateau *-- "0..6" Continent
+    Continent *-r- "0..*" Territoire
+
+    Joueur *-l- "1..1" Armée : arméePossédée
+    Joueur -- "0..*" Carte
+    Joueur -- "0..*" Territoire
+
+    Armée o-d- Pion
+
+    Pion "0..*" -r- "1..1" TypePion : typeDePion
+
+    ' Infanterie -r-|> Pion
+    ' Cavalerie -r-|> Pion
+    ' Artillerie -r-|> Pion
+
+    Joker -l-|> Carte
+
+
+    Carte "0..*" o-l- "1..1" TypePion : typeLié
+    Carte o-- "1..1" Territoire : territoireLié
+    Territoire -d- Territoire #Green: <color:Green>territoiresVoisins
+
+    (Pion, Territoire) . Déploiement
+}

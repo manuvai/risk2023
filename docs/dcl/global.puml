@@ -1,0 +1,10 @@
+@startuml
+
+!include lib.iuml
+
+!include model.iuml
+!include vue.iuml
+!include controler.iuml
+
+
+@enduml
