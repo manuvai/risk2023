@@ -71,6 +71,10 @@ public class Territoire {
             déploiement = new Déploiement(pionsToAdd);
         }
         déploiement.ajouterQuantites(qtyToAdd);
+
+        if (!unitésDéployées.contains(déploiement)) {
+            unitésDéployées.add(déploiement);
+        }
     }
 
     /**
