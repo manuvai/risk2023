@@ -44,6 +44,13 @@ public class Controler {
         }
     }
 
+    /**
+     * Demande au joueur s'il souhaite effectuer une phase de fortification.
+     *
+     * @return 1 si le joueur souhaite effectuer une fortification, 2 si le joueur ne souhaite pas en effectuer.
+     *
+     * @throws Exception Lorsque le joueur entre une option invalide.
+     */
 
     public int demanderFortification() throws Exception {
         Scanner sc = new Scanner(System.in);
@@ -72,6 +79,11 @@ public class Controler {
         return territoire;
     }
 
+    /**
+     * Demande au joueur de sélectionner un territoire source pour la phase de fortification.
+     *
+     * @return Le territoire source sélectionné par le joueur.
+     */
     public Territoire DemanderTerritoireSource() {
         Scanner sc = new Scanner(System.in);
         while (true) {
@@ -91,6 +103,11 @@ public class Controler {
         }
     }
 
+    /**
+     * Demande au joueur de sélectionner un territoire cible pour la phase de fortification.
+     *
+     * @return Le territoire cible sélectionné par le joueur.
+     */
     public Territoire DemanderTerritoireCible() {
         while (true) {
             Scanner sc = new Scanner(System.in);
@@ -109,6 +126,13 @@ public class Controler {
         }
     }
 
+
+    /**
+     * Demande au joueur de saisir le nombre de régiments à déplacer depuis le territoire source donné.
+     *
+     * @param tS Le territoire source depuis lequel le joueur souhaite déplacer des régiments.
+     * @return Le nombre de régiments à déplacer, saisi par le joueur.
+     */
     public int DemanderNbRegimentDeplace(Territoire tS) {
         while (true) {
             Scanner sc = new Scanner(System.in);
@@ -128,6 +152,15 @@ public class Controler {
         }
     }
 
+
+    /**
+     * Méthode permettant de déplacer des troupes pour renforcer ou redéployer un territoire. Les joueurs peuvent utiliser cette méthode
+     * pour déplacer des troupes d'un territoire à un autre.
+     *
+     * @param territoireSource Le territoire de départ pour le déplacement des troupes.
+     * @param territoireCible Le territoire de destination pour le déplacement des troupes.
+     * @param nombreRegiment Le nombre de troupes à déplacer.
+     */
     public void deplacerRegiment(
             Territoire territoireSource,
             Territoire territoireCible,
