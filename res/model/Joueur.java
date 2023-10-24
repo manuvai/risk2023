@@ -147,7 +147,7 @@ public class Joueur {
         return nbRegimentGained;
     }
 
-    private boolean isPossessed(Territoire territoire) {
+    public boolean isPossessed(Territoire territoire) {
         return Objects.nonNull(territoire) && territoires.contains(territoire);
     }
 

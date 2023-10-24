@@ -11,9 +11,9 @@ public enum TypePion {
 
 	public static int points(TypePion a) {
 		return INFANTERIE.equals(a)
-				? 1
+				? 3
 				: CAVALERIE.equals(a)
 					? 2
-					: 3;
+					: 1;
 	}
 }
