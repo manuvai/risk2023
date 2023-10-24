@@ -67,6 +67,32 @@ public class Joueur {
             cartes.put(carte, cartes.get(carte) + 1);
         }
     }
+    
+    public List<Continent> determinerContinentsComplets(Plateau plateau) {
+        List<Continent> continentsComplets = new ArrayList<>();
+
+        for (Continent continent : plateau.getContinents()) {
+            boolean complet = true;
+
+            for (Territoire territoire : continent.getTerritoires()) {
+                if (!posseTerritoire(territoire)) {
+                    complet = false;
+                    break;
+                }
+            }
+
+            if (complet) {
+                continentsComplets.add(continent);
+            }
+        }
+
+        return continentsComplets;
+    }
+
+    public boolean posseTerritoire(Territoire territoire) {
+        // Vérifier si le joueur possède le territoire
+        return territoires.contains(territoire);
+    }
 
     public void echangerCartes(List<CarteRisk> cartes) {
         if (Objects.isNull(cartes) || cartes.size() < 3) {
