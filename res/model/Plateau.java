@@ -9,10 +9,8 @@ public class Plateau {
     private ArrayList<Joueur> joueurs;
     private Map<CarteRisk, Integer> cartesPille;
 
-
-
     // pluetôt distribuerTerritoires
-    public void distribuerCartes(ArrayList<Joueur> js){
+    public void distribuerCartes(ArrayList<Joueur> js) {
 
         // Fonctionne:
         // Créez d'abord une liste de territoires et,
@@ -23,13 +21,13 @@ public class Plateau {
 
         // 1. Créez une liste de territoires
         ArrayList<Territoire> listeTtTerritoire = new ArrayList<Territoire>();
-        for (Continent c : continents){
+        for (Continent c : continents) {
             listeTtTerritoire.addAll(c.getTerritories());
         }
 
         // 2. Pour chaque joueur, get un territoire de la liste et remove ce territoire de cette liste
-        while (!listeTtTerritoire.isEmpty()){
-            for (Joueur j : joueurs){
+        while (!listeTtTerritoire.isEmpty()) {
+            for (Joueur j : joueurs) {
                 Random rand = new Random();
                 int randomIndex = rand.nextInt(listeTtTerritoire.size());
                 j.ajouterTerritoire(listeTtTerritoire.get(randomIndex)); // <- il faut l'ajouter dans Joueur !!!
@@ -37,6 +35,14 @@ public class Plateau {
             }
         }
 
+    }
+
+    public ArrayList<Continent> getContinents() {
+        return continents;
+    }
+
+    public Map<CarteRisk, Integer> getCartesPille() {
+        return cartesPille;
     }
 
     public void initialiserParties() {

@@ -6,8 +6,8 @@ public class Continent {
     private String nomCtint;
     private int bonusRenforts;
     private ArrayList<Territoire> territoires;
-
-    public Continent(String nomCtint, int bonusRenforts){
+  
+    public Continent(String nomCtint, int bonusRenforts) {
         this.nomCtint = nomCtint;
         this.bonusRenforts = bonusRenforts;
     }
