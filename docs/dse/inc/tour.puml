@@ -1,0 +1,33 @@
+title Déroulement d'un tour
+
+hide footbox
+actor "Joueur" as user
+
+participant "Systeme" as app
+
+== Phase renfort ==
+app -> user ++: calculerNbRenforts()
+
+alt Si le joueur a au moins 3 cartes
+    alt Si le joueur veut échanger ou qu'il a au moins 5 cartes
+        loop Tant que le joueur peut échanger
+            user -> user : échangerCartes(List<CarteRisk>)
+        end
+    end
+end
+
+return placerRenforts()
+
+== Phase attaque ==
+alt Si le joueur veut attaquer
+    loop Tant que le joueur peut mener une attaque
+        user -> app : choisirTerritoirePourAttaque()
+        user -> app : attaquer(\n\tTerritoireSource, \n\tTerritoireCible, \n\tnombreRégiments)
+    end
+end
+
+== Phase fortification ==
+alt Si le joueur veut fortifier un territoire
+    user -> app : déplacerRégiment(\n\tTerritoireSource, \n\tTerritoireCible, \n\tnombreRégiments)
+
+end
