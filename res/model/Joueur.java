@@ -23,6 +23,10 @@ public class Joueur {
         return prenom;
     }
 
+    public Armee getArmee() {
+        return armee;
+    }
+
     /**
      * Génère un nombre donné de lancer de dés.
      *
