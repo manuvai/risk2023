@@ -75,7 +75,7 @@ public class Joueur {
             boolean complet = true;
 
             for (Territoire territoire : continent.getTerritoires()) {
-                if (!posseTerritoire(territoire)) {
+                if (!isPossessed(territoire)) {
                     complet = false;
                     break;
                 }
@@ -87,11 +87,6 @@ public class Joueur {
         }
 
         return continentsComplets;
-    }
-
-    public boolean posseTerritoire(Territoire territoire) {
-        // Vérifier si le joueur possède le territoire
-        return territoires.contains(territoire);
     }
 
     public void echangerCartes(List<CarteRisk> cartes) {
