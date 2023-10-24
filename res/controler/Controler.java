@@ -45,17 +45,11 @@ public class Controler {
                 System.out.println(e.getMessage());
             }
         }
-
-
-
     }
-
 
     public void deplacerRegiment(
             Territoire territoireSource,
             Territoire territoireCible,
-            int nombreRegiment)
-    {
-
+            int nombreRegiment) {
     }
 }
