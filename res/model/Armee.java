@@ -10,7 +10,7 @@ import java.util.Objects;
 
 public class Armee {
     private String couleur;
-    private L
+    private List<Pion> pions = new ArrayList<>();
 
      /**
      * Constructeur de la classe Armée.
