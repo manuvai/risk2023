@@ -9,11 +9,24 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+
+    /**
+     * Cette classe représente un territoire dans un jeu.
+     */
+
+
 public class Territoire {
     private String nom;
-   private List<Déploiement> unitésDéployées = new ArrayList<>(); // Nombre d'unités déployées sur le territoire
+    private List<Déploiement> unitésDéployées = new ArrayList<>(); // Nombre d'unités déployées sur le territoire
     private List<Territoire> voisins = new ArrayList<>();
     private Joueur proprio; // Joueur propriétaire du territoire
+
+     /**
+     * Constructeur de la classe Territoire.
+     *
+     * @param nom Le nom du territoire.
+     */
+
 
     public Territoire(String nom) {
         this.nom = nom;
@@ -26,26 +39,53 @@ public class Territoire {
 
 
     /**
-     * Retourne le nombre d'unités dans ce territoire
+     * Retourne le nombre d'unités dans ce territoire.
      *
-     * @return
+     * @return Le nombre d'unités dans le territoire.
      */
     public int getNombreUnites() {
         return getNombreUnites(unitésDéployées);
     }
 
+
+    /**
+     * Obtient la liste des territoires voisins.
+     *
+     * @return La liste des territoires voisins.
+     */
+
     public List<Territoire> getVoisins() {
         return voisins;
     }
+
+    /**
+     * Définit la liste des territoires voisins.
+     *
+     * @param voisins La liste des territoires voisins à définir.
+     */
 
     public void setVoisins(List<Territoire> voisins) {
         this.voisins = voisins;
     }
 
+    /**
+     * Vérifie si un territoire est voisin de celui-ci.
+     *
+     * @param autreTerritoire Le territoire à vérifier.
+     * @return Vrai si le territoire est voisin, sinon faux.
+     */
+
     public boolean estVoisin(Territoire autreTerritoire) {
         return voisins.contains(autreTerritoire);
     }
     
+
+    /**
+     * Obtient le propriétaire du territoire.
+     *
+     * @return Le joueur propriétaire du territoire.
+     */
+
     public Joueur getProprietaire() {
         return proprio;
     }
@@ -103,8 +143,8 @@ public class Territoire {
     /**
      * Détermine les régiments à retirer pour obtenir le nombre de régiments fournis en paramètre
      *
-     * @param nbRegiments
-     * @return
+     * @param nbRegiments 
+     * @return  La liste des déploiements retirés.
      */
     public List<Déploiement> retirerRegiment(int nbRegiments) {
         if (nbRegiments > getNombreUnites()) {
@@ -161,6 +201,14 @@ public class Territoire {
         return regimentsEnleves;
     }
 
+
+    /**
+     * Redéfinition de la méthode equals.
+     *
+     * @param o L'objet à comparer.
+     * @return Vrai si les objets sont égaux, sinon faux.
+     */ 
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
