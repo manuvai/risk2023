@@ -22,18 +22,18 @@ public class Plateau {
         // pour chaque territoire, et s'il reste des Pions, le joueur choisit où les placer.
 
         // 1. Créez une liste de territoires
-        ArrayList<Territoire> listeTtContinent = new ArrayList<Territoire>();
+        ArrayList<Territoire> listeTtTerritoire = new ArrayList<Territoire>();
         for (Continent c : continents){
-            listeTtContinent.addAll(c.getTerritories());
+            listeTtTerritoire.addAll(c.getTerritories());
         }
 
         // 2. Pour chaque joueur, get un territoire de la liste et remove ce territoire de cette liste
-        while (!listeTtContinent.isEmpty()){
+        while (!listeTtTerritoire.isEmpty()){
             for (Joueur j : joueurs){
                 Random rand = new Random();
-                int randomIndex = rand.nextInt(listeTtContinent.size());
-                j.setContinent(listeTtContinent.get(randomIndex)); // <- il faut l'ajouter dans Joueur !!!
-                listeTtContinent.remove(randomIndex);
+                int randomIndex = rand.nextInt(listeTtTerritoire.size());
+                j.ajouterTerritoire(listeTtTerritoire.get(randomIndex)); // <- il faut l'ajouter dans Joueur !!!
+                listeTtTerritoire.remove(randomIndex);
             }
         }
 
