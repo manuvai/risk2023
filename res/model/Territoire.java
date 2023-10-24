@@ -4,8 +4,10 @@ import res.model.exceptions.InvalidQuantityDeploymentException;
 import res.model.exceptions.UnpossessedTroupRemovalException;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class Territoire {
     private String nom;
@@ -29,13 +31,7 @@ public class Territoire {
      * @return
      */
     public int getNombreUnites() {
-        int nbUnites = 0;
-
-        for (Déploiement déploiement : unitésDéployées) {
-            nbUnites += déploiement.getQtéDéployée();
-        }
-
-        return nbUnites;
+        return getNombreUnites(unitésDéployées);
     }
 
     public List<Territoire> getVoisins() {
@@ -61,8 +57,6 @@ public class Territoire {
      * @param qtyToAdd
      */
     public void ajouterRegiment(Pion pionsToAdd, int qtyToAdd) {
-        List<Pion> listeUnites = new ArrayList<>();
-
         if (qtyToAdd <= 0) {
             throw new InvalidQuantityDeploymentException();
         }
@@ -106,6 +100,37 @@ public class Territoire {
         déploiement.retirerQuantites(qtyToRemove);
     }
 
+    /**
+     * Détermine les régiments à retirer pour obtenir le nombre de régiments fournis en paramètre
+     *
+     * @param nbRegiments
+     * @return
+     */
+    public List<Déploiement> retirerRegiment(int nbRegiments) {
+        if (nbRegiments > getNombreUnites()) {
+            throw new InvalidQuantityDeploymentException();
+        }
+
+        List<Déploiement> regimentsEnleves = new ArrayList<>();
+
+        List<Déploiement> sortedDeploiements = unitésDéployées.stream()
+                .sorted((o1, o2) -> TypePion.compare(
+                        o1.getPionRattachee().getTypePion(),
+                        o2.getPionRattachee().getTypePion()))
+                .collect(Collectors.toList());
+
+        int i = 0;
+        while (i < sortedDeploiements.size() && getNombreUnites(regimentsEnleves) != nbRegiments) {
+            Déploiement actualDeploiement = unitésDéployées.get(i);
+
+            // TODO Ajouter la lofique pour retirer le nécessaire
+
+            i++;
+        }
+
+        return regimentsEnleves;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -116,5 +141,21 @@ public class Territoire {
     @Override
     public int hashCode() {
         return Objects.hash(getNom());
+    }
+
+    /**
+     * Détermine le nombre de régiments disponibles à partir d'une liste de déploiement
+     *
+     * @param déploiements
+     * @return
+     */
+    private int getNombreUnites(List<Déploiement> déploiements) {
+        int nbUnites = 0;
+
+        for (Déploiement déploiement : déploiements) {
+            nbUnites += déploiement.getQtéDéployée() * déploiement.getPionRattachee().obtenirNbRegiment();
+        }
+
+        return nbUnites;
     }
 }

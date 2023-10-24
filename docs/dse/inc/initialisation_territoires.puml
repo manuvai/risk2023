@@ -1,0 +1,19 @@
+title Initialisat° des territoires des joueurs
+
+hide footbox
+actor "Joueur" as user
+
+participant "Systeme" as app
+
+activate app 
+    loop Pour chaque territoire
+        app -> user ++: ajouterTerritoire(Territoire)
+        return
+        note right 
+            Il faudra donner de façon aléatoire
+        end note
+    end 
+
+    user -> app : placerRégiments()
+
+deactivate app 

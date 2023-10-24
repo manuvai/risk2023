@@ -9,7 +9,6 @@ public class Plateau {
     private ArrayList<Joueur> joueurs;
     private Map<CarteRisk, Integer> cartesPille;
 
-
     // pluetôt distribuerTerritoires
     public void distribuerCartes(ArrayList<Joueur> js) {
 
@@ -46,8 +45,6 @@ public class Plateau {
         return cartesPille;
     }
 
-
-
     public void initialiserParties() {
 
         distribuerCartes(this.joueurs);
@@ -65,5 +62,4 @@ public class Plateau {
     public void enleverJoueur(Joueur j) {
         this.joueurs.remove(j);
     }
-}
 }
