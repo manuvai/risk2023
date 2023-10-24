@@ -18,25 +18,29 @@ public class Controler {
 
                 if (resJ != 1 && resJ != 2){
                     throw new Exception("Saissiez numero 1 ou 2 SVP !");
-                } else {
-
+                } else if (resJ == 1){
                     System.out.println("Veuillez sélectionner un territoireSource :");
                     String territoireSource = sc.nextLine();
-                    // Verify if territoireSource is one of the game and if it owns by player
-                    // if ...true
+                    // Verify if territoireSource owns by player
 
                     System.out.println("Veuillez sélectionner un territoireCible :");
                     String territoireCible = sc.nextLine();
-                    // Verify if territoireCible is one of the game and if it owns by player
+                    // Verify if territoireCible owns by player
 
                     System.out.println("Veuillez sélectionner le nombre de régiment :");
+                    // Afficher le nombre de rigément du territoire territoireSource
+
                     int nbRegiment = sc.nextInt();
                     // Verify if player have enough nb regiment
+                    // and at least one rigement stay at territoireSource
 
+                    // start to move ->
                     deplacerRegiment(territoireSource,territoireCible,nbRegiment);
+                    break;
+
+                } else {
+                    break;
                 }
-
-
             } catch (Exception e){
                 System.out.println(e.getMessage());
             }
