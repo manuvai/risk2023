@@ -1,9 +1,11 @@
 package res.controler;
 
-import org.w3c.dom.ls.LSOutput;
-import res.model.Territoire;
 
-import java.sql.SQLOutput;
+import res.model.Déploiement;
+import res.model.Pion;
+import res.model.Territoire;
+import res.model.TypePion;
+
 import java.util.Scanner;
 
 public class Controler {
@@ -22,6 +24,13 @@ public class Controler {
                     System.out.println("Veuillez sélectionner un territoireSource :");
                     String territoireSource = sc.nextLine();
                     // Verify if territoireSource owns by player
+                    /*
+                    * if (this.controlerContinent(territoireSource)){
+                    *   continue;
+                    * } else {
+                    *   retourne au debut
+                    *
+                    */
 
                     System.out.println("Veuillez sélectionner un territoireCible :");
                     String territoireCible = sc.nextLine();
@@ -51,5 +60,39 @@ public class Controler {
             Territoire territoireSource,
             Territoire territoireCible,
             int nombreRegiment) {
+
+        // Calculer nb de chaque pion
+        int nb_ARTILLERIE = nombreRegiment / 10;
+        int nb_INFANTERIE = (nombreRegiment - nombreRegiment / 10 * 10) / 5;
+        int nb_CAVALERIE = nombreRegiment - (nombreRegiment / 10 * 10) - (nombreRegiment / 5 * 5);
+        // Ajouter dans le territoireCible
+        // Pion Cavalerie
+        Pion pC = new Pion("pionCavalerie", TypePion.CAVALERIE);
+
+        Déploiement dC = new Déploiement(pC);
+        dC.ajouterQuantites(nb_CAVALERIE);
+
+        territoireCible.ajouterRegiment(pC,nb_CAVALERIE);
+
+        // Pion Infanterie
+        Pion pI = new Pion("pionInfanterie", TypePion.INFANTERIE);
+
+        Déploiement dI = new Déploiement(pI);
+        dI.ajouterQuantites(nb_INFANTERIE);
+
+        territoireCible.ajouterRegiment(pI,nb_INFANTERIE);
+
+        // Pion Artillerie
+        Pion pA = new Pion("pionArtillerie", TypePion.ARTILLERIE);
+
+        Déploiement dA = new Déploiement(pA);
+        dA.ajouterQuantites(nb_INFANTERIE);
+
+        territoireCible.ajouterRegiment(pA,nb_ARTILLERIE);
+
+        // Enlever le nb de Regiment de territoireSource
+        territoireSource.retirerRegiment(pC,nb_CAVALERIE);
+        territoireSource.retirerRegiment(pI,nb_INFANTERIE);
+        territoireSource.retirerRegiment(pA,nb_ARTILLERIE);
     }
 }
