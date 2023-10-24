@@ -15,6 +15,18 @@ public class Joueur {
     private List<Territoire> territoires = new ArrayList<>();
     private Map<CarteRisk, Integer> cartes = new HashMap<>();
 
+    public String getNom() {
+        return nom;
+    }
+
+    public String getPrenom() {
+        return prenom;
+    }
+
+    public Armee getArmee() {
+        return armee;
+    }
+
     /**
      * Génère un nombre donné de lancer de dés.
      *
