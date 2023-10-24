@@ -1,4 +1,5 @@
 package res.controler;
+
 import res.model.Joueur;
 import res.model.Territoire;
 
@@ -15,15 +16,23 @@ public class Controler {
     }
 
     // Phase Fortification
+    /**
+     * Effectue la phase de fortification, permettant aux joueurs de déplacer des régiment pour renforcer leurs territoires.
+     *
+     * @param resJ Option indiquant si le joueur souhaite ou non effectuer une fortification.
+     *             1 pour effectuer une fortification, 2 pour ne pas en effectuer.
+     *
+     * @throws Exception Lorsque le joueur entre une option invalide.
+     */
     public void phaseFortification() throws Exception {
         // 1.Demander joueur -> Fortification ?
         while (true) {
             int resJ = demanderFortification();
-            
+
             if (resJ != 1 && resJ != 2) {
                 throw new Exception("Saissiez numero 1 ou 2 SVP !");
             }
-            
+
             // 2.Commencer Fortification
             if (resJ == 1) {
                 Territoire tS = DemanderTerritoireSource();
@@ -42,24 +51,24 @@ public class Controler {
         System.out.println("Est-ce que vous voulez fortifier(1/2) ? (Reponse : 1 - Oui, 2 - Non");
         int resJ = sc.nextInt();
         sc.close();
-        
+
         return resJ;
 
     }
-    
+
     public Joueur getActualJoueur() {
         Joueur joueur = new Joueur();
-        
+
         // TODO Permettre de savoir de quel joueur il s'agit
-        
+
         return joueur;
     }
-    
+
     public Territoire recupererTerritoire(String nomTerritoire) {
         Territoire territoire = new Territoire(nomTerritoire);
-        
+
         // TODO Implémenter la recherche d'un territoire à partir d'un nom
-        
+
         return territoire;
     }
 
@@ -68,13 +77,13 @@ public class Controler {
         while (true) {
             System.out.println("Veuillez sélectionner un territoireSource :");
             String nomTerritoireSource = sc.nextLine();
-            
+
             Territoire territoireSource = recupererTerritoire(nomTerritoireSource);
             // Si joueur controle ce territoire, on changer le String -> Territoire
             if (getActualJoueur().isPossessed(territoireSource)) { // Boolean <- controleTerritoire(territoireSource)
                 // getActualJoueur().ExchangeStringTerritoire(territoireSource); // Territoire <- ExchangeStringTerritoire(territoireSource)
                 return territoireSource;
-                
+
             } else {
                 System.err.println("Vous controle pas ce territoire ! Ressayer !");
             }
@@ -87,7 +96,7 @@ public class Controler {
             Scanner sc = new Scanner(System.in);
             System.out.println("Veuillez sélectionner un territoireCible :");
             String nomTerritoireCible = sc.nextLine();
-            
+
             Territoire territoireCible = recupererTerritoire(nomTerritoireCible);
 
             // Si joueur controle ce territoire, on changer le String -> Territoire
@@ -209,7 +218,6 @@ public class Controler {
 
         return territoiresAccessibles;
     }
-
 
 
     public void fermerScanner() {
