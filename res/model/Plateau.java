@@ -38,6 +38,16 @@ public class Plateau {
 
     }
 
+    public ArrayList<Continent> getContinents() {
+        return continents;
+    }
+
+    public Map<CarteRisk, Integer> getCartesPille() {
+        return cartesPille;
+    }
+
+
+
     public void initialiserParties() {
 
         distribuerCartes(this.joueurs);
