@@ -7,6 +7,10 @@ import res.model.exceptions.WrongOwnerTerritoriesException;
 
 import java.util.*;
 
+/**
+ * Cette classe représente un joueur dans un jeu de Risk.
+ */
+
 public class Joueur {
     private String nom;
     private String prenom;
@@ -19,7 +23,7 @@ public class Joueur {
      * Génère un nombre donné de lancer de dés.
      *
      * @param nbDes
-     * @return
+     * @return Une liste de dés lancés
      */
     public List<De> lancerDes(int nbDes) {
         if (nbDes < 0) {
@@ -37,10 +41,10 @@ public class Joueur {
         return desLances;
     }
 
-    /**
-     * Calcule et renvoie le nombre de régiments de renforts censé être reçu
+     /**
+     * Calcule et renvoie le nombre de régiments de renforts censé être reçu.
      *
-     * @return
+     * @return Le nombre de régiments de renforts.
      */
     public int calculerNbRenforts() {
 
@@ -50,6 +54,12 @@ public class Joueur {
 
         return renfortsObtenusPourTerritoires + renfortsObtenusPourContinents;
     }
+
+     /**
+     * Obtient la liste des territoires possédés par le joueur.
+     *
+     * @return La liste des territoires du joueur.
+     */
 
     public List<Territoire> obtenirTerritoires() {
         return territoires;
@@ -67,6 +77,13 @@ public class Joueur {
             cartes.put(carte, cartes.get(carte) + 1);
         }
     }
+
+    /**
+     * Détermine les continents complets que le joueur possède sur le plateau.
+     *
+     * @param plateau Le plateau de jeu.
+     * @return Une liste de continents complets possédés par le joueur.
+     */
     
     public List<Continent> determinerContinentsComplets(Plateau plateau) {
         List<Continent> continentsComplets = new ArrayList<>();
@@ -89,6 +106,12 @@ public class Joueur {
         return continentsComplets;
     }
 
+     /**
+     * Échange un ensemble de cartes pour obtenir des renforts.
+     *
+     * @param cartes Les cartes à échanger.
+     */
+
     public void echangerCartes(List<CarteRisk> cartes) {
         if (Objects.isNull(cartes) || cartes.size() < 3) {
             throw new InvalidCardsToTradeException();
@@ -101,10 +124,22 @@ public class Joueur {
         }
 
     }
+
+    // TO ADD javadoc
     public void attaquer(Territoire territoireSource, Territoire territoireDestination, int nbRegiments) {
 
     }
 
+   
+   /**
+     * Déplace un nombre spécifié de régiments d'un territoire source vers un territoire de destination.
+     *
+     * @param territoireSource       Le territoire source depuis lequel les régiments seront déplacés.
+     * @param territoireDestination   Le territoire de destination où les régiments seront déplacés.
+     * @param nbRegiments            Le nombre de régiments à déplacer.
+     * @throws WrongOwnerTerritoriesException      Si le joueur n'est pas propriétaire des territoires source ou de destination.
+     * @throws InvalidQuantityDeploymentException    Si le nombre de régiments à déplacer est invalide (inférieur ou égal à zéro).
+     */
     public void deplacerRegiment(Territoire territoireSource, Territoire territoireDestination, int nbRegiments) {
         if (!isPossessed(territoireSource) || !isPossessed(territoireDestination)) {
             throw new WrongOwnerTerritoriesException();
@@ -121,12 +156,24 @@ public class Joueur {
                 déploiement.getQtéDéployée()));
     }
 
+     /**
+     * Ajoute un territoire à la liste de territoires possédés par le joueur.
+     *
+     * @param territoire Le territoire à ajouter.
+     */
+
     public void ajouterTerritoire(Territoire territoire) {
         if (Objects.nonNull(territoire)) {
             territoires.add(territoire);
         }
     }
 
+    /**
+     * Calcule le nombre de régiments de renforts à obtenir en échange d'un ensemble de cartes.
+     *
+     * @param cartes La liste de cartes à échanger.
+     * @return Le nombre de régiments de renforts à gagner en fonction des cartes échangées.
+     */
     private int getNbRegimentGained(List<CarteRisk> cartes) {
         int countInfanterie = 0;
         int countCavalerie = 0;
@@ -167,6 +214,13 @@ public class Joueur {
         }
         return nbRegimentGained;
     }
+
+     /**
+     * Vérifie si le joueur possède un territoire donné.
+     *
+     * @param territoire Le territoire à vérifier.
+     * @return True si le joueur possède le territoire, sinon False.
+     */
 
     public boolean isPossessed(Territoire territoire) {
         return Objects.nonNull(territoire) && territoires.contains(territoire);
