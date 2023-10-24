@@ -23,6 +23,11 @@ public class Territoire {
     }
 
 
+    /**
+     * Retourne le nombre d'unités dans ce territoire
+     *
+     * @return
+     */
     public int getNombreUnites() {
         int nbUnites = 0;
 
