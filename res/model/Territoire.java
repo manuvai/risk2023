@@ -113,6 +113,8 @@ public class Territoire {
 
         List<Déploiement> regimentsEnleves = new ArrayList<>();
 
+        List<Déploiement> regimentsToRemove = new ArrayList<>();
+
         List<Déploiement> sortedDeploiements = unitésDéployées.stream()
                 .sorted((o1, o2) -> TypePion.compare(
                         o1.getPionRattachee().getTypePion(),
@@ -121,12 +123,40 @@ public class Territoire {
 
         int i = 0;
         while (i < sortedDeploiements.size() && getNombreUnites(regimentsEnleves) != nbRegiments) {
-            Déploiement actualDeploiement = unitésDéployées.get(i);
+            Déploiement actualDeploiement = sortedDeploiements.get(i);
 
-            // TODO Ajouter la lofique pour retirer le nécessaire
+            int nbRegimentPionRattache = actualDeploiement.getPionRattachee()
+                    .obtenirNbRegiment();
+
+            int qtyActualDeploiement = actualDeploiement.getQtéDéployée() * nbRegimentPionRattache;
+
+            int qtyToAddLeft = nbRegiments - getNombreUnites(regimentsEnleves);
+
+            if (qtyToAddLeft >= qtyActualDeploiement) {
+                regimentsEnleves.add(actualDeploiement);
+                regimentsToRemove.add(actualDeploiement);
+
+            } else {
+                int qtyPossible = (qtyToAddLeft - nbRegimentPionRattache) / nbRegimentPionRattache;
+
+                if (qtyPossible > 0) {
+                    actualDeploiement.retirerQuantites(qtyPossible);
+
+                    Déploiement newDeploiement = new Déploiement(actualDeploiement.getPionRattachee());
+                    newDeploiement.ajouterQuantites(qtyPossible);
+
+                    regimentsEnleves.add(newDeploiement);
+                }
+            }
 
             i++;
         }
+
+        for (Déploiement toDeleteDeploiement : regimentsToRemove) {
+            sortedDeploiements.remove(toDeleteDeploiement);
+        }
+
+        unitésDéployées = sortedDeploiements;
 
         return regimentsEnleves;
     }

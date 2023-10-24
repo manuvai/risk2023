@@ -9,6 +9,8 @@ import res.model.TypePion;
 import res.model.exceptions.InvalidQuantityDeploymentException;
 import res.model.exceptions.UnpossessedTroupRemovalException;
 
+import java.util.List;
+
 public class TerritoireTest {
 
     @Test(expected = InvalidQuantityDeploymentException.class)
@@ -42,6 +44,16 @@ public class TerritoireTest {
         Assertions.assertDoesNotThrow(() -> {
             territoire.ajouterRegiment(new Pion("PionA", TypePion.INFANTERIE), 10);
             territoire.retirerRegiment(new Pion("PionA", TypePion.INFANTERIE), 10);
+        });
+
+    }
+    @Test
+    public void retirerRegiment_int_OK() {
+        Territoire territoire = new Territoire("France");
+        Assertions.assertDoesNotThrow(() -> {
+            territoire.ajouterRegiment(new Pion("PionA", TypePion.INFANTERIE), 10);
+            territoire.ajouterRegiment(new Pion("PionB", TypePion.CAVALERIE), 10);
+            List<Déploiement> deploiements = territoire.retirerRegiment(25);
         });
 
     }
