@@ -1,20 +1,36 @@
 package res.vue;
 
+
 public class Vue {
 
-  public void afficherInformations() {
-        System.out.println("Nom du joueur : " + nom);
-        System.out.println("Prénom du joueur : " + prenom);
-        System.out.println("Armée : " + armee.getNom()); 
+  
+public void afficherInformations(Joueur joueur) {
+        System.out.println("Nom du joueur : " + joueur.getNom());
+        System.out.println("Prénom du joueur : " + joueur.getPrenom());
+        System.out.println("Armée : " + joueur.getArmee().getNom());
         System.out.println("Cartes du joueur :");
 
-        for (Map.Entry<Carte, Integer> entry : cartes.entrySet()) {
+        for (Map.Entry<Carte, Integer> entry : joueur.getCartes().entrySet()) {
             Carte carte = entry.getKey();
-            int quantite = entry.getValue();
-            System.out.println(" - " + quantite + "x " + carte.getNom()); 
+            int quantité = entry.getValue();
+            System.out.println(" - " + quantité + "x " + carte.getNom());
         }
     }
 
- }
+    public void afficherInformations(CarteRisk carte) {
+        System.out.println("Type de pion : " + carte.getTypePion());
+        System.out.println("Territoire : " + carte.getTerritoire());
+        
+    }
+
+    public void afficherInformations(Armee armee) {
+        System.out.println("Couleur de l'armée : " + armee.getCouleur());
+        System.out.println("Pions : " + armee.getPions());
+       
+    }
+
+
+
 
 }
+
