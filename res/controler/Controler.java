@@ -4,7 +4,6 @@ import java.util.Scanner;
 
 
 public class Controler {
-
     private Scanner scanner;
 
     public Controler() {
@@ -101,6 +100,5 @@ public class Controler {
     public void fermerScanner() {
         scanner.close();
     }
-    
 
 }
