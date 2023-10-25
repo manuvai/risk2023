@@ -255,7 +255,9 @@ public class Controler {
     }
 
     private Joueur rechercherProprietaireTerritoire(Territoire territoire) {
-       return territoire.getProprietaire();
+       return Objects.isNull(plateau)
+            ? null
+            : plateau.getProprietaire(territoire);
 
     }
 
