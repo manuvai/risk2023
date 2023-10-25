@@ -1,0 +1,24 @@
+
+hide footbox
+
+participant "Controler" as ctrl
+actor "Joueur" as user
+
+ctrl -> user ++: calculerNbRenforts()
+return nbRenforts
+
+alt Si le joueur a au moins 3 cartes
+    alt Si le joueur veut échanger ou qu'il a au moins 5 cartes
+        loop Tant que le joueur peut échanger
+            user -> user : échangerCartes(List<CarteRisk>)
+            user -> ctrl : ajoutRenforts(nbEchange)
+        end
+    end
+end
+
+ctrl -> ctrl : placerRenforts()
+note right
+    Nécessite de demander en saisie les 
+    territoires où positionner les 
+    troupes de renfort
+end note
