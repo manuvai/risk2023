@@ -255,7 +255,8 @@ public class Controler {
     }
 
     private Joueur rechercherProprietaireTerritoire(Territoire territoire) {
-        return null; // TODO Faire le lien avec le plateau
+       return territoire.getProprietaire();
+
     }
 
     private boolean canAttack(Joueur attaquant ) {
