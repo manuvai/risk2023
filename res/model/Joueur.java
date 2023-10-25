@@ -250,4 +250,7 @@ public class Joueur {
         return renfortsObtenusPourContinents;
     }
 
+    public void setArmee(Armee inArmee) {
+        armee = inArmee;
+    }
 }

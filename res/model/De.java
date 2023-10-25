@@ -32,7 +32,7 @@ public class De {
     public void lancerDe() {
         Random random = new Random();
 
-        int nouvelleValeur = random.nextInt(MIN_VALEUR, MAX_VALEUR + 1);
+        int nouvelleValeur = random.nextInt(MAX_VALEUR) + MIN_VALEUR;
 
         setValeur(nouvelleValeur);
     }

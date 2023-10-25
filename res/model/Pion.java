@@ -78,7 +78,9 @@ public class Pion{
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
-		if (!(o instanceof Pion pion)) return false;
+		if (!(o instanceof Pion)) return false;
+
+		Pion pion = (Pion) o;
 		return Objects.equals(getNomPion(), pion.getNomPion()) &&
 				getTypePion() == pion.getTypePion();
 	}
