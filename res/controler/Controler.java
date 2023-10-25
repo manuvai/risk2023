@@ -1,13 +1,15 @@
 package res.controler;
-
 import res.model.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 public class Controler {
     private Scanner scanner;
+    
+    private Plateau plateau;//TODO Besoin d'une instance d'objet plateau pour méthodes
 
     public Controler() {
         this.scanner = new Scanner(System.in);
@@ -315,9 +317,109 @@ public class Controler {
         return troupesRestantes;
     }
 
+    private List<Territoire> getTerritoiresAccessiblesDepuis(String territoireSource, Joueur joueur) {
+        List<Territoire> territoiresAccessibles = new ArrayList<>();
+
+        // Supposons que nous avons une liste de tous les territoires du jeu
+        List<Territoire> tousTerritoires = joueur.obtenirTerritoires();
+
+        // Parcourir tous les territoires et les ajouter à la liste des territoires accessibles
+        for (Territoire territoire : tousTerritoires) {
+            if (!territoire.getNom().equals(territoireSource)) {
+                territoiresAccessibles.add(territoire);
+            }
+        }
+
+        return territoiresAccessibles;
+    }
+
+	public void distribuerRenforts(Joueur joueur, int nb) {
+		int artillerie = nb / 10;
+		nb = nb % 10;
+		int cavalerie = nb / 5;
+		nb = nb % 5;
+		int infanterie = nb;
+		
+		for (int i = 0; i < artillerie; i++) {
+			Pion pion = new Pion("Artillerie", TypePion.ARTILLERIE);
+			joueur.getArmee()
+                    .ajouterPion(pion);
+		}
+
+		for (int i = 0; i < cavalerie; i++) {
+			Pion pion = new Pion("Cavalerie", TypePion.CAVALERIE);
+			joueur.getArmee()
+                    .ajouterPion(pion);
+		}
+
+		for (int i = 0; i < infanterie; i++) {
+			Pion pion = new Pion("Infanterie", TypePion.INFANTERIE);
+			joueur.getArmee()
+                    .ajouterPion(pion);
+		}
+
+	}
+	
+	public void echangerCartes(Joueur joueur) {
+		int regimentsADonner = 0;
+		while (true) {
+			List<CarteRisk> listeCartes = joueur.getCartes();
+			for (CarteRisk carte : listeCartes) {
+				System.out.println("1 : " + carte.getTypePion());
+			}
+			System.out.println("Choisir une carte à échanger (écrivez 0 si vous ne voulez pas échanger)");
+			System.out.println("Si vous avez 5 cartes ou plus, vous devez obligatoirement échanger");
+
+			boolean saisie_correcte = false;
+
+            int choix1 = 0;
+            int choix2 = 0;
+            int choix3 = 0;
+
+            while (!saisie_correcte) {
+				try {
+					choix1 = scanner.nextInt();
+					if (choix1 == 0 && listeCartes.size()<5) {
+						break;
+					}
+					choix2 = scanner.nextInt();
+					choix3 = scanner.nextInt();
+					if (choix1 > 0 && choix1 <= listeCartes.size() &&
+							choix2 > 0 && choix2 <= listeCartes.size() &&
+							choix3 > 0 && choix3 <= listeCartes.size() &&
+							choix1 != choix2 && choix1 != choix3 && choix2 != choix3) {
+						saisie_correcte = true;
+					}
+				} catch (IllegalArgumentException e) {
+					System.out.println("Saisie incorrecte");
+					
+				}
+				if (!saisie_correcte) {
+					System.out.println("Saisie incorrecte, recommencez !");
+				}
+			}
+			if (choix1 > 0) {
+				List<CarteRisk> liste_echange = Stream.of(listeCartes.get(choix1 - 1), listeCartes.get(choix2 - 1), listeCartes.get(choix3 - 1))
+                        .collect(Collectors.toList());
+				regimentsADonner += joueur.echangerCartes(liste_echange);
+				joueur.enleverCartes(liste_echange);
+				plateau.ajouterCarte(liste_echange);
+			}
+			System.out.println("Voulez vous encore échanger ? 0 = non/1 = oui");
+			int choix = scanner.nextInt();
+			while (choix < 0 || choix > 1) {
+				System.out.println("Saisie incorrecte");
+				choix = scanner.nextInt();
+			}
+			if (choix == 0) {
+				break;
+			}
+		}
+		distribuerRenforts(joueur, regimentsADonner);
+	}
+
     public void fermerScanner() {
         scanner.close();
     }
 
 }
-
