@@ -1,11 +1,15 @@
 package res.controler;
 
+import res.model.De;
 import res.model.Joueur;
 import res.model.Territoire;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
+
 
 public class Controler {
     private Scanner scanner;
@@ -18,9 +22,6 @@ public class Controler {
     // Phase Fortification
     /**
      * Effectue la phase de fortification, permettant aux joueurs de déplacer des régiment pour renforcer leurs territoires.
-     *
-     * @param resJ Option indiquant si le joueur souhaite ou non effectuer une fortification.
-     *             1 pour effectuer une fortification, 2 pour ne pas en effectuer.
      *
      * @throws Exception Lorsque le joueur entre une option invalide.
      */
@@ -167,101 +168,129 @@ public class Controler {
             int nombreRegiment) {
         getActualJoueur().deplacerRegiment(territoireSource, territoireCible, nombreRegiment);
     }
+    
+    //Phase d'attaque 
+   
+    public void startAttackPhase(Joueur attaquant ) {
+        while (canAttack(attaquant)) {
+            System.out.println("Phase d'attaque pour le joueur : " + attaquant.getNom());
+            
+         // Demander au joueur de choisir le territoire source
+            System.out.print("Saisissez le nom du territoire source : ");
+            String nomTerritoireSource = scanner.nextLine();
+            Territoire territoireSource = recupererTerritoire(nomTerritoireSource);
 
+            // Demander au joueur d'obtenir la liste des territoires pour attaquer
+            List<Territoire> territoiresAttaquables = getTerritoiresToAttack(attaquant, territoireSource);
 
-    /**
-     * Effectue la phase de attaquer, permettant aux joueurs de attaquer les territoires d'autre joueurs
-     * @param joueur Ce joeur qui fait la phase Attaque
-     */
-    public void phaseAttaque(Joueur joueur) {
-        System.out.println("Phase d'attaque pour le joueur : " + joueur.getNom()); // TODO Remettre getNom()
-
-
-        // Demander au joueur de choisir le nombre de régiments pour l'attaque
-        System.out.print("Saisissez le nombre de régiments à utiliser pour l'attaque : ");
-        int nombreRegiments = scanner.nextInt();
-        scanner.nextLine(); // Nettoyez la nouvelle ligne après la saisie d'un nombre.
-
-        // Définir le nombre maximum de dés (par exemple, la moitié du nombre de régiments avec un maximum de 3 dés)
-        int nombreDesMaximum = Math.min(nombreRegiments / 2, 3);
-
-        int nombreDesChoisi = 0;
-
-        while (true) {
-
-            // Demander au joueur de choisir le territoire source
-            System.out.print("Saisissez le nom du territoire source (ou tapez 'fin' pour terminer l'attaque) : ");
-            String territoireSource = scanner.nextLine();
-
-            if (territoireSource.equalsIgnoreCase("fin")) {
-                // Si le joueur entre "fin", terminez la phase d'attaque.
+            if (territoiresAttaquables.isEmpty()) {
+                System.out.println("Le joueur ne peut plus mener d'attaque. Fin de la phase d'attaque.");
                 break;
             }
-            // Demander au joueur de choisir le nombre de dés à lancer
-            System.out.print("Saisissez le nombre de dés à lancer (maximum " + nombreDesMaximum + ") : ");
-            nombreDesChoisi = scanner.nextInt();
-            scanner.nextLine(); // Nettoyez la nouvelle ligne après la saisie d'un nombre.
 
-            if (nombreDesChoisi >= 1 && nombreDesChoisi <= nombreDesMaximum) {
-                // Le choix est valide, sortez de la boucle.
-                break;
+            // Demander au joueur de choisir le territoire cible
+            System.out.print("Saisissez le nom du territoire cible d'attaque : ");
+            String nomTerritoireCible = scanner.nextLine();
+
+            // Demander au joueur le nombre de dés à lancer pour l'attaque
+            System.out.print("Saisissez le nombre de dés à lancer : ");
+            int desAttaque = scanner.nextInt();
+            scanner.nextLine(); // Nettoyer la nouvelle ligne.
+
+            // Lancer les dés pour l'attaque
+            List<De> resultatsAttaque =  attaquant.lancerDes(desAttaque);
+            		//lancerDes(desAttaque);
+
+            
+            // Déterminer les troupes restantes
+            int troupesRestantes = resolveAttack(resultatsAttaque);
+
+            if (troupesRestantes > 0) {
+                // L'attaquant a réussi l'attaque
+                System.out.println("Attaque réussie ! Vous avez conquis le territoire.");
+                Territoire territoireCible = recupererTerritoire(nomTerritoireCible);
+                // Retirer le territoire du défenseur
+                retirerProprietaireTerritoire(territoireCible);
+
+                // Ajouter le territoire à l'attaquant
+                attaquant.ajouterTerritoire(territoireCible);
+
+                // Demander la saisie du nombre de troupes à déplacer
+                System.out.print("Saisissez le nombre de troupes à déplacer : ");
+                int troupesADeplacer = scanner.nextInt();
+                scanner.nextLine(); // Nettoyer la nouvelle ligne.
+                // Déplacer les régiments
+                attaquant.deplacerRegiment(territoireSource, territoireCible, troupesADeplacer);
             } else {
-                System.out.println("Choix invalide. Le nombre de dés doit être entre 1 et " + nombreDesMaximum + ".");
+                System.out.println("Attaque échouée. Le territoire est toujours aux mains du défenseur.");
             }
+        }
+    }
+
+    private void retirerProprietaireTerritoire(Territoire territoireCible) {
+        // TODO Implémenter le fait de retirer le territoire à son propriétaire
+
+    }
+
+    private boolean canAttack(Joueur attaquant ) {
+    	// Vérification du nombre de territoires du joueur attaquant
+        if (attaquant.obtenirTerritoires().size() < 2) {
+            System.out.println("Vous n'avez pas suffisamment de territoires pour attaquer.");
+            return false;
+        }
+
+        // Vérification du nombre de régiments disponibles pour l'attaque
+        int totalRegiments = 0;
+        for (Territoire territoire : attaquant.obtenirTerritoires()) {
+            totalRegiments += territoire.getNombreUnites();
+        }
+        if (totalRegiments < 2) {
+            System.out.println("Vous n'avez pas suffisamment de régiments pour attaquer.");
+            return false;
+        }
+
+        
+
+        return true;
+    }
+
+    private List<Territoire> getTerritoiresToAttack(Joueur attaquant, Territoire territoireSource) {
+        // Recherche du territoire source
+        if (territoireSource == null) {
+            System.out.println("Territoire source invalide.");
+            return new ArrayList<>();
+        }
+
+        // Obtention des territoires attaquables (voisins non possédés par l'attaquant)
+
+        return territoireSource.getVoisins().stream()
+                .filter(voisin -> !attaquant.obtenirTerritoires().contains(voisin))
+                .collect(Collectors.toList());
+    }
 
 
-            // Déterminer les territoires accessibles à partir du territoire source.
-            List<Territoire> territoiresAccessibles = getTerritoiresAccessiblesDepuis(territoireSource, joueur);
+    private int resolveAttack(List<De> resultatsAttaque ) {
+    	 // Tri des résultats d'attaque par ordre décroissant
+        Collections.sort(resultatsAttaque, Collections.reverseOrder());
 
-            if (territoiresAccessibles.isEmpty()) {
-                System.out.println("Aucun territoire accessible depuis " + territoireSource + ".");
-            } else {
-                System.out.println("Territoires pouvant être attaqués depuis " + territoireSource + " :");
-                for (Territoire territoire : territoiresAccessibles) {
-                    System.out.println("- " + territoire.getNom());
-                }
+        // Initialisez le nombre de pertes.
+        int pertes = 0;
 
-                // Demander au joueur de choisir le territoire cible
-                System.out.print("Saisissez le nom du territoire cible : ");
-                String territoireCible = scanner.nextLine();
-
-                // Demander au joueur de choisir le nombre de régiments pour l'attaque
-                System.out.print("Saisissez le nombre de régiments à utiliser pour l'attaque : ");
-                nombreRegiments = scanner.nextInt();
-                scanner.nextLine(); // Nettoyez la nouvelle ligne après la saisie d'un nombre.
-
-                // Traitez les saisies et effectuez l'attaque en conséquence.
-                // Ici, vous pouvez appeler des méthodes pour gérer l'attaque avec les territoires source et cible, et le nombre de régiments.
-
-                System.out.println("Attaque effectuée depuis " + territoireSource + " vers " + territoireCible + " avec " + nombreRegiments + " régiments.");
+        // Déterminez le nombre de pertes en comparant les dés.
+        for (int i = 0; i < resultatsAttaque.size(); i++) {
+            // Par exemple, si 6 est le résultat d'un dé, cela signifie une victoire.
+            // Vous pouvez personnaliser ces règles en fonction de votre jeu.
+            if (resultatsAttaque.get(i).recupererValeur() < 6) {
+                pertes++;
             }
         }
 
-        System.out.println("Fin de la phase d'attaque.");
+        // Déterminez le nombre de troupes restantes après l'attaque.
+        int troupesRestantes = resultatsAttaque.size() - pertes;
+
+        return troupesRestantes;
     }
-
-    /**
-     * Cette méthode permet d'obtenir la liste des territoires accessibles depuis un territoire source pour un joueur donné.
-     *
-     * @param territoireSource Le nom du territoire source à partir duquel l'accès est recherché.
-     * @param joueur Le joueur pour lequel on recherche les territoires accessibles.
-     * @return Une liste de territoires accessibles depuis le territoire source.
-     */
-    private List<Territoire> getTerritoiresAccessiblesDepuis(String territoireSource, Joueur joueur) {
-        List<Territoire> territoiresAccessibles = new ArrayList<>();
-
-        // Supposons que nous avons une liste de tous les territoires du jeu
-        List<Territoire> tousTerritoires = joueur.obtenirTerritoires();
-
-        // Parcourir tous les territoires et les ajouter à la liste des territoires accessibles
-        for (Territoire territoire : tousTerritoires) {
-            if (!territoire.getNom().equals(territoireSource)) {
-                territoiresAccessibles.add(territoire);
-            }
-        }
-
-        return territoiresAccessibles;
-    }
+}
 
 
     public void fermerScanner() {

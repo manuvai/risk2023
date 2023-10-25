@@ -212,7 +212,8 @@ public class Territoire {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Territoire that)) return false;
+        if (!(o instanceof Territoire)) return false;
+        Territoire that = (Territoire) o;
         return Objects.equals(getNom(), that.getNom());
     }
 
