@@ -14,17 +14,26 @@ public class Controler {
 
     public static void main(String[] args) {
         Joueur j1 = new Joueur();
+        Territoire t1 = new Territoire("Chine");
+        Territoire t2 = new Territoire("Inde");
+        Territoire t3 = new Territoire("Mogolie");
+        j1.ajouterTerritoire(t1);
+        j1.ajouterTerritoire(t2);
+        System.out.println(j1.obtenirTerritoires().toArray());
+
+
+
 
     }
 
     // Jeux
     public void Game(List<Joueur> joueurs) throws Exception {
         Plateau p = new Plateau();
+        p.ajouterJoueur(joueurs);
         p.initialiserParties();
         while(true){
             unTour(joueurs);
-            siPerdu(joueurs);
-            if (siVaqueur(joueurs)){
+            if (siVainqueur(joueurs)){
                 break;
             }
         }
@@ -47,6 +56,9 @@ public class Controler {
             }
         }
     }
+
+    public siVainqueur
+
 
 
     public Controler() {
@@ -103,18 +115,8 @@ public class Controler {
         sc.close();
 
         return resJ;
-
     }
 
-
-    public Joueur getActualJoueur() {
-        Joueur joueur = new Joueur();
-
-
-        // TODO Permettre de savoir de quel joueur il s'agit
-
-        return joueur;
-    }
 
     public Territoire recupererTerritoire(String nomTerritoire) {
         Territoire territoire = new Territoire(nomTerritoire);
@@ -129,25 +131,27 @@ public class Controler {
      *
      * @return Le territoire source sélectionné par le joueur.
      */
-    public Territoire demanderTerritoireSource() {
+    public Territoire demanderTerritoireSource(Joueur j) {
         Scanner sc = new Scanner(System.in);
 
         // il faut print list de territories de joueur.
-        List<Territoire> territoiresJoueur = getActualJoueur().obtenirTerritoires();
+        List<Territoire> territoiresJoueur = j.obtenirTerritoires();
         for (int i = 0; i < territoiresJoueur.size(); i++) {
             // ex. 1. ter1
             //     2. ter2
             System.out.println((i + 1) + territoiresJoueur.get(i).getNom());
         }
 
+
+
         while (true) {
-            System.out.println("Veuillez sélectionner un territoireSource :");
+            System.out.println("Veuillez sélectionner un territoireSource par numero:");
             int numTerritoire = sc.nextInt();
 
 
             Territoire territoireSource = recupererTerritoire(nomTerritoireSource);
             // Si joueur controle ce territoire, on changer le String -> Territoire
-            if (getActualJoueur().isPossessed(territoireSource)) { // Boolean <- controleTerritoire(territoireSource)
+            if (j.isPossessed(territoireSource)) { // Boolean <- controleTerritoire(territoireSource)
                 // getActualJoueur().ExchangeStringTerritoire(territoireSource); // Territoire <- ExchangeStringTerritoire(territoireSource)
                 return territoireSource;
 
