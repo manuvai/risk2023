@@ -1,0 +1,49 @@
+
+hide footbox
+
+participant "Controler" as ctrl
+actor "Joueur" as user
+participant "Plateau" as plat
+
+ctrl -> user ++: calculerNbRenforts()
+return nbRenforts
+
+alt Si le joueur a au moins 3 cartes
+    alt Si le joueur veut échanger ou qu'il a au moins 5 cartes
+        loop Tant que le joueur peut échanger
+            ctrl -> user ++: obtenirCartes()
+            return Map<Carte, Integer>
+
+            ctrl -> ctrl : choixCartes()
+            note right
+                Demander en saisie les cartes à échanger
+            end note
+            ctrl -> user ++: échangerCartes(List<CarteRisk>)
+                note right
+                    Penser à supprimer les cartes du 
+                    deck du joueur
+                end note
+            return nbRenfortsEchanges
+
+            ctrl -> user++: enleverCartes(List<CarteRisk>)
+            return
+
+            ctrl -> plat++:ajouterCartes(List<CarteRisk>)
+            return
+        end
+    end
+end
+
+ctrl -> ctrl : Déterminer les troupes à ajouter
+
+loop Pour chaque nbRenforts
+    ctrl -> user ++: ajouterPion()
+    return
+    
+end
+ctrl -> ctrl : placerRenforts()
+note right
+    Nécessite de demander en saisie les 
+    territoires où positionner les 
+    troupes de renfort
+end note
