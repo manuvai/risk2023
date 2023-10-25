@@ -1,8 +1,6 @@
 package res.controler;
 
-import res.model.De;
-import res.model.Joueur;
-import res.model.Territoire;
+import res.model.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,6 +15,12 @@ public class Controler {
     public Controler() {
         this.scanner = new Scanner(System.in);
 
+    }
+
+    public static void main(String... args) throws Exception {
+
+        Controler ctrl = new Controler();
+        ctrl.startAttackPhase(ctrl.getActualJoueur());
     }
 
     // Phase Fortification
@@ -68,6 +72,13 @@ public class Controler {
         Joueur joueur = new Joueur();
 
         // TODO Permettre de savoir de quel joueur il s'agit
+        joueur.ajouterTerritoire(new Territoire("Affique du nord"));
+        joueur.ajouterTerritoire(new Territoire("Affique du sud"));
+        joueur.ajouterTerritoire(new Territoire("Europe"));
+
+        joueur.setArmee(new Armee("Bleu"));
+        joueur.getArmee().ajouterPion(new Pion("Pion", TypePion.INFANTERIE));
+        joueur.getArmee().ajouterPion(new Pion("Chouval", TypePion.CAVALERIE));
 
         return joueur;
     }
@@ -88,10 +99,12 @@ public class Controler {
     public Territoire DemanderTerritoireSource() {
         Scanner sc = new Scanner(System.in);
         while (true) {
-            System.out.println("Veuillez sélectionner un territoireSource :");
-            String nomTerritoireSource = sc.nextLine();
+            System.out.println("Veuillez sélectionner un numéro territoireSource :");
+            int noTerritoireSource = sc.nextInt();
 
-            Territoire territoireSource = recupererTerritoire(nomTerritoireSource);
+            String nomTerritoire = "Territoire".concat(Integer.toString(noTerritoireSource));
+
+            Territoire territoireSource = recupererTerritoire(nomTerritoire);
             // Si joueur controle ce territoire, on changer le String -> Territoire
             if (getActualJoueur().isPossessed(territoireSource)) { // Boolean <- controleTerritoire(territoireSource)
                 // getActualJoueur().ExchangeStringTerritoire(territoireSource); // Territoire <- ExchangeStringTerritoire(territoireSource)
@@ -172,7 +185,7 @@ public class Controler {
     //Phase d'attaque 
    
     public void startAttackPhase(Joueur attaquant ) {
-        while (canAttack(attaquant)) {
+//        while (canAttack(attaquant)) {
             System.out.println("Phase d'attaque pour le joueur : " + attaquant.getNom());
             
          // Demander au joueur de choisir le territoire source
@@ -185,7 +198,7 @@ public class Controler {
 
             if (territoiresAttaquables.isEmpty()) {
                 System.out.println("Le joueur ne peut plus mener d'attaque. Fin de la phase d'attaque.");
-                break;
+                return;
             }
 
             // Demander au joueur de choisir le territoire cible
@@ -224,7 +237,7 @@ public class Controler {
             } else {
                 System.out.println("Attaque échouée. Le territoire est toujours aux mains du défenseur.");
             }
-        }
+//        }
     }
 
     private void retirerProprietaireTerritoire(Territoire territoireCible) {
@@ -290,8 +303,6 @@ public class Controler {
 
         return troupesRestantes;
     }
-}
-
 
     public void fermerScanner() {
         scanner.close();
