@@ -169,6 +169,10 @@ public class Controler {
     }
 
 
+    /**
+     * Effectue la phase de attaquer, permettant aux joueurs de attaquer les territoires d'autre joueurs
+     * @param joueur Ce joeur qui fait la phase Attaque
+     */
     public void phaseAttaque(Joueur joueur) {
         System.out.println("Phase d'attaque pour le joueur : " + joueur.getNom()); // TODO Remettre getNom()
 
@@ -236,6 +240,13 @@ public class Controler {
         System.out.println("Fin de la phase d'attaque.");
     }
 
+    /**
+     * Cette méthode permet d'obtenir la liste des territoires accessibles depuis un territoire source pour un joueur donné.
+     *
+     * @param territoireSource Le nom du territoire source à partir duquel l'accès est recherché.
+     * @param joueur Le joueur pour lequel on recherche les territoires accessibles.
+     * @return Une liste de territoires accessibles depuis le territoire source.
+     */
     private List<Territoire> getTerritoiresAccessiblesDepuis(String territoireSource, Joueur joueur) {
         List<Territoire> territoiresAccessibles = new ArrayList<>();
 
