@@ -240,9 +240,21 @@ public class Controler {
 //        }
     }
 
+    /**
+     * Retire un territoire de la liste des territoires possédés par le joueur.
+     *
+     * @param territoireCible Le territoire à retirer.
+     * @throws WrongOwnerTerritoriesException Si le joueur n'est pas le propriétaire du territoire cible.
+     *
+     * @YifanSHI
+     */
     private void retirerProprietaireTerritoire(Territoire territoireCible) {
-        // TODO Implémenter le fait de retirer le territoire à son propriétaire
-
+        Joueur joueur = new Joueur();
+        if (joueur.isPossessed(territoireCible)) {
+            territoires.remove(territoireCible);
+        } else {
+            throw new WrongOwnerTerritoriesException();
+        }
     }
 
     private boolean canAttack(Joueur attaquant ) {
