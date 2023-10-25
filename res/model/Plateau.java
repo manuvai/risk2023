@@ -1,6 +1,7 @@
 package res.model;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -10,7 +11,7 @@ import java.util.Random;
 
 
 public class Plateau {
-    private ArrayList<Continent> continents;
+    private ArrayList<Continent> continents = new ArrayList<Continent>();
     private ArrayList<Joueur> joueurs;
     private ArrayList<CarteRisk> cartesPille;
 
@@ -33,7 +34,24 @@ public class Plateau {
         Continent europe = new Continent("Europe",5);
         Continent océante = new Continent("Afrique",2);
 
-        
+        continents.add(afrique);
+        continents.add(amérique_du_sud);
+        continents.add(amérique_du_Nord);
+        continents.add(asie);
+        continents.add(europe);
+        continents.add(océante);
+
+        return continents;
+
+    }
+
+    public void creerTerritories(){
+
+    }
+
+
+    public void creerCartePile(){
+
     }
 
     /**
@@ -55,7 +73,7 @@ public class Plateau {
         // 1. Créez une liste de territoires
         ArrayList<Territoire> listeTtTerritoire = new ArrayList<Territoire>();
         for (Continent c : continents) {
-            listeTtTerritoire.addAll(c.getTerritories());
+            listeTtTerritoire.addAll(c.getTerritoires());
         }
 
         // 2. Pour chaque joueur, get un territoire de la liste et remove ce territoire de cette liste
@@ -87,7 +105,7 @@ public class Plateau {
      * @return Une carte associée à chaque quantité de cartes piochées.
      */
 
-    public Map<CarteRisk, Integer> getCartesPille() {
+    public List<CarteRisk> getCartesPille() {
         return cartesPille;
     }
 
@@ -108,7 +126,7 @@ public class Plateau {
      * @return Les cartes piochées pendant la partie.
      */
 
-    public Map<CarteRisk, Integer> getCartes() {
+    public List<CarteRisk> getCartes() {
         return this.cartesPille;
     }
 

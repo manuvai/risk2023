@@ -6,33 +6,33 @@ import res.model.Territoire;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Iterator;
 
 public class Controler {
     private Scanner scanner;
 
-    public Controler() {
-        this.scanner = new Scanner(System.in);
 
-    }
+    // unTour
+    public void unTour(List<Joueur> joueurs) {
+        Iterator<Joueur> iterator = joueurs.iterator();
 
-    // Gestion de Jeux
-    public Joueur risk(List<Joueur> joueurs) {
-        while (true) {
-            for (int i = 0; i < joueurs.size(); i++) {
-                Joueur j = joueurs.get(i);
+        while (iterator.hasNext()) {
+            Joueur j = iterator.next();
 
+            if (j.obtenirTerritoires().isEmpty()) {
+                iterator.remove();
+            } else {
                 phaseRenfort(j);
                 phaseAttaque(j);
                 phaseFortification(j);
-
-                if (j.isVaqueur()) {
-                    return j;
-                }
             }
-            return null;
         }
     }
 
+
+    public Controler() {
+        this.scanner = new Scanner(System.in);
+    }
 
 
     // Phase Fortification
@@ -107,9 +107,19 @@ public class Controler {
      */
     public Territoire demanderTerritoireSource() {
         Scanner sc = new Scanner(System.in);
+
+        // il faut print list de territories de joueur.
+        List<Territoire> territoiresJoueur = getActualJoueur().obtenirTerritoires();
+        for (int i = 0; i < territoiresJoueur.size(); i++) {
+            // ex. 1. ter1
+            //     2. ter2
+            System.out.println((i + 1) + territoiresJoueur.get(i).getNom());
+        }
+
         while (true) {
             System.out.println("Veuillez sélectionner un territoireSource :");
-            String nomTerritoireSource = sc.nextLine();
+            int numTerritoire = sc.nextInt();
+
 
             Territoire territoireSource = recupererTerritoire(nomTerritoireSource);
             // Si joueur controle ce territoire, on changer le String -> Territoire

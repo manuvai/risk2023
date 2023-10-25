@@ -8,5 +8,6 @@ public class MainTest {
     @Test
     public void test() {
         Assertions.assertEquals(1, 1);
+
     }
 }

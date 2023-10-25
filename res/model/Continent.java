@@ -43,7 +43,7 @@ public class Continent {
      * @return La liste des territoires du continent.
      */
 
-    public ArrayList<Territoire> getTerritories() {
+    public ArrayList<Territoire> getTerritoires() {
         return this.territoires;
     }
 
