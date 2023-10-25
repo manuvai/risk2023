@@ -60,6 +60,7 @@ public class Controler {
 
 
     // Phase Fortification
+
     /**
      * Effectue la phase de fortification, permettant aux joueurs de déplacer des régiment pour renforcer leurs territoires.
      *
@@ -89,7 +90,6 @@ public class Controler {
      * Demande au joueur s'il souhaite effectuer une phase de fortification.
      *
      * @return 1 si le joueur souhaite effectuer une fortification, 2 si le joueur ne souhaite pas en effectuer.
-     *
      * @throws Exception Lorsque le joueur entre une option invalide.
      */
 
@@ -220,8 +220,8 @@ public class Controler {
      * pour déplacer des troupes d'un territoire à un autre.
      *
      * @param territoireSource Le territoire de départ pour le déplacement des troupes.
-     * @param territoireCible Le territoire de destination pour le déplacement des troupes.
-     * @param nombreRegiment Le nombre de troupes à déplacer.
+     * @param territoireCible  Le territoire de destination pour le déplacement des troupes.
+     * @param nombreRegiment   Le nombre de troupes à déplacer.
      */
     public void deplacerRegiment(
             Territoire territoireSource,
@@ -229,14 +229,36 @@ public class Controler {
             int nombreRegiment) {
         getActualJoueur().deplacerRegiment(territoireSource, territoireCible, nombreRegiment);
     }
-    
+
     //Phase d'attaque 
-   
-    public void startAttackPhase(Joueur attaquant ) {
-//        while (canAttack(attaquant)) {
+    //Phase d'attaque 
+    //Phase d'attaque 
+    //Phase d'attaque   //Phase d'attaque   //Phase d'attaque    //Phase d'attaque   //Phase d'attaque   //Phase d'attaque   //Phase d'attaque 
+    //Phase d'attaque 
+    //Phase d'attaque 
+    //Phase d'attaque 
+
+
+    public void testAttackPhase() {
+
+        Controler ctrl = new Controler();
+        // Remplacez "nomJoueur" par le nom du joueur que vous souhaitez tester.
+        Joueur attaquant = new Joueur();
+
+        // Appelez la méthode startAttackPhase en mode test.
+        ctrl.startAttackPhase(attaquant);
+
+
+    }
+
+
+    public void startAttackPhase(Joueur attaquant) {
+
+        while (canAttack(attaquant)) {
+            System.out.println("--------------------Phase d'attaque ------------------");
             System.out.println("Phase d'attaque pour le joueur : " + attaquant.getNom());
-            
-         // Demander au joueur de choisir le territoire source
+
+            // Demander au joueur de choisir le territoire source
             System.out.print("Saisissez le nom du territoire source : ");
             String nomTerritoireSource = scanner.nextLine();
             Territoire territoireSource = recupererTerritoire(nomTerritoireSource);
@@ -244,11 +266,12 @@ public class Controler {
             // Demander au joueur d'obtenir la liste des territoires pour attaquer
             List<Territoire> territoiresAttaquables = getTerritoiresToAttack(attaquant, territoireSource);
 
+            /*
             if (territoiresAttaquables.isEmpty()) {
                 System.out.println("Le joueur ne peut plus mener d'attaque. Fin de la phase d'attaque.");
                 return;
             }
-
+	*/
             // Demander au joueur de choisir le territoire cible
             System.out.print("Saisissez le nom du territoire cible d'attaque : ");
             String nomTerritoireCible = scanner.nextLine();
@@ -259,10 +282,10 @@ public class Controler {
             scanner.nextLine(); // Nettoyer la nouvelle ligne.
 
             // Lancer les dés pour l'attaque
-            List<De> resultatsAttaque =  attaquant.lancerDes(desAttaque);
-            		//lancerDes(desAttaque);
+            List<De> resultatsAttaque = attaquant.lancerDes(desAttaque);
+            //lancerDes(desAttaque);
 
-            
+
             // Déterminer les troupes restantes
             int troupesRestantes = resolveAttack(resultatsAttaque);
 
@@ -285,7 +308,7 @@ public class Controler {
             } else {
                 System.out.println("Attaque échouée. Le territoire est toujours aux mains du défenseur.");
             }
-//        }
+        }
     }
 
     /**
@@ -295,7 +318,7 @@ public class Controler {
      *
      *
      */
-    private void retirerProprietaireTerritoire(Territoire territoireCible) {
+    private void retirerProprietaireTerritoire (Territoire territoireCible){
         Joueur proprietaire = rechercherProprietaireTerritoire(territoireCible);
 
         if (Objects.nonNull(proprietaire)) {
@@ -316,8 +339,8 @@ public class Controler {
 
     }
 
-    private boolean canAttack(Joueur attaquant ) {
-    	// Vérification du nombre de territoires du joueur attaquant
+    private boolean canAttack (Joueur attaquant ){
+        // Vérification du nombre de territoires du joueur attaquant
         if (attaquant.obtenirTerritoires().size() < 2) {
             System.out.println("Vous n'avez pas suffisamment de territoires pour attaquer.");
             return false;
@@ -335,7 +358,7 @@ public class Controler {
         return true;
     }
 
-    private List<Territoire> getTerritoiresToAttack(Joueur attaquant, Territoire territoireSource) {
+    private List<Territoire> getTerritoiresToAttack (Joueur attaquant, Territoire territoireSource){
         // Recherche du territoire source
         if (territoireSource == null) {
             System.out.println("Territoire source invalide.");
@@ -350,8 +373,8 @@ public class Controler {
     }
 
 
-    private int resolveAttack(List<De> resultatsAttaque ) {
-    	 // Tri des résultats d'attaque par ordre décroissant
+    private int resolveAttack (List < De > resultatsAttaque) {
+        // Tri des résultats d'attaque par ordre décroissant
         Collections.sort(resultatsAttaque, Collections.reverseOrder());
 
         // Initialisez le nombre de pertes.
