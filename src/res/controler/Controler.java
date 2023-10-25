@@ -237,14 +237,18 @@ public class Controler {
     //Phase d'attaque 
     //Phase d'attaque 
     //Phase d'attaque 
-
-
-    public void testAttackPhase() {
-
-        Controler ctrl = new Controler();
+    
+  
+    
+     public static void main(String[] args) {
+    	
+    	System.out.println("--------------------Phase d'attaque ------------------");
+    	
+    	Controler ctrl = new Controler();
         // Remplacez "nomJoueur" par le nom du joueur que vous souhaitez tester.
         Joueur attaquant = new Joueur();
-
+        
+        
         // Appelez la méthode startAttackPhase en mode test.
         ctrl.startAttackPhase(attaquant);
 
