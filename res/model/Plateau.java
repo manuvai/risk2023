@@ -12,6 +12,36 @@ public class Plateau {
     private ArrayList<Joueur> joueurs;
     private List<CarteRisk> cartesPille;
 
+
+    /**
+     * Initialise la partie en distribuant les territoires aux joueurs.
+     */
+
+    public void initialiserParties() {
+
+        distribuerCartes(this.joueurs);
+        initialisationRegiment();
+    }
+
+    /**
+     * Initialiser les régiments de chaque joueurs dans ses territoires
+     *
+     * @Author HP
+     */
+
+    public void initialisationRegiment() {
+        // 5 joueurs -> 25 pions infanterie
+        if (joueurs.size() == 5){
+            placerPionDansTerritoire(25);
+
+        } else if (joueurs.size() == 4){ // 4 joueurs -> 30 pions infanterie
+
+        } else if (joueurs.size() == 3){ // 3 joueurs -> 35 pions infanterie
+
+        }
+    }
+
+
      /**
      * Distribue les territoires aux joueurs de manière équilibrée.
      *
@@ -67,15 +97,6 @@ public class Plateau {
         return cartesPille;
     }
 
-      /**
-     * Initialise la partie en distribuant les territoires aux joueurs.
-     */
-
-    public void initialiserParties() {
-
-        distribuerCartes(this.joueurs);
-        // TODO: 23/10/2023
-    }
 
      /**
      * Obtient la liste des joueurs participants à la partie.
