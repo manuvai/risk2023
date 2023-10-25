@@ -1,6 +1,8 @@
 package res.vue;
 
 
+import res.model.Joueur;
+
 public class Vue {
 
   
