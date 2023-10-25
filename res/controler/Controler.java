@@ -15,13 +15,33 @@ public class Controler {
 
     }
 
+    // Gestion de Jeux
+    public Joueur risk(List<Joueur> joueurs) {
+        while (true) {
+            for (int i = 0; i < joueurs.size(); i++) {
+                Joueur j = joueurs.get(i);
+
+                phaseRenfort(j);
+                phaseAttaque(j);
+                phaseFortification(j);
+
+                if (j.isVaqueur()) {
+                    return j;
+                }
+            }
+            return null;
+        }
+    }
+
+
+
     // Phase Fortification
+
     /**
      * Effectue la phase de fortification, permettant aux joueurs de déplacer des régiment pour renforcer leurs territoires.
      *
      * @param resJ Option indiquant si le joueur souhaite ou non effectuer une fortification.
      *             1 pour effectuer une fortification, 2 pour ne pas en effectuer.
-     *
      * @throws Exception Lorsque le joueur entre une option invalide.
      */
     public void phaseFortification() throws Exception {
@@ -35,9 +55,9 @@ public class Controler {
 
             // 2.Commencer Fortification
             if (resJ == 1) {
-                Territoire tS = DemanderTerritoireSource();
-                Territoire tC = DemanderTerritoireCible();
-                int nbRegiment = DemanderNbRegimentDeplace(tS);
+                Territoire tS = demanderTerritoireSource();
+                Territoire tC = demanderTerritoireCible();
+                int nbRegiment = demanderNbRegimentDeplace(tS);
                 deplacerRegiment(tS, tC, nbRegiment);
                 break;
             }
@@ -48,7 +68,6 @@ public class Controler {
      * Demande au joueur s'il souhaite effectuer une phase de fortification.
      *
      * @return 1 si le joueur souhaite effectuer une fortification, 2 si le joueur ne souhaite pas en effectuer.
-     *
      * @throws Exception Lorsque le joueur entre une option invalide.
      */
 
@@ -63,8 +82,10 @@ public class Controler {
 
     }
 
+
     public Joueur getActualJoueur() {
         Joueur joueur = new Joueur();
+
 
         // TODO Permettre de savoir de quel joueur il s'agit
 
@@ -84,7 +105,7 @@ public class Controler {
      *
      * @return Le territoire source sélectionné par le joueur.
      */
-    public Territoire DemanderTerritoireSource() {
+    public Territoire demanderTerritoireSource() {
         Scanner sc = new Scanner(System.in);
         while (true) {
             System.out.println("Veuillez sélectionner un territoireSource :");
@@ -108,7 +129,7 @@ public class Controler {
      *
      * @return Le territoire cible sélectionné par le joueur.
      */
-    public Territoire DemanderTerritoireCible() {
+    public Territoire demanderTerritoireCible() {
         while (true) {
             Scanner sc = new Scanner(System.in);
             System.out.println("Veuillez sélectionner un territoireCible :");
@@ -133,7 +154,7 @@ public class Controler {
      * @param tS Le territoire source depuis lequel le joueur souhaite déplacer des régiments.
      * @return Le nombre de régiments à déplacer, saisi par le joueur.
      */
-    public int DemanderNbRegimentDeplace(Territoire tS) {
+    public int demanderNbRegimentDeplace(Territoire tS) {
         while (true) {
             Scanner sc = new Scanner(System.in);
             System.out.println("Veuillez sélectionner un territoireCible :");
@@ -158,8 +179,8 @@ public class Controler {
      * pour déplacer des troupes d'un territoire à un autre.
      *
      * @param territoireSource Le territoire de départ pour le déplacement des troupes.
-     * @param territoireCible Le territoire de destination pour le déplacement des troupes.
-     * @param nombreRegiment Le nombre de troupes à déplacer.
+     * @param territoireCible  Le territoire de destination pour le déplacement des troupes.
+     * @param nombreRegiment   Le nombre de troupes à déplacer.
      */
     public void deplacerRegiment(
             Territoire territoireSource,
@@ -171,6 +192,7 @@ public class Controler {
 
     /**
      * Effectue la phase de attaquer, permettant aux joueurs de attaquer les territoires d'autre joueurs
+     *
      * @param joueur Ce joeur qui fait la phase Attaque
      */
     public void phaseAttaque(Joueur joueur) {
@@ -244,7 +266,7 @@ public class Controler {
      * Cette méthode permet d'obtenir la liste des territoires accessibles depuis un territoire source pour un joueur donné.
      *
      * @param territoireSource Le nom du territoire source à partir duquel l'accès est recherché.
-     * @param joueur Le joueur pour lequel on recherche les territoires accessibles.
+     * @param joueur           Le joueur pour lequel on recherche les territoires accessibles.
      * @return Une liste de territoires accessibles depuis le territoire source.
      */
     private List<Territoire> getTerritoiresAccessiblesDepuis(String territoireSource, Joueur joueur) {

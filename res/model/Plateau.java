@@ -4,17 +4,39 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Random;
 
-    /**
-     * Cette classe représente le plateau de jeu pour un jeu de Risk.
-     */
+/**
+ * Cette classe représente le plateau de jeu pour un jeu de Risk.
+ */
 
 
 public class Plateau {
     private ArrayList<Continent> continents;
     private ArrayList<Joueur> joueurs;
-    private Map<CarteRisk, Integer> cartesPille;
+    private ArrayList<CarteRisk> cartesPille;
 
-     /**
+    /**
+     * Initialise la partie en distribuant les territoires aux joueurs.
+     */
+
+    public void initialiserParties() {
+        creerContinents();
+        creerTerritories();
+        distribuerCartes(joueurs);
+        creerCartePile();
+    }
+
+    private ArrayList<Continent> creerContinents(){
+        Continent afrique = new Continent("Afrique",3);
+        Continent amérique_du_sud = new Continent("Amérique du sud",2);
+        Continent amérique_du_Nord = new Continent("Amérique du Nord",5);
+        Continent asie = new Continent("Asie",7);
+        Continent europe = new Continent("Europe",5);
+        Continent océante = new Continent("Afrique",2);
+
+        
+    }
+
+    /**
      * Distribue les territoires aux joueurs de manière équilibrée.
      *
      * @param js La liste des joueurs à qui distribuer les territoires.
@@ -59,7 +81,7 @@ public class Plateau {
         return continents;
     }
 
-     /**
+    /**
      * Obtient la carte du jeu associée à chaque quantité de cartes piochées.
      *
      * @return Une carte associée à chaque quantité de cartes piochées.
@@ -69,17 +91,8 @@ public class Plateau {
         return cartesPille;
     }
 
-      /**
-     * Initialise la partie en distribuant les territoires aux joueurs.
-     */
 
-    public void initialiserParties() {
-
-        distribuerCartes(this.joueurs);
-        // TODO: 23/10/2023
-    }
-
-     /**
+    /**
      * Obtient la liste des joueurs participants à la partie.
      *
      * @return La liste des joueurs participants à la partie.
@@ -89,7 +102,7 @@ public class Plateau {
         return this.joueurs;
     }
 
-     /**
+    /**
      * Obtient les cartes piochées pendant la partie.
      *
      * @return Les cartes piochées pendant la partie.
@@ -104,7 +117,7 @@ public class Plateau {
      *
      * @param j Le joueur à enlever de la partie.
      */
-    
+
     public void enleverJoueur(Joueur j) {
         this.joueurs.remove(j);
     }
