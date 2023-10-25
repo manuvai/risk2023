@@ -2,10 +2,7 @@ package res.controler;
 
 import res.model.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -240,9 +237,23 @@ public class Controler {
 //        }
     }
 
+    /**
+     * Retire un territoire de la liste des territoires possédés par le joueur.
+     *
+     * @param territoireCible Le territoire à retirer.
+     *
+     * @YifanSHI
+     */
     private void retirerProprietaireTerritoire(Territoire territoireCible) {
-        // TODO Implémenter le fait de retirer le territoire à son propriétaire
+        Joueur proprietaire = rechercherProprietaireTerritoire(territoireCible);
 
+        if (Objects.nonNull(proprietaire)) {
+            proprietaire.retirerTerritoire(territoireCible);
+        }
+    }
+
+    private Joueur rechercherProprietaireTerritoire(Territoire territoire) {
+        return null; // TODO Faire le lien avec le plateau
     }
 
     private boolean canAttack(Joueur attaquant ) {

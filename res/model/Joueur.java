@@ -253,4 +253,8 @@ public class Joueur {
     public void setArmee(Armee inArmee) {
         armee = inArmee;
     }
+
+    public void retirerTerritoire(Territoire territoireCible) {
+        territoires.remove(territoireCible);
+    }
 }
