@@ -58,16 +58,16 @@ public class Joueur {
      *
      * @return Le nombre de régiments de renforts.
      */
-    public int calculerNbRenforts() {
+    public int calculerNbRenforts(Plateau plateau) {
 
         int result = territoires.size() / 3;
         int renfortsObtenusPourTerritoires = Math.min(3, result);
-        int renfortsObtenusPourContinents = 0; // TODO Ajouter la gestion pour les continents
+        int renfortsObtenusPourContinents = getRenfortsParContinents(plateau);
 
         return renfortsObtenusPourTerritoires + renfortsObtenusPourContinents;
     }
 
-     /**
+    /**
      * Obtient la liste des territoires possédés par le joueur.
      *
      * @return La liste des territoires du joueur.
@@ -103,7 +103,7 @@ public class Joueur {
         for (Continent continent : plateau.getContinents()) {
             boolean complet = true;
 
-            for (Territoire territoire : continent.getTerritoires()) {
+            for (Territoire territoire : continent.getTerritories()) {
                 if (!isPossessed(territoire)) {
                     complet = false;
                     break;
@@ -136,14 +136,8 @@ public class Joueur {
         }
 
     }
-
-    // TO ADD javadoc
-    public void attaquer(Territoire territoireSource, Territoire territoireDestination, int nbRegiments) {
-
-    }
-
    
-   /**
+    /**
      * Déplace un nombre spécifié de régiments d'un territoire source vers un territoire de destination.
      *
      * @param territoireSource       Le territoire source depuis lequel les régiments seront déplacés.
@@ -236,6 +230,24 @@ public class Joueur {
 
     public boolean isPossessed(Territoire territoire) {
         return Objects.nonNull(territoire) && territoires.contains(territoire);
+    }
+
+    /**
+     * Récupère les renforts disponibles pour les continents possédés par le joueur
+     *
+     * @param plateau
+     * @return
+     */
+    private int getRenfortsParContinents(Plateau plateau) {
+        List<Continent> continentsPossedes = determinerContinentsComplets(plateau);
+
+        int renfortsObtenusPourContinents = 0;
+
+        for (Continent continent : continentsPossedes) {
+            renfortsObtenusPourContinents += continent.getBonusTerritories();
+        }
+
+        return renfortsObtenusPourContinents;
     }
 
 }
