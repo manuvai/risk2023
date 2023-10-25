@@ -315,8 +315,24 @@ public class Controler {
 
         return troupesRestantes;
     }
-	public void distribuerRenforts(Joueur joueur) {
-		int nb = joueur.calculerNbRenforts();
+
+    private List<Territoire> getTerritoiresAccessiblesDepuis(String territoireSource, Joueur joueur) {
+        List<Territoire> territoiresAccessibles = new ArrayList<>();
+
+        // Supposons que nous avons une liste de tous les territoires du jeu
+        List<Territoire> tousTerritoires = joueur.obtenirTerritoires();
+
+        // Parcourir tous les territoires et les ajouter à la liste des territoires accessibles
+        for (Territoire territoire : tousTerritoires) {
+            if (!territoire.getNom().equals(territoireSource)) {
+                territoiresAccessibles.add(territoire);
+            }
+        }
+
+        return territoiresAccessibles;
+    }
+
+	public void distribuerRenforts(Joueur joueur, int nb) {
 		int artillerie = nb/10;
 		nb = nb%10;
 		int cavalerie = nb/5;
@@ -385,7 +401,7 @@ public class Controler {
 				break;
 			}
 		}
-		//Ajout des régiments au joueur
+		distribuerRenforts(joueur, regimentsADonner);
 	}
 
     public void fermerScanner() {
