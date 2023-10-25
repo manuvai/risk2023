@@ -34,6 +34,16 @@ public class Armee {
     }
 
     /**
+     * Récupère la couleur de l'armée
+     * '
+     * @return
+     */
+    public String getCouleur() {
+        return couleur;
+
+    }
+
+    /**
      * Retire un pion de l'armée.
      *
      * @param pion Le pion à retirer.
