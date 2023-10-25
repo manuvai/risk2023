@@ -23,6 +23,7 @@ public class MainLoader {
         MainLoader loader = new MainLoader();
 
         System.out.println(loader.getContinentList());
+        System.out.println(loader.getTerritoireList());
     }
 
     public List<Continent> getContinentList() {
@@ -30,6 +31,13 @@ public class MainLoader {
         Map<Integer, Territoire> territoireMap = getTerritoires();
 
         return linkToContinents(continentMap, territoireMap);
+    }
+
+    public List<Territoire> getTerritoireList() {
+        return getContinentList().parallelStream()
+                .map(Continent::getTerritories)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
     }
 
     public Map<Integer, Continent> getContinents() {
