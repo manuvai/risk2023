@@ -17,7 +17,7 @@ public class Joueur {
     private Armee armee;
 
     private List<Territoire> territoires = new ArrayList<>();
-    private Map<CarteRisk, Integer> cartes = new HashMap<>();
+    private List<CarteRisk> cartes = new ArrayList<>();
 
     public String getNom() {
         return nom;
@@ -29,6 +29,10 @@ public class Joueur {
 
     public Armee getArmee() {
         return armee;
+    }
+
+    public List<CarteRisk> getCartes() {
+        return cartes;
     }
 
     /**
@@ -84,9 +88,7 @@ public class Joueur {
      */
     public void ajouterCarte(CarteRisk carte) {
         if (Objects.nonNull(carte)) {
-            cartes.computeIfAbsent(carte, carteKey -> cartes.put(carteKey, 0));
-
-            cartes.put(carte, cartes.get(carte) + 1);
+            cartes.add(carte);
         }
     }
 
@@ -124,16 +126,12 @@ public class Joueur {
      * @param cartes Les cartes à échanger.
      */
 
-    public void echangerCartes(List<CarteRisk> cartes) {
+    public int echangerCartes(List<CarteRisk> cartes) {
         if (Objects.isNull(cartes) || cartes.size() < 3) {
             throw new InvalidCardsToTradeException();
         }
 
-        int nbRegimentGained = getNbRegimentGained(cartes);
-
-        for (int i = 0; i < nbRegimentGained; i++) {
-            armee.ajouterPion(new Pion("pion", TypePion.INFANTERIE));
-        }
+        return getNbRegimentGained(cartes);
 
     }
    
@@ -256,5 +254,13 @@ public class Joueur {
 
     public void retirerTerritoire(Territoire territoireCible) {
         territoires.remove(territoireCible);
+    }
+
+    public void enleverCartes(List<CarteRisk> listeEchange) {
+        if (Objects.nonNull(listeEchange)) {
+            for (CarteRisk carte : listeEchange) {
+                cartes.remove(carte);
+            }
+        }
     }
 }

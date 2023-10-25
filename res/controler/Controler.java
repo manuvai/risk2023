@@ -3,6 +3,7 @@ import res.model.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 public class Controler {
@@ -333,47 +334,59 @@ public class Controler {
     }
 
 	public void distribuerRenforts(Joueur joueur, int nb) {
-		int artillerie = nb/10;
-		nb = nb%10;
-		int cavalerie = nb/5;
-		nb = nb%5;
+		int artillerie = nb / 10;
+		nb = nb % 10;
+		int cavalerie = nb / 5;
+		nb = nb % 5;
 		int infanterie = nb;
 		
 		for (int i = 0; i < artillerie; i++) {
 			Pion pion = new Pion("Artillerie", TypePion.ARTILLERIE);
-			joueur.ajouterPion(pion);
+			joueur.getArmee()
+                    .ajouterPion(pion);
 		}
+
 		for (int i = 0; i < cavalerie; i++) {
 			Pion pion = new Pion("Cavalerie", TypePion.CAVALERIE);
-			joueur.ajouterPion(pion);
+			joueur.getArmee()
+                    .ajouterPion(pion);
 		}
+
 		for (int i = 0; i < infanterie; i++) {
 			Pion pion = new Pion("Infanterie", TypePion.INFANTERIE);
-			joueur.ajouterPion(pion);
+			joueur.getArmee()
+                    .ajouterPion(pion);
 		}
+
 	}
 	
 	public void echangerCartes(Joueur joueur) {
 		int regimentsADonner = 0;
 		while (true) {
-			List<CarteRisk>liste = joueur.getCartes();
-			for (CarteRisk cartes : liste) {
-				System.out.println("1 : "+cartes.getTypePion());
+			List<CarteRisk> listeCartes = joueur.getCartes();
+			for (CarteRisk carte : listeCartes) {
+				System.out.println("1 : " + carte.getTypePion());
 			}
 			System.out.println("Choisir une carte à échanger (écrivez 0 si vous ne voulez pas échanger)");
 			System.out.println("Si vous avez 5 cartes ou plus, vous devez obligatoirement échanger");
+
 			boolean saisie_correcte = false;
-			while (!saisie_correcte) {
+
+            int choix1 = 0;
+            int choix2 = 0;
+            int choix3 = 0;
+
+            while (!saisie_correcte) {
 				try {
-					int choix1 = scanner.nextInt();
-					if (choix1 == 0 && cartes.size()<5) {
+					choix1 = scanner.nextInt();
+					if (choix1 == 0 && listeCartes.size()<5) {
 						break;
 					}
-					int choix2 = scanner.nextInt();
-					int choix3 = scanner.nextInt();
-					if (choix1 > 0 && choix1 <= liste.size() &&
-							choix2 > 0 && choix2 <= liste.size() && 
-							choix3 > 0 && choix3 <= liste.size() &&
+					choix2 = scanner.nextInt();
+					choix3 = scanner.nextInt();
+					if (choix1 > 0 && choix1 <= listeCartes.size() &&
+							choix2 > 0 && choix2 <= listeCartes.size() &&
+							choix3 > 0 && choix3 <= listeCartes.size() &&
 							choix1 != choix2 && choix1 != choix3 && choix2 != choix3) {
 						saisie_correcte = true;
 					}
@@ -386,9 +399,10 @@ public class Controler {
 				}
 			}
 			if (choix1 > 0) {
-				List<CarteRisk>liste_echange = new ArrayList<>(cartes.get(choix1 - 1), cartes.get(choix2 - 1), cartes.get(choix3 - 1));	
+				List<CarteRisk> liste_echange = Stream.of(listeCartes.get(choix1 - 1), listeCartes.get(choix2 - 1), listeCartes.get(choix3 - 1))
+                        .collect(Collectors.toList());
 				regimentsADonner += joueur.echangerCartes(liste_echange);
-				joueur.enleverCarte(liste_echange);
+				joueur.enleverCartes(liste_echange);
 				plateau.ajouterCarte(liste_echange);
 			}
 			System.out.println("Voulez vous encore échanger ? 0 = non/1 = oui");

@@ -1,10 +1,8 @@
 package res.model;
 
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
-    /**
+/**
      * Cette classe représente le plateau de jeu pour un jeu de Risk.
      */
 
@@ -12,7 +10,7 @@ import java.util.Random;
 public class Plateau {
     private ArrayList<Continent> continents;
     private ArrayList<Joueur> joueurs;
-    private Map<CarteRisk, Integer> cartesPille;
+    private List<CarteRisk> cartesPille;
 
      /**
      * Distribue les territoires aux joueurs de manière équilibrée.
@@ -65,7 +63,7 @@ public class Plateau {
      * @return Une carte associée à chaque quantité de cartes piochées.
      */
 
-    public Map<CarteRisk, Integer> getCartesPille() {
+    public List<CarteRisk> getCartesPille() {
         return cartesPille;
     }
 
@@ -89,16 +87,6 @@ public class Plateau {
         return this.joueurs;
     }
 
-     /**
-     * Obtient les cartes piochées pendant la partie.
-     *
-     * @return Les cartes piochées pendant la partie.
-     */
-
-    public Map<CarteRisk, Integer> getCartes() {
-        return this.cartesPille;
-    }
-
     /**
      * Enlève un joueur de la partie.
      *
@@ -107,5 +95,11 @@ public class Plateau {
     
     public void enleverJoueur(Joueur j) {
         this.joueurs.remove(j);
+    }
+
+    public void ajouterCarte(List<CarteRisk> listeEchange) {
+        if (Objects.nonNull(listeEchange)) {
+            cartesPille.addAll(listeEchange);
+        }
     }
 }
