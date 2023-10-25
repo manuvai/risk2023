@@ -1,6 +1,7 @@
 package res.controler;
 
 import res.model.Joueur;
+import res.model.Plateau;
 import res.model.Territoire;
 
 import java.util.ArrayList;
@@ -11,9 +12,27 @@ import java.util.Iterator;
 public class Controler {
     private Scanner scanner;
 
+    public static void main(String[] args) {
+        Joueur j1 = new Joueur();
+
+    }
+
+    // Jeux
+    public void Game(List<Joueur> joueurs) throws Exception {
+        Plateau p = new Plateau();
+        p.initialiserParties();
+        while(true){
+            unTour(joueurs);
+            siPerdu(joueurs);
+            if (siVaqueur(joueurs)){
+                break;
+            }
+        }
+    }
+
 
     // unTour
-    public void unTour(List<Joueur> joueurs) {
+    public void unTour(List<Joueur> joueurs) throws Exception {
         Iterator<Joueur> iterator = joueurs.iterator();
 
         while (iterator.hasNext()) {
@@ -34,6 +53,11 @@ public class Controler {
         this.scanner = new Scanner(System.in);
     }
 
+    //PhaseRenfort
+    public void phaseRenfort(Joueur j){
+
+    }
+
 
     // Phase Fortification
 
@@ -44,7 +68,7 @@ public class Controler {
      *             1 pour effectuer une fortification, 2 pour ne pas en effectuer.
      * @throws Exception Lorsque le joueur entre une option invalide.
      */
-    public void phaseFortification() throws Exception {
+    public void phaseFortification(Joueur j) throws Exception {
         // 1.Demander joueur -> Fortification ?
         while (true) {
             int resJ = demanderFortification();
