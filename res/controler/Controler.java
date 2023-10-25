@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 
 public class Controler {
     private Scanner scanner;
+    
+    private Plateau plateau;//TODO Besoin d'une instance d'objet plateau pour méthodes
 
     public Controler() {
         this.scanner = new Scanner(System.in);
@@ -336,29 +338,54 @@ public class Controler {
 	}
 	
 	public void echangerCartes(Joueur joueur) {
-		List<Cartes>liste = joueur.getCartes();
-		for (Cartes cartes : liste) {
-			System.out.println("1 : "+cartes.getTypePion());
-		}
-		Scanner scanner = new Scanner(System.in);
-		System.out.println("Choisir une carte à échanger");
-		boolean saisie_correcte = false;
-		while (!saisie_correcte) {
-			try {
-				int choix1 = myObj.nextInt();
-				int choix2 = myObj.nextInt();
-				int choix3 = myObj.nextInt();
-				if (choix1 > 0 && choix1 < liste.size() &&
-						choix2 > 0 && choix2 < liste.size() && 
-						choix3 > 0 && choix3 < liste.size()) {
-					saisie_correcte = true;
+		int regimentsADonner = 0;
+		while (true) {
+			List<CarteRisk>liste = joueur.getCartes();
+			for (CarteRisk cartes : liste) {
+				System.out.println("1 : "+cartes.getTypePion());
+			}
+			System.out.println("Choisir une carte à échanger (écrivez 0 si vous ne voulez pas échanger)");
+			System.out.println("Si vous avez 5 cartes ou plus, vous devez obligatoirement échanger");
+			boolean saisie_correcte = false;
+			while (!saisie_correcte) {
+				try {
+					int choix1 = scanner.nextInt();
+					if (choix1 == 0 && cartes.size()<5) {
+						break;
+					}
+					int choix2 = scanner.nextInt();
+					int choix3 = scanner.nextInt();
+					if (choix1 > 0 && choix1 <= liste.size() &&
+							choix2 > 0 && choix2 <= liste.size() && 
+							choix3 > 0 && choix3 <= liste.size() &&
+							choix1 != choix2 && choix1 != choix3 && choix2 != choix3) {
+						saisie_correcte = true;
+					}
+				} catch (IllegalArgumentException e) {
+					System.out.println("Saisie incorrecte");
+					
 				}
-			} catch (Exception e) {
+				if (!saisie_correcte) {
+					System.out.println("Saisie incorrecte, recommencez !");
+				}
+			}
+			if (choix1 > 0) {
+				List<CarteRisk>liste_echange = new ArrayList<>(cartes.get(choix1 - 1), cartes.get(choix2 - 1), cartes.get(choix3 - 1));	
+				regimentsADonner += joueur.echangerCartes(liste_echange);
+				joueur.enleverCarte(liste_echange);
+				plateau.ajouterCarte(liste_echange);
+			}
+			System.out.println("Voulez vous encore échanger ? 0 = non/1 = oui");
+			int choix = scanner.nextInt();
+			while (choix < 0 || choix > 1) {
 				System.out.println("Saisie incorrecte");
+				choix = scanner.nextInt();
+			}
+			if (choix == 0) {
+				break;
 			}
 		}
-		
-		
+		//Ajout des régiments au joueur
 	}
 
     public void fermerScanner() {
