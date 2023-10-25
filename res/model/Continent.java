@@ -1,14 +1,16 @@
 package res.model;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
-    /**
+/**
      * Cette classe représente un continent dans un jeu.
      */
 public class Continent {
     private String nomCtint;
     private int bonusRenforts;
-    private ArrayList<Territoire> territoires;
+    private List<Territoire> territoires = new ArrayList<>();
   
     /**
      * Constructeur de la classe Continent avec nom et bonus de renforts.
@@ -43,7 +45,7 @@ public class Continent {
      * @return La liste des territoires du continent.
      */
 
-    public ArrayList<Territoire> getTerritories() {
+    public List<Territoire> getTerritories() {
         return this.territoires;
     }
 
@@ -57,5 +59,10 @@ public class Continent {
         return this.bonusRenforts;
     }
 
+    public void addTerritoire(Territoire territoire) {
+        if (Objects.nonNull(territoire)) {
+            territoires.add(territoire);
+        }
+    }
 }
 
