@@ -19,15 +19,12 @@ public class Territoire {
     private String nom;
     private List<Déploiement> unitésDéployées = new ArrayList<>(); // Nombre d'unités déployées sur le territoire
     private List<Territoire> voisins = new ArrayList<>();
-    private Joueur proprio; // Joueur propriétaire du territoire
 
-     /**
+    /**
      * Constructeur de la classe Territoire.
      *
      * @param nom Le nom du territoire.
      */
-
-
     public Territoire(String nom) {
         this.nom = nom;
     }
@@ -77,17 +74,6 @@ public class Territoire {
 
     public boolean estVoisin(Territoire autreTerritoire) {
         return voisins.contains(autreTerritoire);
-    }
-    
-
-    /**
-     * Obtient le propriétaire du territoire.
-     *
-     * @return Le joueur propriétaire du territoire.
-     */
-
-    public Joueur getProprietaire() {
-        return proprio;
     }
 
     /**

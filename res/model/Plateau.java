@@ -76,6 +76,24 @@ public class Plateau {
 
     }
 
+    /**
+     * Récupère le propriétaire du territoire donné en paramètre
+     *
+     * @param territoire
+     * @return
+     */
+    public Joueur getProprietaire(Territoire territoire) {
+        if (Objects.nonNull(territoire)) {
+            for (Joueur j : joueurs) {
+                if (j.isPossessed(territoire)) {
+                    return j;
+                }
+            }
+        }
+
+        return null;
+    }
+
 
     /**
      * Obtient la liste des continents sur le plateau.
