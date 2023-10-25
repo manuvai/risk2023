@@ -39,9 +39,9 @@ public class Controler {
 
             // 2.Commencer Fortification
             if (resJ == 1) {
-                Territoire tS = DemanderTerritoireSource();
-                Territoire tC = DemanderTerritoireCible();
-                int nbRegiment = DemanderNbRegimentDeplace(tS);
+                Territoire tS = demanderTerritoireSource();
+                Territoire tC = demanderTerritoireCible();
+                int nbRegiment = demanderNbRegimentDeplace(tS);
                 deplacerRegiment(tS, tC, nbRegiment);
                 break;
             }
@@ -95,7 +95,7 @@ public class Controler {
      *
      * @return Le territoire source sélectionné par le joueur.
      */
-    public Territoire DemanderTerritoireSource() {
+    public Territoire demanderTerritoireSource() {
         Scanner sc = new Scanner(System.in);
         while (true) {
             System.out.println("Veuillez sélectionner un numéro territoireSource :");
@@ -121,7 +121,7 @@ public class Controler {
      *
      * @return Le territoire cible sélectionné par le joueur.
      */
-    public Territoire DemanderTerritoireCible() {
+    public Territoire demanderTerritoireCible() {
         while (true) {
             Scanner sc = new Scanner(System.in);
             System.out.println("Veuillez sélectionner un territoireCible :");
@@ -146,7 +146,7 @@ public class Controler {
      * @param tS Le territoire source depuis lequel le joueur souhaite déplacer des régiments.
      * @return Le nombre de régiments à déplacer, saisi par le joueur.
      */
-    public int DemanderNbRegimentDeplace(Territoire tS) {
+    public int demanderNbRegimentDeplace(Territoire tS) {
         while (true) {
             Scanner sc = new Scanner(System.in);
             System.out.println("Veuillez sélectionner un territoireCible :");
