@@ -1,5 +1,4 @@
 package res.controler;
-
 import res.model.*;
 
 import java.util.*;
@@ -314,10 +313,56 @@ public class Controler {
 
         return troupesRestantes;
     }
+	public void distribuerRenforts(Joueur joueur) {
+		int nb = joueur.calculerNbRenforts();
+		int artillerie = nb/10;
+		nb = nb%10;
+		int cavalerie = nb/5;
+		nb = nb%5;
+		int infanterie = nb;
+		
+		for (int i = 0; i < artillerie; i++) {
+			Pion pion = new Pion("Artillerie", TypePion.ARTILLERIE);
+			joueur.ajouterPion(pion);
+		}
+		for (int i = 0; i < cavalerie; i++) {
+			Pion pion = new Pion("Cavalerie", TypePion.CAVALERIE);
+			joueur.ajouterPion(pion);
+		}
+		for (int i = 0; i < infanterie; i++) {
+			Pion pion = new Pion("Infanterie", TypePion.INFANTERIE);
+			joueur.ajouterPion(pion);
+		}
+	}
+	
+	public void echangerCartes(Joueur joueur) {
+		List<Cartes>liste = joueur.getCartes();
+		for (Cartes cartes : liste) {
+			System.out.println("1 : "+cartes.getTypePion());
+		}
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("Choisir une carte à échanger");
+		boolean saisie_correcte = false;
+		while (!saisie_correcte) {
+			try {
+				int choix1 = myObj.nextInt();
+				int choix2 = myObj.nextInt();
+				int choix3 = myObj.nextInt();
+				if (choix1 > 0 && choix1 < liste.size() &&
+						choix2 > 0 && choix2 < liste.size() && 
+						choix3 > 0 && choix3 < liste.size()) {
+					saisie_correcte = true;
+				}
+			} catch (Exception e) {
+				System.out.println("Saisie incorrecte");
+			}
+		}
+		
+		
+	}
 
     public void fermerScanner() {
         scanner.close();
     }
 
 }
-
