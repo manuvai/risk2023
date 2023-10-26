@@ -135,6 +135,31 @@ public class Controler {
 
     }
 
+    public static void testGauthier(Controler ctrl) {
+    	Joueur j1 = ctrl.getActualJoueur();
+    	Armee rouge = new Armee("rouge");
+    	j1.setArmee(rouge);
+    	List<CarteRisk>cartes = ctrl.plateau.creerCartes();
+		/* Méthode creerCartes() renvoie bien une liste de cartes avec pour valeurs un type de pion et un territoire
+		 * for (CarteRisk carteRisk : cartes) {
+		 * System.out.println(carteRisk.getTypePion() +" "+
+		 * carteRisk.getTerritoire().getNom()); }
+		 */
+    	
+		/* Méthode de distribution des renforts ok
+		 * System.out.println(j1.getArmee().getPions()); //Armée vide donc liste vide
+		 * ctrl.distribuerRenforts(j1, 5); //On ajoute 5 renforts, soit un pion
+		 * cavalerie System.out.println(j1.getArmee().getPions().get(0).getNomPion());
+		 */
+    	j1.getArmee().ajouterPion(new Pion("Infanterie", TypePion.INFANTERIE));
+    	j1.getArmee().getPions().get(0);
+    	for (int i = 0; i < 10; i++) {
+			j1.ajouterCarte(cartes.get(i));
+		}
+    	ctrl.echangerCartes(j1);
+    	j1.getArmee().getPions().get(0);
+    	
+    }
 
     public static void testGauthier(Controler ctrl) {
     	Joueur j1 = ctrl.getActualJoueur();
