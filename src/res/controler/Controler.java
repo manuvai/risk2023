@@ -246,7 +246,18 @@ public class Controler {
         // Ajouter Cartes
 //        List<CarteRisk> cartes = new ArrayList<CarteRisk>();
 //        pl.initialisationCarte(cartes);
+
+        // Ajouter Cartes
+        List<CarteRisk> cartes = plateau.initialisationCarte(); // Appel de la méthode pour créer les cartes
+        plateau.distribuerCartes(joueurs); // Distribuer les cartes aux joueurs
+        plateau.distribuerCartesAuxTerritoires(); // Distribuer les cartes aux territoires
         plateau.initialiserParties();
+
+
+
+
+
+
 //        for (Joueur j : joueurs){
 //            System.out.println(j.obtenirTerritoires());
 //        }
