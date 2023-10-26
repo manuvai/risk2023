@@ -405,6 +405,7 @@ public class Controler {
                 //lancerDes(desAttaque);
 
                 // Déterminer les troupes restantes
+                // Entrain de fix !!!
                 int troupesRestantes = resolveAttack(resultatsAttaque, tC);
 
                 if (troupesRestantes > 0) {
