@@ -11,6 +11,11 @@ public class Controler {
     
     private Plateau plateau;//TODO Besoin d'une instance d'objet plateau pour méthodes
 
+    private List<Joueur> joueurs;
+
+    private Joueur actualJoueur;
+
+
     public Controler() {
         this.scanner = new Scanner(System.in);
 
@@ -20,13 +25,27 @@ public class Controler {
 
         Controler ctrl = new Controler();
 //        ctrl.startAttackPhase(ctrl.getActualJoueur());
-
         ctrl.initializePlateau();
+        ctrl.phaseFortification();
 
     }
+
+
+    // Switch Joueur
+    public void passerAuJoueurSuivant() {
+        int currentIndex = joueurs.indexOf(actualJoueur);
+        if (currentIndex < joueurs.size() - 1) {
+            actualJoueur = joueurs.get(currentIndex + 1);
+        } else {
+            actualJoueur = joueurs.get(0); // Retourner au permier joueur
+        }
+    }
+
+
     // Phase Préparation
-    public void initializePlateau(){
+    public void initializePlateau() throws Exception {
         Plateau pl = new Plateau();
+        this.plateau = pl;
 
         Joueur j1 = new Joueur();
         Joueur j2 = new Joueur();
@@ -39,13 +58,15 @@ public class Controler {
         joueurs.add(j3);
         joueurs.add(j4);
 
-        pl.setJoueurs(joueurs);
+        plateau.setJoueurs(joueurs);
+        this.joueurs = joueurs;
+        this.actualJoueur = joueurs.get(0);
 
 
         // Ajouter Cartes
 //        List<CarteRisk> cartes = new ArrayList<CarteRisk>();
 //        pl.initialisationCarte(cartes);
-        pl.initialiserParties();
+        plateau.initialiserParties();
 //        for (Joueur j : joueurs){
 //            System.out.println(j.obtenirTerritoires());
 //        }
@@ -56,6 +77,10 @@ public class Controler {
 //                System.out.println(t.getNombreUnites());
 //            }
 //        }
+    }
+
+    public void setJoueurs(List<Joueur> joueurs){
+        this.joueurs = joueurs;
     }
 
 
@@ -77,9 +102,16 @@ public class Controler {
             // 2.Commencer Fortification
             if (resJ == 1) {
                 Territoire tS = demanderTerritoireSource();
-                Territoire tC = demanderTerritoireCible();
+                Territoire tC = demanderTerritoireCible(tS);
+                System.out.println(tS.getNombreUnites());
+                System.out.println(tC.getNombreUnites());
                 int nbRegiment = demanderNbRegimentDeplace(tS);
                 deplacerRegiment(tS, tC, nbRegiment);
+                System.out.println(tS.getNombreUnites());
+                System.out.println(tC.getNombreUnites());
+                break;
+            } else if (resJ == 2) {
+                System.out.println("Vous sautez ce tour de fortificqtion.");
                 break;
             }
         }
@@ -94,29 +126,15 @@ public class Controler {
      */
 
     public int demanderFortification() throws Exception {
-        Scanner sc = new Scanner(System.in);
         // Demander si joueur va commencer l'étape de fortification
-        System.out.println("Est-ce que vous voulez fortifier(1/2) ? (Reponse : 1 - Oui, 2 - Non");
-        int resJ = sc.nextInt();
-        sc.close();
-
+        System.out.println("Est-ce que vous voulez fortifier(1/2) ? (Reponse : 1 - Oui, 2 - Non)");
+        int resJ = this.scanner.nextInt();
         return resJ;
 
     }
 
     public Joueur getActualJoueur() {
-        Joueur joueur = new Joueur();
-
-        // TODO Permettre de savoir de quel joueur il s'agit
-        joueur.ajouterTerritoire(new Territoire("Affique du nord"));
-        joueur.ajouterTerritoire(new Territoire("Affique du sud"));
-        joueur.ajouterTerritoire(new Territoire("Europe"));
-
-        joueur.setArmee(new Armee("Bleu"));
-        joueur.getArmee().ajouterPion(new Pion("Pion", TypePion.INFANTERIE));
-        joueur.getArmee().ajouterPion(new Pion("Chouval", TypePion.CAVALERIE));
-
-        return joueur;
+        return this.actualJoueur;
     }
     
     /**
@@ -145,23 +163,25 @@ public class Controler {
      * @return Le territoire source sélectionné par le joueur.
      */
     public Territoire demanderTerritoireSource() {
-        Scanner sc = new Scanner(System.in);
         while (true) {
             System.out.println("Veuillez sélectionner un numéro territoireSource :");
-            int noTerritoireSource = sc.nextInt();
-
-            String nomTerritoire = "Territoire".concat(Integer.toString(noTerritoireSource));
-
-            Territoire territoireSource = recupererTerritoire(nomTerritoire);
-            // Si joueur controle ce territoire, on changer le String -> Territoire
-            if (getActualJoueur().isPossessed(territoireSource)) { // Boolean <- controleTerritoire(territoireSource)
-                // getActualJoueur().ExchangeStringTerritoire(territoireSource); // Territoire <- ExchangeStringTerritoire(territoireSource)
-                return territoireSource;
-
-            } else {
-                System.err.println("Vous controle pas ce territoire ! Ressayer !");
+            // afficher tous les territoires de joueur
+            for (int i = 0; i < getActualJoueur().obtenirTerritoires().size(); i++) {
+                int indexT = i + 1;
+                System.out.println(indexT + "." + getActualJoueur().obtenirTerritoires().get(i).getNom() + " : " +
+                        getActualJoueur().obtenirTerritoires().get(i).getNombreUnites());
             }
-            sc.close();
+            System.out.println("Saisir un numéro de la liste : ");
+            int noTerritoireSource = this.scanner.nextInt();
+
+            if (noTerritoireSource > getActualJoueur().obtenirTerritoires().size() || noTerritoireSource <= 0){
+                System.err.println("Veuillez sélectionner un numéro territoireSource de la liste");
+            } else {
+                Territoire territoireSource = getActualJoueur().obtenirTerritoires().get(noTerritoireSource - 1);
+                System.out.println("Vous avez choisi un territoireSource : " + territoireSource.getNom());
+                return territoireSource;
+            }
+
         }
     }
 
@@ -170,21 +190,32 @@ public class Controler {
      *
      * @return Le territoire cible sélectionné par le joueur.
      */
-    public Territoire demanderTerritoireCible() {
+    public Territoire demanderTerritoireCible(Territoire tS) {
         while (true) {
             Scanner sc = new Scanner(System.in);
-            System.out.println("Veuillez sélectionner un territoireCible :");
-            String nomTerritoireCible = sc.nextLine();
-
-            Territoire territoireCible = recupererTerritoire(nomTerritoireCible);
-
-            // Si joueur controle ce territoire, on changer le String -> Territoire
-            if (getActualJoueur().isPossessed(territoireCible)) { // Boolean <- controleTerritoire(territoireSource)
-                return territoireCible;
-            } else {
-                System.err.println("Vous controle pas ce territoire ! Ressayer !");
+            System.out.println("Veuillez sélectionner un numéro de territoireCible :");
+            // afficher tous les territoires de joueur
+            for (int i = 0; i < getActualJoueur().obtenirTerritoires().size(); i++) {
+                int indexT = i + 1;
+                if (getActualJoueur().obtenirTerritoires().get(i) == tS){
+                    continue;
+                } else {
+                    System.out.println(indexT + "." + getActualJoueur().obtenirTerritoires().get(i).getNom() +
+                            " : " + getActualJoueur().obtenirTerritoires().get(i).getNombreUnites());
+                }
             }
-            sc.close();
+
+            System.out.println("Saisir un numéro de la liste : ");
+            int noTerritoireCible = this.scanner.nextInt();
+
+            if (noTerritoireCible > getActualJoueur().obtenirTerritoires().size() || noTerritoireCible <= 0
+                    || noTerritoireCible == getActualJoueur().obtenirTerritoires().indexOf(tS) + 1){
+                System.err.println("Veuillez sélectionner un numéro territoireCible de la liste");
+            } else {
+                Territoire TerritoireCible = getActualJoueur().obtenirTerritoires().get(noTerritoireCible - 1);
+                System.out.println("Vous avez choisi un territoireCible : " + TerritoireCible.getNom());
+                return TerritoireCible;
+            }
         }
     }
 
@@ -197,18 +228,17 @@ public class Controler {
      */
     public int demanderNbRegimentDeplace(Territoire tS) {
         while (true) {
-            Scanner sc = new Scanner(System.in);
-            System.out.println("Veuillez sélectionner un territoireCible :");
-            System.out.println("Vous avez" + tS.getNombreUnites() + " regiments ici !");// int <- getNbRegiment()
-            System.out.println("Vous pouvez deplacer 0 -> " + (tS.getNombreUnites() - 1) + "regiments");
-            int nbRegiment = sc.nextInt();
+            System.out.println("Vous avez " + tS.getNombreUnites() + " regiments dans " + tS.getNom() + " !");
+            System.out.println("Vous pouvez deplacer 0 -> " + (tS.getNombreUnites() - 1) + " régiments");
+            System.out.println("Veuillez choisir nb de régiment pour deplacer : ");
+            int nbRegiment = this.scanner.nextInt();
 
             if (nbRegiment > (tS.getNombreUnites() - 1)) {
                 System.err.println("Vous n'avez pas assez de regiments");
             } else if (nbRegiment < 0) {
                 System.err.println("nbRegiment ne peut pas < 0");
             } else {
-                sc.close();
+                System.out.println("Vous avez déplacé " + nbRegiment + " de " + tS.getNom());
                 return nbRegiment;
             }
         }
