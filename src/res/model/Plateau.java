@@ -10,11 +10,9 @@ import java.util.*;
 
 
 public class Plateau {
-    private List<Continent> continents;
-    private List<Joueur> joueurs;
-    private List<CarteRisk> cartesPille;
-    private ArrayList<Territoire> territoires;
-
+    private List<Continent> continents = new ArrayList<>();
+    private List<Joueur> joueurs = new ArrayList<>();
+    private List<CarteRisk> cartesPille = new ArrayList<>();
 
     /**
      * Initialise la partie en distribuant les territoires aux joueurs.
