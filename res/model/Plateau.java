@@ -11,6 +11,7 @@ public class Plateau {
     private ArrayList<Continent> continents;
     private ArrayList<Joueur> joueurs;
     private List<CarteRisk> cartesPille;
+    private ArrayList<Territoire> territoires;
 
      /**
      * Distribue les territoires aux joueurs de manière équilibrée.
@@ -120,4 +121,14 @@ public class Plateau {
             cartesPille.addAll(listeEchange);
         }
     }
+
+    /**
+     * Obtient la liste des territoires sur le plateau.
+     *
+     * @return La liste des territoires sur le plateau.
+     */
+    public ArrayList<Territoire> getTerritoires() {
+        return territoires;
+    }
+
 }
