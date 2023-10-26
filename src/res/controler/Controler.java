@@ -5,6 +5,15 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+    /**
+     * Cette classe représente le controller du jeu.
+     *
+     * @author Fatima MOUSLIM
+     * @author Manuvai REHUA
+     * @author Yifan SHI
+     * @author Han PANG
+     * @since 24/10/23
+     */
 
 public class Controler {
     private Scanner scanner;
@@ -32,7 +41,7 @@ public class Controler {
     public static void main(String... args) throws Exception {
 
         Controler ctrl = new Controler();
-//        ctrl.startAttackPhase(ctrl.getActualJoueur());
+
         ctrl.initializePlateau();
 
         ctrl.startAttackPhase();
@@ -42,6 +51,13 @@ public class Controler {
         // TODO Décommenter la partie du bas lors de tests
         // testGauthier(ctrl);
     }
+
+
+        /**
+         * tester fortification.
+         *
+         * @return Controler
+         */
 
     private static void testFortification(Controler ctrl) throws Exception {
         //tester distribuer Territoires
