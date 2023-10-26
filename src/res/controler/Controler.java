@@ -33,36 +33,37 @@ public class Controler {
     public static void main(String... args) throws Exception {
 
         Controler ctrl = new Controler();
+//        ctrl.startAttackPhase(ctrl.getActualJoueur());
         ctrl.initializePlateau();
-////        ctrl.startAttackPhase(ctrl.getActualJoueur());
-//
-//        //tester distribuer Territoires
-//        System.out.println("tous les territories: ");
-//        List<String> ttTerr = new ArrayList<String>();
-//        for (Continent c : ctrl.plateau.getContinents()) {
-//            for (Territoire t : c.getTerritories()) {
-//                ttTerr.add(t.getNom());
-//            }
-//        }
-//        System.out.println(Arrays.toString(ttTerr.toArray()));
-//
-//        System.out.println("apres distribution, pour chanque joueur: ");
-//        for (Joueur j : ctrl.joueurs){
-//            List<String> terrJoueur = new ArrayList<String>();
-//
-//            for (Territoire t : j.obtenirTerritoires()) {
-//                terrJoueur.add(t.getNom());
-//            }
-//            System.out.println(Arrays.toString(terrJoueur.toArray()));
-//        }
-//
-//        ctrl.phaseFortification();
 
-        //ctrl.phaseFortification();
-        
-        
+        testFortification(ctrl);
+
         // TODO Décommenter la partie du bas lors de tests
-         testGauthier(ctrl);
+        // testGauthier(ctrl);
+    }
+
+    private static void testFortification(Controler ctrl) throws Exception {
+        //tester distribuer Territoires
+        System.out.println("tous les territories: ");
+        List<String> ttTerr = new ArrayList<String>();
+        for (Continent c : ctrl.plateau.getContinents()) {
+            for (Territoire t : c.getTerritories()) {
+                ttTerr.add(t.getNom());
+            }
+        }
+        System.out.println(Arrays.toString(ttTerr.toArray()));
+
+        System.out.println("apres distribution, pour chanque joueur: ");
+        for (Joueur j : ctrl.joueurs){
+            List<String> terrJoueur = new ArrayList<String>();
+
+            for (Territoire t : j.obtenirTerritoires()) {
+                terrJoueur.add(t.getNom());
+            }
+            System.out.println(Arrays.toString(terrJoueur.toArray()));
+        }
+
+        ctrl.phaseFortification();
     }
 
     /**
@@ -266,7 +267,7 @@ public class Controler {
      * @return Le territoire correspondant au nom spécifié, ou null s'il n'existe pas de territoire avec ce nom.
      */
     public Territoire recupererTerritoire(String nomTerritoire) {
-        ArrayList<Territoire> territoiresPlateau = plateau.getTerritoires();
+        List<Territoire> territoiresPlateau = plateau.getTerritoires();
 
         // les territoires du plateau
         for (Territoire territoire : territoiresPlateau) {

@@ -63,8 +63,4 @@ public class Armee {
             pions.remove(pion);
         }
     }
-
-    public List<Pion> getPions() {
-        return pions;
-    }
 }
