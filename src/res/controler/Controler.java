@@ -40,7 +40,7 @@ public class Controler {
         testFortification(ctrl);
 
         // TODO Décommenter la partie du bas lors de tests
-        // testGauthier(ctrl);
+        testGauthier(ctrl);
     }
 
     private static void testFortification(Controler ctrl) throws Exception {
@@ -91,6 +91,8 @@ public class Controler {
 		 * j1.ajouterCarte(cartes.get(i)); } ctrl.echangerCartes(j1); for (Pion pion :
 		 * j1.getArmee().getPions()) { System.out.println(pion.getNomPion()); }
 		 */
+    	ctrl.distribuerRenforts(j1, 13);
+    	ctrl.placerRenforts(j1);
     	
     }
 	/*
@@ -730,9 +732,57 @@ public class Controler {
 			}
 		}
 		distribuerRenforts(joueur, regimentsADonner);
+		placerRenforts(joueur);
 	}
 
-    public void fermerScanner() {
+    public void placerRenforts(Joueur j1) {
+    	System.out.print("Vous disposez des pions suivants : ");
+		for (Pion pions : j1.getArmee().getPions()) {
+			System.out.print(pions.getNomPion()+" ");
+		} System.out.println();
+		System.out.println("Souhaitez vous les placer sur vos territoires ? 1-Oui/2-Non");
+		int choix = scanner.nextInt();
+		//Si le joueur veut positionner ses renforts, on liste ses territoires et il choisit où les placer
+		if (choix == 1) {
+			System.out.print("Vous disposez des territoires suivants : ");
+			int i = 1;
+			for (Territoire territoires : j1.obtenirTerritoires()) {
+				System.out.println(i+": "+territoires.getNom());
+				i++;
+			} 
+			i = 1;
+			List<Integer> ter_saisis = new ArrayList<Integer>();
+			while (i!=0) {
+				System.out.println("Choisissez le(s) territoire(s) que vous souhaitez remplir, saisir 0 pour terminer");
+				i = scanner.nextInt();
+				if (i!=0) {
+					ter_saisis.add(i);
+				}
+			}
+			if(ter_saisis.size()>0) {
+				System.out.print("Vous disposez des pions suivants : ");
+				int j = 1;
+				for (Pion pions : j1.getArmee().getPions()) {
+					System.out.print(j+":"+pions.getNomPion()+" ");
+					j++;
+				} System.out.println();
+				int k = 0;
+				for (Integer nb : ter_saisis) {
+					if (nb-1 < j1.obtenirTerritoires().size() && (j1.getArmee().getPions().size()>0)) {
+						System.out.println("Quel pion ajouter au territoire "+j1.obtenirTerritoires().get(nb-1).getNom());
+						k = scanner.nextInt();
+						j1.obtenirTerritoires().get(nb-1).ajouterRegiment(j1.getArmee().getPions().get(k-1), 1);
+					}
+				}
+				System.out.println("Placement effectué sur les "+ter_saisis.size()+" terrains choisis");
+			}
+			
+		} else {
+			System.out.println("Pas de placement, vous passez donc à la phase suivante");
+		}
+	}
+
+	public void fermerScanner() {
         scanner.close();
     }
 
