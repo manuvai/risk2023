@@ -13,6 +13,7 @@ public class Plateau {
     private List<Continent> continents;
     private List<Joueur> joueurs;
     private List<CarteRisk> cartesPille;
+    private ArrayList<Territoire> territoires;
 
 
     /**
@@ -182,4 +183,14 @@ public class Plateau {
             cartesPille.addAll(listeEchange);
         }
     }
+
+    /**
+     * Obtient la liste des territoires sur le plateau.
+     *
+     * @return La liste des territoires sur le plateau.
+     */
+    public ArrayList<Territoire> getTerritoires() {
+        return territoires;
+    }
+
 }

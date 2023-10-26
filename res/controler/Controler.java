@@ -118,14 +118,26 @@ public class Controler {
 
         return joueur;
     }
-
+    
+    /**
+     * Récupère un territoire à partir de son nom.
+     *
+     * @param nomTerritoire Le nom du territoire à récupérer.
+     * @return Le territoire correspondant au nom spécifié, ou null s'il n'existe pas de territoire avec ce nom.
+     */
     public Territoire recupererTerritoire(String nomTerritoire) {
-        Territoire territoire = new Territoire(nomTerritoire);
+        ArrayList<Territoire> territoiresPlateau = plateau.getTerritoires();
 
-        // TODO Implémenter la recherche d'un territoire à partir d'un nom
-
-        return territoire;
+        // les territoires du plateau
+        for (Territoire territoire : territoiresPlateau) {
+            if (territoire.getNom().equalsIgnoreCase(nomTerritoire)) {
+                return territoire; // Si le nom correspond
+            }
+        }
+        // Si aucun territoire trouvé
+        return null;
     }
+
 
     /**
      * Demande au joueur de sélectionner un territoire source pour la phase de fortification.
@@ -281,7 +293,7 @@ public class Controler {
      *
      * @param territoireCible Le territoire à retirer.
      *
-     * @YifanSHI
+     *
      */
     private void retirerProprietaireTerritoire(Territoire territoireCible) {
         Joueur proprietaire = rechercherProprietaireTerritoire(territoireCible);
@@ -291,6 +303,12 @@ public class Controler {
         }
     }
 
+    /**
+     * Recherche le propriétaire d'un territoire donné en utilisant les informations du plateau de jeu.
+     *
+     * @param territoire Le territoire dont vous souhaitez trouver le propriétaire.
+     * @return Le joueur qui est propriétaire du territoire, ou null si le propriétaire n'a pas été trouvé ou si le plateau n'est pas défini.
+     */
     private Joueur rechercherProprietaireTerritoire(Territoire territoire) {
        return Objects.isNull(plateau)
             ? null
@@ -314,9 +332,6 @@ public class Controler {
             System.out.println("Vous n'avez pas suffisamment de régiments pour attaquer.");
             return false;
         }
-
-        
-
         return true;
     }
 
