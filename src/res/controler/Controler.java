@@ -44,6 +44,8 @@ public class Controler {
 
         ctrl.initializePlateau();
 
+        testGauthier(ctrl);
+
         ctrl.startAttackPhase();
 
         testFortification(ctrl);
@@ -87,7 +89,7 @@ public class Controler {
     	Joueur j1 = ctrl.getActualJoueur();
     	Armee rouge = new Armee("rouge");
     	j1.setArmee(rouge);
-    	List<CarteRisk>cartes = ctrl.plateau.creerCartes();
+    	//List<CarteRisk>cartes = ctrl.plateau.creerCartes();
 		/* Méthode creerCartes() renvoie bien une liste de cartes avec pour valeurs un type de pion et un territoire
 		 * for (CarteRisk carteRisk : cartes) {
 		 * System.out.println(carteRisk.getTypePion() +" "+
@@ -196,7 +198,6 @@ public class Controler {
         return saisie;
 
     }
-    
     // Switch Joueur
     public void passerAuJoueurSuivant() {
         int currentIndex = joueurs.indexOf(actualJoueur);
@@ -223,7 +224,18 @@ public class Controler {
         // Ajouter Cartes
 //        List<CarteRisk> cartes = new ArrayList<CarteRisk>();
 //        pl.initialisationCarte(cartes);
+
+        // Ajouter Cartes
+
+        plateau.distribuerCartes(joueurs); // Distribuer les cartes aux joueurs
+        plateau.distribuerCartesAuxTerritoires(); // Distribuer les cartes aux territoires
         plateau.initialiserParties();
+
+
+
+
+
+
 //        for (Joueur j : joueurs){
 //            System.out.println(j.obtenirTerritoires());
 //        }

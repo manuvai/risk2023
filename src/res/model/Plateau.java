@@ -148,6 +148,25 @@ public class Plateau {
         }
     }
 
+    public void distribuerCartesAuxTerritoires() {
+        // Liste des territoires
+        List<Territoire> territoires = getTerritoires();
+
+        // Liste des cartes à distribuer
+        List<CarteRisk> cartes = getCartesPille();
+
+        // Mélanger la liste des cartes pour une distribution aléatoire
+        Collections.shuffle(cartes);
+
+        // Distribuer les cartes aux territoires
+        for (int i = 0; i < territoires.size(); i++) {
+            Territoire territoire = territoires.get(i);
+            CarteRisk carte = cartes.get(i % cartes.size());
+            // Sélectionnez la carte suivante dans la liste, en boucle
+           // territoire.setCarte(carte);
+        }
+    }
+
     /**
      * Récupère le propriétaire du territoire donné en paramètre
      *
