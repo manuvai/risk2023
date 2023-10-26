@@ -118,7 +118,7 @@ public class Plateau {
         //Ensuite on ajoute les deux jokers
         Joker joker = new Joker(null, null);
         cartes.add(joker);
-        Joker joker = new Joker(null, null);
+        joker = new Joker(null, null);
         cartes.add(joker);
         Collections.shuffle(cartes);
         return cartes;
