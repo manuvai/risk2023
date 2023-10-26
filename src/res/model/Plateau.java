@@ -83,7 +83,7 @@ public class Plateau {
      /**
      * Distribue les territoires aux joueurs de manière équilibrée.
      *
-     * @param js La liste des joueurs à qui distribuer les territoires.
+     * @return La liste des joueurs à qui distribuer les territoires.
      */
 
     //Création d'une liste de cartes
@@ -118,7 +118,7 @@ public class Plateau {
         //Ensuite on ajoute les deux jokers
         Joker joker = new Joker(null, null);
         cartes.add(joker);
-        Joker joker = new Joker(null, null);
+        joker = new Joker(null, null);
         cartes.add(joker);
         Collections.shuffle(cartes);
         return cartes;

@@ -30,6 +30,25 @@ public class Controler {
 
     }
 
+    /**
+     * Récupère la saisie de l'utilisateur pour avoir le nombre de joueurs
+     *
+     * @return
+     */
+    public int getNbJoueurs() {
+        System.out.print("Combien de joueurs ? (1 à 5) : ");
+
+        int nbJoueurs = scanner.nextInt();
+
+        while (nbJoueurs <= 0 || nbJoueurs > 5) {
+            System.out.print("Veuillez saisir un nombre entre 1 et 5 : ");
+            nbJoueurs = scanner.nextInt();
+        }
+
+        return nbJoueurs;
+
+    }
+
 
     // Switch Joueur
     public void passerAuJoueurSuivant() {
