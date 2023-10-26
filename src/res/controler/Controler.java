@@ -236,7 +236,7 @@ public class Controler {
      * @return Le territoire correspondant au nom spécifié, ou null s'il n'existe pas de territoire avec ce nom.
      */
     public Territoire recupererTerritoire(String nomTerritoire) {
-        ArrayList<Territoire> territoiresPlateau = plateau.getTerritoires();
+        List<Territoire> territoiresPlateau = plateau.getTerritoires();
 
         // les territoires du plateau
         for (Territoire territoire : territoiresPlateau) {
