@@ -68,11 +68,11 @@ public class Controler {
     public int getNbJoueurs() {
         System.out.print("Combien de joueurs ? (1 à 5) : ");
 
-        int nbJoueurs = scanner.nextInt();
+        int nbJoueurs = Integer.parseInt(scanner.nextLine());
 
         while (nbJoueurs <= 0 || nbJoueurs > 5) {
             System.out.print("Veuillez saisir un nombre entre 1 et 5 : ");
-            nbJoueurs = scanner.nextInt();
+            nbJoueurs = Integer.parseInt(scanner.nextLine());
         }
 
         return nbJoueurs;
@@ -144,13 +144,12 @@ public class Controler {
 
     // Phase Préparation
     public void initializePlateau() throws Exception {
-        Plateau pl = new Plateau();
-        this.plateau = pl;
+        plateau = new Plateau();
 
         int nbJoueurs = getNbJoueurs();
         List<Joueur> joueurs = initialiserJoueurs(nbJoueurs);
 
-        pl.setJoueurs(joueurs);
+        plateau.setJoueurs(joueurs);
         this.joueurs = joueurs;
         this.actualJoueur = joueurs.get(0);
 
