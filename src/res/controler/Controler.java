@@ -16,7 +16,6 @@ public class Controler {
 
     private Joueur actualJoueur;
 
-
     public Controler() {
         this.scanner = new Scanner(System.in);
 
@@ -37,6 +36,15 @@ public class Controler {
 //        ctrl.startAttackPhase(ctrl.getActualJoueur());
         ctrl.initializePlateau();
 
+        ctrl.startAttackPhase();
+
+        testFortification(ctrl);
+
+        // TODO Décommenter la partie du bas lors de tests
+        // testGauthier(ctrl);
+    }
+
+    private static void testFortification(Controler ctrl) throws Exception {
         //tester distribuer Territoires
 //        System.out.println("tous les territories: ");
 //        List<String> ttTerr = new ArrayList<String>();
@@ -59,9 +67,62 @@ public class Controler {
 //
 //        ctrl.phaseFortification();
 
-        ctrl.startAttackPhase();
+        System.out.println("apres distribution, pour chanque joueur: ");
+        for (Joueur j : ctrl.joueurs){
+            List<String> terrJoueur = new ArrayList<String>();
 
+            for (Territoire t : j.obtenirTerritoires()) {
+                terrJoueur.add(t.getNom());
+            }
+            System.out.println(Arrays.toString(terrJoueur.toArray()));
+        }
+
+        ctrl.phaseFortification();
     }
+
+    public static void testGauthier(Controler ctrl) {
+    	Joueur j1 = ctrl.getActualJoueur();
+    	Armee rouge = new Armee("rouge");
+    	j1.setArmee(rouge);
+    	List<CarteRisk>cartes = ctrl.plateau.creerCartes();
+		/* Méthode creerCartes() renvoie bien une liste de cartes avec pour valeurs un type de pion et un territoire
+		 * for (CarteRisk carteRisk : cartes) {
+		 * System.out.println(carteRisk.getTypePion() +" "+
+		 * carteRisk.getTerritoire().getNom()); }
+		 */
+    	
+		/* Méthode de distribution des renforts ok
+		 * System.out.println(j1.getArmee().getPions()); //Armée vide donc liste vide
+		 * ctrl.distribuerRenforts(j1, 5); //On ajoute 5 renforts, soit un pion
+		 * cavalerie System.out.println(j1.getArmee().getPions().get(0).getNomPion());
+		 */
+    	
+		/*Méthode d'échange de cartes ok
+		 * j1.getArmee().ajouterPion(new Pion("Infanterie", TypePion.INFANTERIE)); for
+		 * (Pion pion : j1.getArmee().getPions()) {
+		 * System.out.println(pion.getNomPion()); } for (int i = 0; i < 5; i++) {
+		 * j1.ajouterCarte(cartes.get(i)); } ctrl.echangerCartes(j1); for (Pion pion :
+		 * j1.getArmee().getPions()) { System.out.println(pion.getNomPion()); }
+		 */
+    	
+    }
+	/*
+	 * //tester distribuer Territoires System.out.println("tous les territories: ");
+	 * List<String> ttTerr = new ArrayList<String>(); for (Continent c :
+	 * ctrl.plateau.getContinents()) { for (Territoire t : c.getTerritories()) {
+	 * ttTerr.add(t.getNom()); } }
+	 * System.out.println(Arrays.toString(ttTerr.toArray()));
+	 * 
+	 * System.out.println("apres distribution, pour chanque joueur: "); for (Joueur
+	 * j : ctrl.joueurs){ List<String> terrJoueur = new ArrayList<String>();
+	 * 
+	 * for (Territoire t : j.obtenirTerritoires()) { terrJoueur.add(t.getNom()); }
+	 * System.out.println(Arrays.toString(terrJoueur.toArray())); }
+	 * 
+	 * ctrl.phaseFortification();
+	 * 
+	 * }
+	 */
 
     /**
      * Récupère la saisie de l'utilisateur pour avoir le nombre de joueurs
@@ -133,6 +194,31 @@ public class Controler {
 
     }
 
+    public static void testGauthier(Controler ctrl) {
+    	Joueur j1 = ctrl.getActualJoueur();
+    	Armee rouge = new Armee("rouge");
+    	j1.setArmee(rouge);
+    	List<CarteRisk>cartes = ctrl.plateau.creerCartes();
+		/* Méthode creerCartes() renvoie bien une liste de cartes avec pour valeurs un type de pion et un territoire
+		 * for (CarteRisk carteRisk : cartes) {
+		 * System.out.println(carteRisk.getTypePion() +" "+
+		 * carteRisk.getTerritoire().getNom()); }
+		 */
+    	
+		/* Méthode de distribution des renforts ok
+		 * System.out.println(j1.getArmee().getPions()); //Armée vide donc liste vide
+		 * ctrl.distribuerRenforts(j1, 5); //On ajoute 5 renforts, soit un pion
+		 * cavalerie System.out.println(j1.getArmee().getPions().get(0).getNomPion());
+		 */
+    	j1.getArmee().ajouterPion(new Pion("Infanterie", TypePion.INFANTERIE));
+    	j1.getArmee().getPions().get(0);
+    	for (int i = 0; i < 10; i++) {
+			j1.ajouterCarte(cartes.get(i));
+		}
+    	ctrl.echangerCartes(j1);
+    	j1.getArmee().getPions().get(0);
+    	
+    }
 
     // Switch Joueur
     public void passerAuJoueurSuivant() {
@@ -239,7 +325,7 @@ public class Controler {
      * @return Le territoire correspondant au nom spécifié, ou null s'il n'existe pas de territoire avec ce nom.
      */
     public Territoire recupererTerritoire(String nomTerritoire) {
-        ArrayList<Territoire> territoiresPlateau = plateau.getTerritoires();
+        List<Territoire> territoiresPlateau = plateau.getTerritoires();
 
         // les territoires du plateau
         for (Territoire territoire : territoiresPlateau) {
@@ -356,12 +442,14 @@ public class Controler {
             int nombreRegiment) {
         getActualJoueur().deplacerRegiment(territoireSource, territoireCible, nombreRegiment);
     }
+    
+    //Phase d'attaque 
 
-    // Phase d'attaque
 
-    public void startAttackPhase() throws Exception {
-        Joueur attaquant = this.getActualJoueur();
-        // 1.Demander attack?
+    public void startAttackPhase()throws Exception {
+        Controler ctrl = new Controler();
+        Joueur  attaquant = joueurs.get(0);
+        // 1.Demander joueur -> Fortification ?
         while (true) {
             int resJ = demanderAttaque();
             // while (canAttack(attaquant)) {
@@ -371,66 +459,60 @@ public class Controler {
                 throw new Exception("Saissiez numero 1 ou 2 SVP !");
             }
 
-            // 2.Commencer Attack
+            // 2.Commencer Fortification
             if (resJ == 1) {
-                // Demander TerritoireSource
                 Territoire tS = demanderTerritoireSource();
-//              System.out.println(tS.getNombreUnites());
+                Territoire tC = demanderTerritoireCible(tS);
+                System.out.println(tS.getNombreUnites());
+                System.out.println(tC.getNombreUnites());
+                // Demander au joueur d'obtenir la liste des territoires pour attaquer
+                List<Territoire> territoiresAttaquables = getTerritoiresToAttack(attaquant, tS);
 
-                Territoire tC = demanderTerritoireCiblePourAttaquer(attaquant,tS);
-
-                //S'il n'y a pas de territoires à attaquer, la phase d'attaque est recommencée
-                if (tC == null){
-                    continue;
+                if (territoiresAttaquables.isEmpty()) {
+                    System.out.println("Le joueur ne peut plus mener d'attaque. Fin de la phase d'attaque.");
+                    return;
                 }
 
-                /* Obtient des informations sur le regiment du terrtoireSource en cours
-                   et indique le nombre de dés que le joueur peut lancer.
-                   ex. 2 régiments ->  1 régimentAttaque -> 1 dès
-                       3 régiments ->  1/2 régimentAttaque -> 1 ou 2 dès
-                       4+ régiments ->  1/2/3 régimentAttaque -> 1 ou 2 ou 3 dès
-                */
                 // Demander au joueur le nombre de dés à lancer pour l'attaque
-                int desAttaque = demanderNbDesAttaque(tS);
-//                System.out.println(desAttaque);
-                scanner.nextLine(); // Nettoyer la nouvelle ligne.
+                System.out.print("Saisissez le nombre de dés à lancer : ");
+                int desAttaque = scanner.nextInt();
 
+                while (desAttaque > 3) {
+                    System.out.print("Veuillez ressaisir le nombre de dés (entre 1 et 3) : ");
+                    desAttaque = scanner.nextInt();
+                }
+                scanner.nextLine(); // Nettoyer la nouvelle ligne.
 
                 // Lancer les dés pour l'attaque
                 List<De> resultatsAttaque = attaquant.lancerDes(desAttaque);
-
-                for (De d : resultatsAttaque){
-                    System.out.println(d.recupererValeur());
-                }
-                //lancerDes(desAttaque);
+                // lancerDes(desAttaque);
 
                 // Déterminer les troupes restantes
-                // Entrain de fix !!!
-                int troupesRestantes = resolveAttack(resultatsAttaque, tC);
+                int troupesRestantes = resolveAttack(resultatsAttaque,desAttaque);
 
                 if (troupesRestantes > 0) {
                     // L'attaquant a réussi l'attaque
                     System.out.println("Attaque réussie ! Vous avez conquis le territoire.");
-                    // Territoire territoireCible = recupererTerritoire( tC);
+                   // Territoire territoireCible = recupererTerritoire(nomTerritoireCible);
                     // Retirer le territoire du défenseur
-                    //retirerProprietaireTerritoire();
+                    retirerProprietaireTerritoire(tC);
 
                     // Ajouter le territoire à l'attaquant
-                    //attaquant.ajouterTerritoire(tC);
+                    attaquant.ajouterTerritoire(tC);
 
                     // Demander la saisie du nombre de troupes à déplacer
                     System.out.print("Saisissez le nombre de troupes à déplacer : ");
                     int troupesADeplacer = scanner.nextInt();
                     scanner.nextLine(); // Nettoyer la nouvelle ligne.
                     // Déplacer les régiments
-                    //attaquant.deplacerRegiment(tS, tC, troupesADeplacer);
+                    attaquant.deplacerRegiment(tS, tC, troupesADeplacer);
                 } else {
                     System.out.println("Attaque échouée. Le territoire est toujours aux mains du défenseur.");
                 }
                 int nbRegiment = demanderNbRegimentDeplace(tS);
-//                deplacerRegiment(tS, tC, nbRegiment);
-//                System.out.println(tS.getNombreUnites());
-//                System.out.println(tC.getNombreUnites());
+                deplacerRegiment(tS, tC, nbRegiment);
+                System.out.println(tS.getNombreUnites());
+                System.out.println(tC.getNombreUnites());
                 break;
             } else if (resJ == 2) {
                 System.out.println("Vous sautez ce tour d'attaque à la prochaine.");
@@ -440,65 +522,6 @@ public class Controler {
 
     }
 
-    private int demanderNbDesAttaque(Territoire tS){
-        while (true){
-            System.out.println("Vous avez " + tS.getNombreUnites() + "régiments ");
-            if (tS.getNombreUnites() == 2){
-                System.out.println("Pour 2 régiments vous pouvez lancer 1 dès");
-                int desAttaque = 1;
-                return desAttaque;
-
-            } else if (tS.getNombreUnites() == 3){
-                System.out.println("Pour 3 régiments vous pouvez lancer 1 ou 2 dès");
-                int desAttque = this.scanner.nextInt();
-                if (desAttque < 1 || desAttque > 2){
-                    System.err.println("Le nombre de dès doit être 1 / 2");
-                    continue;
-                }
-                return desAttque;
-            } else if (tS.getNombreUnites() >= 4){
-                System.out.println("Pour 4+ régiments vous pouvez lancer 1 ou 2 ou 3 dès");
-                int desAttque = this.scanner.nextInt();
-                if (desAttque < 1 || desAttque > 3){
-                    System.err.println("Le nombre de dès doit être 1 / 2 / 3");
-                    continue;
-                }
-                return desAttque;
-            }
-        }
-    }
-
-    private Territoire demanderTerritoireCiblePourAttaquer(Joueur attaquant, Territoire tS){
-        while (true){
-            // Demander au joueur d'obtenir la liste des territoires pour attaquer
-            List<Territoire> territoiresAttaquables = getTerritoiresToAttack(attaquant, tS);
-            for (int i = 0; i < territoiresAttaquables.size(); i++) {
-                int indexTerr = i + 1;
-                System.out.println(indexTerr + " . " + territoiresAttaquables.get(i).getNom());
-            }
-
-            if (territoiresAttaquables.isEmpty()) {
-                System.out.println("Le joueur ne peut plus mener d'attaque. Fin de la phase d'attaque.");
-                break;
-            }
-
-            // Demander TerritoireCible dans List -> territoiresAttaquables
-            System.out.println("Veuillez choisir un numéro de territoire pour attaquer : ");
-            int indexTc = this.scanner.nextInt();
-            if ((indexTc < 0) || (indexTc > territoiresAttaquables.size())){
-                System.err.println("Veuillez saisir le numéro correct");
-                continue;
-            } else {
-                Territoire tC = territoiresAttaquables.get(indexTc - 1);
-                System.out.println("Vous avez choisi un territoireCible : " + tC.getNom());
-                return tC;
-            }
-
-        }
-
-        return null;
-    }
-
     private int demanderAttaque() throws Exception {
         // Demander si joueur va commencer l'étape d'attaque
         System.out.println("Est-ce que vous voulez Attaquer(1/2) ? (Reponse : 1 - Oui, 2 - Non)");
@@ -506,7 +529,6 @@ public class Controler {
         return resJ;
 
     }
-
     /**
      * Retire un territoire de la liste des territoires possédés par le joueur.
      *
@@ -567,8 +589,53 @@ public class Controler {
     }
 
 
-    private int resolveAttack(List<De> resultatsAttaque, Territoire tC) {
-        // Tri des résultats d'attaque par ordre décroissant
+    private List<De> lancerDesDefense(int nombreDes) {
+        List<De> resultatsDefense = new ArrayList<>();
+
+        for (int i = 0; i < nombreDes; i++) {
+            // Lancez un dé pour chaque dé du défenseur.
+            De de = new De();
+            de.lancerDe();
+            resultatsDefense.add(de);
+        }
+
+        return resultatsDefense;
+    }
+
+
+    private int resolveAttack(List<De> resultatsAttaque, int desDefense) {
+        // Lancez les dés de défense pour obtenir les résultats du défenseur.
+        List<De> resultatsDefense = lancerDesDefense(desDefense);
+
+        // Tri des résultats d'attaque et de défense par ordre décroissant
+        List<De> sortedAttackResults = resultatsAttaque.parallelStream()
+                        .sorted((o1, o2) -> o1.recupererValeur() - o2.recupererValeur())
+                        .collect(Collectors.toList());
+
+        List<De> sortedDefenseResults = resultatsDefense.parallelStream()
+                .sorted((o1, o2) -> o1.recupererValeur() - o2.recupererValeur())
+                .collect(Collectors.toList());
+
+        // Initialisez le nombre de pertes.
+        int pertes = 0;
+
+        // Déterminez le nombre de pertes en comparant les dés d'attaque et de défense.
+        for (int i = 0; i < Math.min(sortedAttackResults.size(), sortedDefenseResults.size()); i++) {
+            if (sortedAttackResults.get(i).recupererValeur() <= sortedDefenseResults.get(i).recupererValeur()) {
+                pertes++;
+            }
+        }
+
+        // Déterminez le nombre de troupes restantes après l'attaque.
+        int troupesRestantes = resultatsAttaque.size() - pertes;
+
+        return troupesRestantes;
+    }
+
+
+    /*
+    private int resolveAttack(List<De> resultatsAttaque ) {
+    	 // Tri des résultats d'attaque par ordre décroissant
         Collections.sort(resultatsAttaque, Collections.reverseOrder());
 
         // afficher valeur de Des pour tester
@@ -605,6 +672,8 @@ public class Controler {
         return troupesRestantes;
     }
 
+
+     */
     private List<Territoire> getTerritoiresAccessiblesDepuis(String territoireSource, Joueur joueur) {
         List<Territoire> territoiresAccessibles = new ArrayList<>();
 
@@ -646,7 +715,24 @@ public class Controler {
                     .ajouterPion(pion);
         }
 
-    }
+	}
+	
+	public void echangerCartes(Joueur joueur) {
+		int regimentsADonner = 0;
+		while (true) {
+			List<CarteRisk> listeCartes = joueur.getCartes();
+			int i = 1;
+			System.out.println("Voici les cartes dont vous disposez actuellement");
+			for (CarteRisk carte : listeCartes) {
+				if(carte instanceof Joker) {
+					System.out.println(i+" : Carte Joker");
+				} else {
+					System.out.println(i+" : " + carte.getTypePion() +" / "+carte.getTerritoire().getNom());
+				}
+				i++;
+			}
+			System.out.println("Choisir une carte à échanger (écrivez 0 si vous ne voulez pas échanger)");
+			System.out.println("Si vous avez 5 cartes ou plus, vous devez obligatoirement échanger");
 
     public void echangerCartes(Joueur joueur) {
         int regimentsADonner = 0;
@@ -689,22 +775,26 @@ public class Controler {
             if (choix1 > 0) {
                 List<CarteRisk> liste_echange = Stream.of(listeCartes.get(choix1 - 1), listeCartes.get(choix2 - 1), listeCartes.get(choix3 - 1))
                         .collect(Collectors.toList());
-                regimentsADonner += joueur.echangerCartes(liste_echange);
-                joueur.enleverCartes(liste_echange);
-                plateau.ajouterCarte(liste_echange);
-            }
-            System.out.println("Voulez vous encore échanger ? 0 = non/1 = oui");
-            int choix = scanner.nextInt();
-            while (choix < 0 || choix > 1) {
-                System.out.println("Saisie incorrecte");
-                choix = scanner.nextInt();
-            }
-            if (choix == 0) {
-                break;
-            }
-        }
-        distribuerRenforts(joueur, regimentsADonner);
-    }
+				if(joueur.echangerCartes(liste_echange) != 0) {
+					regimentsADonner += joueur.echangerCartes(liste_echange);
+					joueur.enleverCartes(liste_echange);
+					plateau.ajouterCarte(liste_echange);
+				} else {
+					System.out.println("Les cartes que vous avez choisies ne correspondent à aucune combinaison");
+				}
+			}
+			System.out.println("Voulez vous encore échanger ? 0 = non/1 = oui");
+			int choix = scanner.nextInt();
+			while (choix < 0 || choix > 1) {
+				System.out.println("Saisie incorrecte");
+				choix = scanner.nextInt();
+			}
+			if (choix == 0) {
+				break;
+			}
+		}
+		distribuerRenforts(joueur, regimentsADonner);
+	}
 
     public void fermerScanner() {
         scanner.close();
