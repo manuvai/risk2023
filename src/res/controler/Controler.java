@@ -133,9 +133,6 @@ public class Controler {
 
     }
 
-
-
-
     public Joueur getActualJoueur() {
         return this.actualJoueur;
     }
@@ -146,7 +143,6 @@ public class Controler {
      * @param nomTerritoire Le nom du territoire à récupérer.
      * @return Le territoire correspondant au nom spécifié, ou null s'il n'existe pas de territoire avec ce nom.
      */
-
     public Territoire recupererTerritoire(String nomTerritoire) {
         ArrayList<Territoire> territoiresPlateau = plateau.getTerritoires();
 
