@@ -44,7 +44,7 @@ public class Controler {
 
 //        ctrl.startAttackPhase(ctrl.getActualJoueur());
         ctrl.initializePlateau();
-
+        System.out.println("Démarrage de la partie");
         // TODO Initialiser
         while (ctrl.getJoueurs().size() > 1) {
             ctrl.afficherTourJoueur(ctrl.getActualJoueur());
@@ -58,6 +58,10 @@ public class Controler {
         }
 
         ctrl.vainqueur(ctrl.getActualJoueur());
+        System.out.println("Fin de la partie");
+
+        // TODO Décommenter la partie du bas lors de tests
+        // testGauthier(ctrl);
 
     }
 
