@@ -570,6 +570,22 @@ public class Controler {
         // Tri des résultats d'attaque par ordre décroissant
         Collections.sort(resultatsAttaque, Collections.reverseOrder());
 
+        // afficher valeur de Des pour tester
+        List<Integer> res = new ArrayList<>();
+        for (De d: resultatsAttaque) {
+            res.add(d.recupererValeur());
+        }
+        System.out.println(Arrays.toString(res.toArray()));
+        // fin de afficher
+
+
+
+        // Pour le propriétaire de territoire tC, on vérifie le nombre de ses regiments
+        // je creer une methode pour recuperer les resultatsDefendu
+
+        int nbRegimentDefendeur = tC.getNombreUnites();
+        Joueur ownerTc = plateau.getProprietaire(tC);
+
         // Initialisez le nombre de pertes.
         int pertes = 0;
 
