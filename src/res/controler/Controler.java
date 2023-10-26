@@ -198,8 +198,6 @@ public class Controler {
         return saisie;
 
     }
-
-
     // Switch Joueur
     public void passerAuJoueurSuivant() {
         int currentIndex = joueurs.indexOf(actualJoueur);
