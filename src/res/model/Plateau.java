@@ -3,6 +3,7 @@ package res.model;
 import res.model.loader.MainLoader;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
      * Cette classe représente le plateau de jeu pour un jeu de Risk.
@@ -226,8 +227,11 @@ public class Plateau {
      *
      * @return La liste des territoires sur le plateau.
      */
-    public ArrayList<Territoire> getTerritoires() {
-        return territoires;
+    public List<Territoire> getTerritoires() {
+        return continents.parallelStream()
+                .map(Continent::getTerritories)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
     }
 
 }
