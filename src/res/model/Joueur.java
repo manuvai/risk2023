@@ -211,10 +211,10 @@ public class Joueur {
         if (countInfanterie == 3) {
             nbRegimentGained = 4;
 
-        } else if (countArtillerie == 3) {
+        } else if (countCavalerie == 3) {
             nbRegimentGained = 6;
 
-        } else if (countCavalerie == 3) {
+        } else if (countArtillerie == 3) {
             nbRegimentGained = 8;
 
         } else if (countInfanterie == countArtillerie && countArtillerie == countCavalerie) {
