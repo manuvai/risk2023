@@ -2,6 +2,8 @@ package res.model;
 
 /**
  * Représente les types de pions utilisés dans le jeu Risk.
+ * @author LALUYAUX Gauthier
+ * @since 21/10/23
  */
 
 public enum TypePion {
