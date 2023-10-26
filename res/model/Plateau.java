@@ -18,6 +18,44 @@ public class Plateau {
      * @param js La liste des joueurs à qui distribuer les territoires.
      */
 
+    //Création d'une liste de cartes
+    public List<CarteRisk> creerCartes(){
+    	ArrayList<Territoire> listeTerritoire = new ArrayList<Territoire>();
+        for (Continent c : continents) {
+            listeTerritoire.addAll(c.getTerritories());
+        }
+        ArrayList<CarteRisk>cartes = new ArrayList<CarteRisk>();
+        
+        //Création d'une liste regroupant les types de régiments pour les associer aux cartes territoire de manière aléatoire
+        ArrayList<TypePion>type = new ArrayList<TypePion>();
+        for (int i = 0; i < 14; i++) {
+        	type.add(TypePion.INFANTERIE);
+        }
+        for (int i = 0; i < 14; i++) {
+        	type.add(TypePion.CAVALERIE);
+        }
+        for (int i = 0; i < 14; i++) {
+        	type.add(TypePion.ARTILLERIE);
+        }
+        //Pour chaque territoire existant, on crée une carte représentant le territoire et un type de régiment aléatoirement
+        for (Territoire territoire : listeTerritoire) {
+        	
+        	int random = (int)(Math.random()*((type.size()-1)+1));
+        	//On crée la carte qui associe un territoire à un type de pion, puis on enlève le type de pion des possibilités car on estime que sur 42 cartes, on aura 14 de chaque type
+			CarteRisk carte = new CarteRisk(type.get(random), territoire);
+			type.remove(random);
+			cartes.add(carte);
+		}
+        
+        //Ensuite on ajoute les deux jokers
+        Joker joker = new Joker(null, null);
+        cartes.add(joker);
+        Joker joker = new Joker(null, null);
+        cartes.add(joker);
+        Collections.shuffle(cartes);
+        return cartes;
+    }
+    
     // pluetôt distribuerTerritoires
     public void distribuerCartes(ArrayList<Joueur> js) {
 
