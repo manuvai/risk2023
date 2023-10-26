@@ -33,31 +33,36 @@ public class Controler {
     public static void main(String... args) throws Exception {
 
         Controler ctrl = new Controler();
-//        ctrl.startAttackPhase(ctrl.getActualJoueur());
         ctrl.initializePlateau();
+////        ctrl.startAttackPhase(ctrl.getActualJoueur());
+//
+//        //tester distribuer Territoires
+//        System.out.println("tous les territories: ");
+//        List<String> ttTerr = new ArrayList<String>();
+//        for (Continent c : ctrl.plateau.getContinents()) {
+//            for (Territoire t : c.getTerritories()) {
+//                ttTerr.add(t.getNom());
+//            }
+//        }
+//        System.out.println(Arrays.toString(ttTerr.toArray()));
+//
+//        System.out.println("apres distribution, pour chanque joueur: ");
+//        for (Joueur j : ctrl.joueurs){
+//            List<String> terrJoueur = new ArrayList<String>();
+//
+//            for (Territoire t : j.obtenirTerritoires()) {
+//                terrJoueur.add(t.getNom());
+//            }
+//            System.out.println(Arrays.toString(terrJoueur.toArray()));
+//        }
+//
+//        ctrl.phaseFortification();
 
-        //tester distribuer Territoires
-        System.out.println("tous les territories: ");
-        List<String> ttTerr = new ArrayList<String>();
-        for (Continent c : ctrl.plateau.getContinents()) {
-            for (Territoire t : c.getTerritories()) {
-                ttTerr.add(t.getNom());
-            }
-        }
-        System.out.println(Arrays.toString(ttTerr.toArray()));
-
-        System.out.println("apres distribution, pour chanque joueur: ");
-        for (Joueur j : ctrl.joueurs){
-            List<String> terrJoueur = new ArrayList<String>();
-
-            for (Territoire t : j.obtenirTerritoires()) {
-                terrJoueur.add(t.getNom());
-            }
-            System.out.println(Arrays.toString(terrJoueur.toArray()));
-        }
-
-        ctrl.phaseFortification();
-
+        //ctrl.phaseFortification();
+        
+        
+        // TODO Décommenter la partie du bas lors de tests
+         testGauthier(ctrl);
     }
 
     /**
@@ -130,6 +135,32 @@ public class Controler {
 
     }
 
+
+    public static void testGauthier(Controler ctrl) {
+    	Joueur j1 = ctrl.getActualJoueur();
+    	Armee rouge = new Armee("rouge");
+    	j1.setArmee(rouge);
+    	List<CarteRisk>cartes = ctrl.plateau.creerCartes();
+		/* Méthode creerCartes() renvoie bien une liste de cartes avec pour valeurs un type de pion et un territoire
+		 * for (CarteRisk carteRisk : cartes) {
+		 * System.out.println(carteRisk.getTypePion() +" "+
+		 * carteRisk.getTerritoire().getNom()); }
+		 */
+    	
+		/* Méthode de distribution des renforts ok
+		 * System.out.println(j1.getArmee().getPions()); //Armée vide donc liste vide
+		 * ctrl.distribuerRenforts(j1, 5); //On ajoute 5 renforts, soit un pion
+		 * cavalerie System.out.println(j1.getArmee().getPions().get(0).getNomPion());
+		 */
+    	j1.getArmee().ajouterPion(new Pion("Infanterie", TypePion.INFANTERIE));
+    	j1.getArmee().getPions().get(0);
+    	for (int i = 0; i < 10; i++) {
+			j1.ajouterCarte(cartes.get(i));
+		}
+    	ctrl.echangerCartes(j1);
+    	j1.getArmee().getPions().get(0);
+    	
+    }
 
     // Switch Joueur
     public void passerAuJoueurSuivant() {
@@ -541,8 +572,14 @@ public class Controler {
 		int regimentsADonner = 0;
 		while (true) {
 			List<CarteRisk> listeCartes = joueur.getCartes();
+			int i = 1;
 			for (CarteRisk carte : listeCartes) {
-				System.out.println("1 : " + carte.getTypePion());
+				if(carte instanceof Joker) {
+					System.out.println(i+" : Carte Joker");
+				} else {
+					System.out.println(i+" : " + carte.getTypePion());
+				}
+				i++;
 			}
 			System.out.println("Choisir une carte à échanger (écrivez 0 si vous ne voulez pas échanger)");
 			System.out.println("Si vous avez 5 cartes ou plus, vous devez obligatoirement échanger");
