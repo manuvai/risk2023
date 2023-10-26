@@ -1,5 +1,7 @@
 package res.model;
 
+import res.model.loader.MainLoader;
+
 import java.util.*;
 
 /**
@@ -8,9 +10,74 @@ import java.util.*;
 
 
 public class Plateau {
-    private ArrayList<Continent> continents;
-    private ArrayList<Joueur> joueurs;
+    private List<Continent> continents;
+    private List<Joueur> joueurs;
     private List<CarteRisk> cartesPille;
+
+
+    /**
+     * Initialise la partie en distribuant les territoires aux joueurs.
+     */
+
+    public void initialiserParties() {
+        MainLoader ml = new MainLoader();
+        continents = ml.getContinentList();
+
+        distribuerCartes(this.joueurs);
+        initialisationRegiment();
+    }
+
+    /**
+     * Initialiser les régiments de chaque joueurs dans ses territoires
+     *
+     * @Author HP
+     */
+
+    public void initialisationRegiment() {
+        if (joueurs.size() == 3){ // 35 pions -> infanterie
+            placementAuto(35);
+        } else if (joueurs.size() == 4){ // 30 pions -> infanterie
+            placementAuto(30);
+        } else if (joueurs.size() == 5) { // 25 pions -> infanterie
+            placementAuto(25);
+        }
+    }
+
+    /**
+     * Placer automatiquement des armées sur les territoires du joueur,
+     *  en veillant à ce que chaque territoire dispose d'au moins une armée.
+     *
+     * @param nbRegiment Nombre total de régiment à placer
+     */
+
+    public void placementAuto(int nbRegiment){
+        // Tout d'abord, mettre un pion dans tous les territoires.
+        for (Joueur j : joueurs){
+            for (Territoire t : j.obtenirTerritoires()){
+                Pion p = new Pion("pionDebut",TypePion.INFANTERIE);
+                t.ajouterRegiment(p,1);
+            }
+        }
+
+        //Placement aléatoire de pions dans les territoires restants
+        Random rand = new Random();
+        for (Joueur j : joueurs){
+            List<Territoire> listeTerritoire = j.obtenirTerritoires();
+            int nbTourPlacement = nbRegiment - listeTerritoire.size();
+            for (int i = 0; i < nbTourPlacement; i++){
+                int randomIndex = rand.nextInt(listeTerritoire.size());
+                Pion p = new Pion("pionPlaceAuto",TypePion.INFANTERIE);
+                listeTerritoire.get(randomIndex).ajouterRegiment(p,1);
+            }
+        }
+
+
+    }
+
+    public void initialisationCarte(ArrayList<CarteRisk> cartes){
+        this.cartesPille = cartes;
+    }
+
 
      /**
      * Distribue les territoires aux joueurs de manière équilibrée.
@@ -19,31 +86,27 @@ public class Plateau {
      */
 
     // pluetôt distribuerTerritoires
-    public void distribuerCartes(ArrayList<Joueur> js) {
-
-        // Fonctionne:
-        // Créez d'abord une liste de territoires et,
-        // pour chaque joueur de la liste des joueurs, prenez le territoire correspondant dans la liste
-        // et retirez ce territoire de la liste jusqu'à ce que celle-ci soit vide.
-        // Ensuite, le joueur place un Pion dans sa liste de territoires,
-        // pour chaque territoire, et s'il reste des Pions, le joueur choisit où les placer.
+    public void distribuerCartes(List<Joueur> js) {
 
         // 1. Créez une liste de territoires
-        ArrayList<Territoire> listeTtTerritoire = new ArrayList<Territoire>();
+        List<Territoire> listeTtTerritoire = new ArrayList<Territoire>();
         for (Continent c : continents) {
             listeTtTerritoire.addAll(c.getTerritories());
         }
 
         // 2. Pour chaque joueur, get un territoire de la liste et remove ce territoire de cette liste
-        while (!listeTtTerritoire.isEmpty()) {
+        while (listeTtTerritoire.size() != 0) {
             for (Joueur j : joueurs) {
-                Random rand = new Random();
-                int randomIndex = rand.nextInt(listeTtTerritoire.size());
-                j.ajouterTerritoire(listeTtTerritoire.get(randomIndex)); // <- il faut l'ajouter dans Joueur !!!
-                listeTtTerritoire.remove(randomIndex);
+                if (listeTtTerritoire.size() == 0){
+                    break;
+                } else {
+                    Random rand = new Random();
+                    int randomIndex = rand.nextInt(listeTtTerritoire.size());
+                    j.ajouterTerritoire(listeTtTerritoire.get(randomIndex)); // <- il faut l'ajouter dans Joueur !!!
+                    listeTtTerritoire.remove(randomIndex);
+                }
             }
         }
-
     }
 
     /**
@@ -71,7 +134,7 @@ public class Plateau {
      * @return La liste des continents sur le plateau.
      */
 
-    public ArrayList<Continent> getContinents() {
+    public List<Continent> getContinents() {
         return continents;
     }
 
@@ -85,15 +148,6 @@ public class Plateau {
         return cartesPille;
     }
 
-      /**
-     * Initialise la partie en distribuant les territoires aux joueurs.
-     */
-
-    public void initialiserParties() {
-
-        distribuerCartes(this.joueurs);
-        // TODO: 23/10/2023
-    }
 
      /**
      * Obtient la liste des joueurs participants à la partie.
@@ -101,8 +155,16 @@ public class Plateau {
      * @return La liste des joueurs participants à la partie.
      */
 
-    public ArrayList<Joueur> getJoueurs() {
+    public List<Joueur> getJoueurs() {
         return this.joueurs;
+    }
+
+    /**
+     * initialiser la liste de joueurs
+     * @param joueurs liste de joueur
+     */
+    public void setJoueurs(List<Joueur> joueurs) {
+        this.joueurs = joueurs;
     }
 
     /**
