@@ -56,7 +56,7 @@ public class Controler {
 //                System.out.println(t.getNombreUnites());
 //            }
 //        }
-//    }
+    }
 
 
     // Phase Fortification
