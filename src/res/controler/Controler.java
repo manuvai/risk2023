@@ -21,6 +21,10 @@ public class Controler {
 
     }
 
+    public List<Joueur> getJoueurs() {
+        return joueurs;
+    }
+
     public static void main(String... args) throws Exception {
 
         Controler ctrl = new Controler();
@@ -132,18 +136,10 @@ public class Controler {
         Plateau pl = new Plateau();
         this.plateau = pl;
 
-        Joueur j1 = new Joueur();
-        Joueur j2 = new Joueur();
-        Joueur j3 = new Joueur();
-        Joueur j4 = new Joueur();
+        int nbJoueurs = getNbJoueurs();
+        List<Joueur> joueurs = initialiserJoueurs(nbJoueurs);
 
-        List<Joueur> joueurs = new ArrayList<Joueur>();
-        joueurs.add(j1);
-        joueurs.add(j2);
-        joueurs.add(j3);
-        joueurs.add(j4);
-
-        plateau.setJoueurs(joueurs);
+        pl.setJoueurs(joueurs);
         this.joueurs = joueurs;
         this.actualJoueur = joueurs.get(0);
 
@@ -324,7 +320,7 @@ public class Controler {
             } else if (nbRegiment < 0) {
                 System.err.println("nbRegiment ne peut pas < 0");
             } else {
-                System.out.println("Vous avez déplacé " + nbRegiment + " de " + tS.getNom());
+                System.out.println("Vous avez déplacé " + nbRegiment + " régiment(s) de " + tS.getNom());
                 return nbRegiment;
             }
         }
