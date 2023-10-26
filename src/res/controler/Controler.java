@@ -21,6 +21,15 @@ public class Controler {
 
     }
 
+    /**
+     * Obtenir la liste des joueurs actuels dans le jeu.
+     *
+     * @return Une liste contenant tous les joueurs actuels du jeu.
+     */
+    public List<Joueur> getJoueurs() {
+        return joueurs;
+    }
+
     public static void main(String... args) throws Exception {
 
         Controler ctrl = new Controler();
@@ -58,6 +67,101 @@ public class Controler {
     	
     }
 
+        //tester distribuer Territoires
+        System.out.println("tous les territories: ");
+        List<String> ttTerr = new ArrayList<String>();
+        for (Continent c : ctrl.plateau.getContinents()) {
+            for (Territoire t : c.getTerritories()) {
+                ttTerr.add(t.getNom());
+            }
+        }
+        System.out.println(Arrays.toString(ttTerr.toArray()));
+
+        System.out.println("apres distribution, pour chanque joueur: ");
+        for (Joueur j : ctrl.joueurs){
+            List<String> terrJoueur = new ArrayList<String>();
+
+            for (Territoire t : j.obtenirTerritoires()) {
+                terrJoueur.add(t.getNom());
+            }
+            System.out.println(Arrays.toString(terrJoueur.toArray()));
+        }
+
+        ctrl.phaseFortification();
+
+    }
+
+    /**
+     * Récupère la saisie de l'utilisateur pour avoir le nombre de joueurs
+     *
+     * @return
+     */
+    public int getNbJoueurs() {
+        System.out.print("Combien de joueurs ? (1 à 5) : ");
+
+        int nbJoueurs = Integer.parseInt(scanner.nextLine());
+
+        while (nbJoueurs <= 0 || nbJoueurs > 5) {
+            System.out.print("Veuillez saisir un nombre entre 1 et 5 : ");
+            nbJoueurs = Integer.parseInt(scanner.nextLine());
+        }
+
+        return nbJoueurs;
+    }
+
+    /**
+     * Initialise et retourne une liste de joueurs pour le jeu.
+     *
+     * @param nbJoueurs Le nombre de joueurs à initialiser.
+     * @return Une liste de joueurs prête pour le jeu, ou une liste vide si le nombre de joueurs est incohérent.
+     */
+    public List<Joueur> initialiserJoueurs(int nbJoueurs) {
+
+        if (nbJoueurs <= 0 || nbJoueurs > 5) {
+            System.out.println("Vous devez donner un nombre cohérent de joueurs");
+            return new ArrayList<>();
+        }
+
+        List<Joueur> joueurs = new ArrayList<>();
+        for (int i = 0; i < nbJoueurs; i++) {
+            Joueur joueur = new Joueur();
+            String nomJoueur = saisieNomJoueur(i);
+            String prenomJoueur = saisiePrenomJoueur(i);
+
+            joueur.setNom(nomJoueur);
+            joueur.setPrenom(prenomJoueur);
+            joueurs.add(joueur);
+        }
+
+        return joueurs;
+    }
+
+    private String saisieNomJoueur(int i) {
+        System.out.print("Veuillez entrer le nom du joueur ".concat(Integer.toString(i + 1)).concat(" : "));
+        String saisie = scanner.nextLine();
+
+        while ("".equals(saisie)) {
+            System.out.print("Veuillez saisir un nom valide : ");
+            saisie = scanner.nextLine();
+        }
+
+        return saisie;
+    }
+
+    private String saisiePrenomJoueur(int i) {
+        System.out.print("Veuillez entrer le prenom du joueur ".concat(Integer.toString(i + 1)).concat(" : "));
+        String saisie = scanner.nextLine();
+
+        while ("".equals(saisie)) {
+            System.out.print("Veuillez saisir un prenom valide : ");
+            saisie = scanner.nextLine();
+        }
+
+        return saisie;
+
+    }
+
+
     // Switch Joueur
     public void passerAuJoueurSuivant() {
         int currentIndex = joueurs.indexOf(actualJoueur);
@@ -71,19 +175,10 @@ public class Controler {
 
     // Phase Préparation
     public void initializePlateau() throws Exception {
-        Plateau pl = new Plateau();
-        this.plateau = pl;
+        plateau = new Plateau();
 
-        Joueur j1 = new Joueur();
-        Joueur j2 = new Joueur();
-        Joueur j3 = new Joueur();
-        Joueur j4 = new Joueur();
-
-        List<Joueur> joueurs = new ArrayList<Joueur>();
-        joueurs.add(j1);
-        joueurs.add(j2);
-        joueurs.add(j3);
-        joueurs.add(j4);
+        int nbJoueurs = getNbJoueurs();
+        List<Joueur> joueurs = initialiserJoueurs(nbJoueurs);
 
         plateau.setJoueurs(joueurs);
         this.joueurs = joueurs;
@@ -104,6 +199,7 @@ public class Controler {
 //                System.out.println(t.getNombreUnites());
 //            }
 //        }
+
     }
 
     public void setJoueurs(List<Joueur> joueurs){
@@ -171,7 +267,7 @@ public class Controler {
      * @return Le territoire correspondant au nom spécifié, ou null s'il n'existe pas de territoire avec ce nom.
      */
     public Territoire recupererTerritoire(String nomTerritoire) {
-        ArrayList<Territoire> territoiresPlateau = plateau.getTerritoires();
+        List<Territoire> territoiresPlateau = plateau.getTerritoires();
 
         // les territoires du plateau
         for (Territoire territoire : territoiresPlateau) {
@@ -265,7 +361,7 @@ public class Controler {
             } else if (nbRegiment < 0) {
                 System.err.println("nbRegiment ne peut pas < 0");
             } else {
-                System.out.println("Vous avez déplacé " + nbRegiment + " de " + tS.getNom());
+                System.out.println("Vous avez déplacé " + nbRegiment + " régiment(s) de " + tS.getNom());
                 return nbRegiment;
             }
         }
@@ -292,7 +388,7 @@ public class Controler {
     public void startAttackPhase(Joueur attaquant ) {
 //        while (canAttack(attaquant)) {
             System.out.println("Phase d'attaque pour le joueur : " + attaquant.getNom());
-            
+             
          // Demander au joueur de choisir le territoire source
             System.out.print("Saisissez le nom du territoire source : ");
             String nomTerritoireSource = scanner.nextLine();

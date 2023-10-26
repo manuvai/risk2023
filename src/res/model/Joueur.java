@@ -268,4 +268,12 @@ public class Joueur {
             }
         }
     }
+
+    public void setNom(String nomJoueur) {
+        nom = nomJoueur;
+    }
+
+    public void setPrenom(String prenomJoueur) {
+        prenom = prenomJoueur;
+    }
 }

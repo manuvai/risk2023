@@ -3,6 +3,7 @@ package res.model;
 import res.model.loader.MainLoader;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
      * Cette classe représente le plateau de jeu pour un jeu de Risk.
@@ -10,11 +11,9 @@ import java.util.*;
 
 
 public class Plateau {
-    private List<Continent> continents;
-    private List<Joueur> joueurs;
-    private List<CarteRisk> cartesPille;
-    private ArrayList<Territoire> territoires;
-
+    private List<Continent> continents = new ArrayList<>();
+    private List<Joueur> joueurs = new ArrayList<>();
+    private List<CarteRisk> cartesPille = new ArrayList<>();
 
     /**
      * Initialise la partie en distribuant les territoires aux joueurs.
@@ -83,7 +82,7 @@ public class Plateau {
      /**
      * Distribue les territoires aux joueurs de manière équilibrée.
      *
-     * @param js La liste des joueurs à qui distribuer les territoires.
+     * @return La liste des joueurs à qui distribuer les territoires.
      */
 
     //Création d'une liste de cartes
@@ -124,10 +123,11 @@ public class Plateau {
         return cartes;
     }
     
-    // pluetôt distribuerTerritoires
+    // pluetôt distribuer Territoires
     public void distribuerCartes(List<Joueur> js) {
 
         // 1. Créez une liste de territoires
+        // Cette liste comprend les territoires de tous les continents du plateau de jeu.
         List<Territoire> listeTtTerritoire = new ArrayList<Territoire>();
         for (Continent c : continents) {
             listeTtTerritoire.addAll(c.getTerritories());
@@ -227,8 +227,11 @@ public class Plateau {
      *
      * @return La liste des territoires sur le plateau.
      */
-    public ArrayList<Territoire> getTerritoires() {
-        return territoires;
+    public List<Territoire> getTerritoires() {
+        return continents.parallelStream()
+                .map(Continent::getTerritories)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
     }
 
 }
