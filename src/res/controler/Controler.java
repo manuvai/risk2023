@@ -1,4 +1,5 @@
 package res.controler;
+
 import res.model.*;
 
 import java.util.*;
@@ -8,7 +9,7 @@ import java.util.stream.Stream;
 
 public class Controler {
     private Scanner scanner;
-    
+
     private Plateau plateau;//TODO Besoin d'une instance d'objet plateau pour méthodes
 
     private List<Joueur> joueurs;
@@ -173,12 +174,13 @@ public class Controler {
 
     }
 
-    public void setJoueurs(List<Joueur> joueurs){
+    public void setJoueurs(List<Joueur> joueurs) {
         this.joueurs = joueurs;
     }
 
 
     // Phase Fortification
+
     /**
      * Effectue la phase de fortification, permettant aux joueurs de déplacer des régiment pour renforcer leurs territoires.
      *
@@ -215,7 +217,6 @@ public class Controler {
      * Demande au joueur s'il souhaite effectuer une phase de fortification.
      *
      * @return 1 si le joueur souhaite effectuer une fortification, 2 si le joueur ne souhaite pas en effectuer.
-     *
      * @throws Exception Lorsque le joueur entre une option invalide.
      */
 
@@ -230,7 +231,7 @@ public class Controler {
     public Joueur getActualJoueur() {
         return this.actualJoueur;
     }
-    
+
     /**
      * Récupère un territoire à partir de son nom.
      *
@@ -268,8 +269,10 @@ public class Controler {
             System.out.println("Saisir un numéro de la liste : ");
             int noTerritoireSource = this.scanner.nextInt();
 
-            if (noTerritoireSource > getActualJoueur().obtenirTerritoires().size() || noTerritoireSource <= 0){
+            if (noTerritoireSource > getActualJoueur().obtenirTerritoires().size() || noTerritoireSource <= 0) {
                 System.err.println("Veuillez sélectionner un numéro territoireSource de la liste");
+            } else if (getActualJoueur().obtenirTerritoires().get(noTerritoireSource - 1).getNombreUnites() == 1 ) {
+                System.err.println("Il n'y a qu'un seul régiment dans ce territoire et il doit y être stationné.");
             } else {
                 Territoire territoireSource = getActualJoueur().obtenirTerritoires().get(noTerritoireSource - 1);
                 System.out.println("Vous avez choisi un territoireSource : " + territoireSource.getNom());
@@ -291,7 +294,7 @@ public class Controler {
             // afficher tous les territoires de joueur
             for (int i = 0; i < getActualJoueur().obtenirTerritoires().size(); i++) {
                 int indexT = i + 1;
-                if (getActualJoueur().obtenirTerritoires().get(i) == tS){
+                if (getActualJoueur().obtenirTerritoires().get(i) == tS) {
                     continue;
                 } else {
                     System.out.println(indexT + "." + getActualJoueur().obtenirTerritoires().get(i).getNom() +
@@ -303,7 +306,7 @@ public class Controler {
             int noTerritoireCible = this.scanner.nextInt();
 
             if (noTerritoireCible > getActualJoueur().obtenirTerritoires().size() || noTerritoireCible <= 0
-                    || noTerritoireCible == getActualJoueur().obtenirTerritoires().indexOf(tS) + 1){
+                    || noTerritoireCible == getActualJoueur().obtenirTerritoires().indexOf(tS) + 1) {
                 System.err.println("Veuillez sélectionner un numéro territoireCible de la liste");
             } else {
                 Territoire TerritoireCible = getActualJoueur().obtenirTerritoires().get(noTerritoireCible - 1);
@@ -344,8 +347,8 @@ public class Controler {
      * pour déplacer des troupes d'un territoire à un autre.
      *
      * @param territoireSource Le territoire de départ pour le déplacement des troupes.
-     * @param territoireCible Le territoire de destination pour le déplacement des troupes.
-     * @param nombreRegiment Le nombre de troupes à déplacer.
+     * @param territoireCible  Le territoire de destination pour le déplacement des troupes.
+     * @param nombreRegiment   Le nombre de troupes à déplacer.
      */
     public void deplacerRegiment(
             Territoire territoireSource,
@@ -356,21 +359,13 @@ public class Controler {
 
     // Phase d'attaque
 
-    public void startAttackPhase()throws Exception {
+    public void startAttackPhase() throws Exception {
         Joueur attaquant = this.getActualJoueur();
         // 1.Demander attack?
         while (true) {
             int resJ = demanderAttaque();
             // while (canAttack(attaquant)) {
             System.out.println("Phase d'attaque pour le joueur : " + attaquant.getNom());
-<<<<<<< Updated upstream
-             
-         // Demander au joueur de choisir le territoire source
-            System.out.print("Saisissez le nom du territoire source : ");
-            String nomTerritoireSource = scanner.nextLine();
-            Territoire territoireSource = recupererTerritoire(nomTerritoireSource);
-=======
->>>>>>> Stashed changes
 
             if (resJ != 1 && resJ != 2) {
                 throw new Exception("Saissiez numero 1 ou 2 SVP !");
@@ -378,33 +373,39 @@ public class Controler {
 
             // 2.Commencer Attack
             if (resJ == 1) {
+                // Demander TerritoireSource
                 Territoire tS = demanderTerritoireSource();
-//                System.out.println(tS.getNombreUnites());
+//              System.out.println(tS.getNombreUnites());
 
-                // Demander au joueur d'obtenir la liste des territoires pour attaquer
-                List<Territoire> territoiresAttaquables = getTerritoiresToAttack(attaquant, tS);
-                for (int i = 0; i < territoiresAttaquables.size(); i++) {
-                    int indexTerr = i + 1;
-                    System.out.println(indexTerr + " . " + territoiresAttaquables.get(i).getNom());
+                Territoire tC = demanderTerritoireCiblePourAttaquer(attaquant,tS);
+
+                //S'il n'y a pas de territoires à attaquer, la phase d'attaque est recommencée
+                if (tC == null){
+                    continue;
                 }
 
-
-                if (territoiresAttaquables.isEmpty()) {
-                    System.out.println("Le joueur ne peut plus mener d'attaque. Fin de la phase d'attaque.");
-                    return;
-                }
-
+                /* Obtient des informations sur le regiment du terrtoireSource en cours
+                   et indique le nombre de dés que le joueur peut lancer.
+                   ex. 2 régiments ->  1 régimentAttaque -> 1 dès
+                       3 régiments ->  1/2 régimentAttaque -> 1 ou 2 dès
+                       4+ régiments ->  1/2/3 régimentAttaque -> 1 ou 2 ou 3 dès
+                */
                 // Demander au joueur le nombre de dés à lancer pour l'attaque
-                System.out.print("Saisissez le nombre de dés à lancer : ");
-                int desAttaque = scanner.nextInt();
+                int desAttaque = demanderNbDesAttaque(tS);
+//                System.out.println(desAttaque);
                 scanner.nextLine(); // Nettoyer la nouvelle ligne.
+
 
                 // Lancer les dés pour l'attaque
                 List<De> resultatsAttaque = attaquant.lancerDes(desAttaque);
+
+                for (De d : resultatsAttaque){
+                    System.out.println(d.recupererValeur());
+                }
                 //lancerDes(desAttaque);
 
                 // Déterminer les troupes restantes
-                int troupesRestantes = resolveAttack(resultatsAttaque);
+                int troupesRestantes = resolveAttack(resultatsAttaque, tC);
 
                 if (troupesRestantes > 0) {
                     // L'attaquant a réussi l'attaque
@@ -438,6 +439,65 @@ public class Controler {
 
     }
 
+    private int demanderNbDesAttaque(Territoire tS){
+        while (true){
+            System.out.println("Vous avez " + tS.getNombreUnites() + "régiments ");
+            if (tS.getNombreUnites() == 2){
+                System.out.println("Pour 2 régiments vous pouvez lancer 1 dès");
+                int desAttaque = 1;
+                return desAttaque;
+
+            } else if (tS.getNombreUnites() == 3){
+                System.out.println("Pour 3 régiments vous pouvez lancer 1 ou 2 dès");
+                int desAttque = this.scanner.nextInt();
+                if (desAttque < 1 || desAttque > 2){
+                    System.err.println("Le nombre de dès doit être 1 / 2");
+                    continue;
+                }
+                return desAttque;
+            } else if (tS.getNombreUnites() >= 4){
+                System.out.println("Pour 4+ régiments vous pouvez lancer 1 ou 2 ou 3 dès");
+                int desAttque = this.scanner.nextInt();
+                if (desAttque < 1 || desAttque > 3){
+                    System.err.println("Le nombre de dès doit être 1 / 2 / 3");
+                    continue;
+                }
+                return desAttque;
+            }
+        }
+    }
+
+    private Territoire demanderTerritoireCiblePourAttaquer(Joueur attaquant, Territoire tS){
+        while (true){
+            // Demander au joueur d'obtenir la liste des territoires pour attaquer
+            List<Territoire> territoiresAttaquables = getTerritoiresToAttack(attaquant, tS);
+            for (int i = 0; i < territoiresAttaquables.size(); i++) {
+                int indexTerr = i + 1;
+                System.out.println(indexTerr + " . " + territoiresAttaquables.get(i).getNom());
+            }
+
+            if (territoiresAttaquables.isEmpty()) {
+                System.out.println("Le joueur ne peut plus mener d'attaque. Fin de la phase d'attaque.");
+                break;
+            }
+
+            // Demander TerritoireCible dans List -> territoiresAttaquables
+            System.out.println("Veuillez choisir un numéro de territoire pour attaquer : ");
+            int indexTc = this.scanner.nextInt();
+            if ((indexTc < 0) || (indexTc > territoiresAttaquables.size())){
+                System.err.println("Veuillez saisir le numéro correct");
+                continue;
+            } else {
+                Territoire tC = territoiresAttaquables.get(indexTc - 1);
+                System.out.println("Vous avez choisi un territoireCible : " + tC.getNom());
+                return tC;
+            }
+
+        }
+
+        return null;
+    }
+
     private int demanderAttaque() throws Exception {
         // Demander si joueur va commencer l'étape d'attaque
         System.out.println("Est-ce que vous voulez Attaquer(1/2) ? (Reponse : 1 - Oui, 2 - Non)");
@@ -450,8 +510,6 @@ public class Controler {
      * Retire un territoire de la liste des territoires possédés par le joueur.
      *
      * @param territoireCible Le territoire à retirer.
-     *
-     *
      */
     private void retirerProprietaireTerritoire(Territoire territoireCible) {
         Joueur proprietaire = rechercherProprietaireTerritoire(territoireCible);
@@ -468,14 +526,14 @@ public class Controler {
      * @return Le joueur qui est propriétaire du territoire, ou null si le propriétaire n'a pas été trouvé ou si le plateau n'est pas défini.
      */
     private Joueur rechercherProprietaireTerritoire(Territoire territoire) {
-       return Objects.isNull(plateau)
-            ? null
-            : plateau.getProprietaire(territoire);
+        return Objects.isNull(plateau)
+                ? null
+                : plateau.getProprietaire(territoire);
 
     }
 
-    private boolean canAttack(Joueur attaquant ) {
-    	// Vérification du nombre de territoires du joueur attaquant
+    private boolean canAttack(Joueur attaquant) {
+        // Vérification du nombre de territoires du joueur attaquant
         if (attaquant.obtenirTerritoires().size() < 2) {
             System.out.println("Vous n'avez pas suffisamment de territoires pour attaquer.");
             return false;
@@ -508,8 +566,8 @@ public class Controler {
     }
 
 
-    private int resolveAttack(List<De> resultatsAttaque ) {
-    	 // Tri des résultats d'attaque par ordre décroissant
+    private int resolveAttack(List<De> resultatsAttaque, Territoire tC) {
+        // Tri des résultats d'attaque par ordre décroissant
         Collections.sort(resultatsAttaque, Collections.reverseOrder());
 
         // Initialisez le nombre de pertes.
@@ -546,90 +604,90 @@ public class Controler {
         return territoiresAccessibles;
     }
 
-	public void distribuerRenforts(Joueur joueur, int nb) {
-		int artillerie = nb / 10;
-		nb = nb % 10;
-		int cavalerie = nb / 5;
-		nb = nb % 5;
-		int infanterie = nb;
-		
-		for (int i = 0; i < artillerie; i++) {
-			Pion pion = new Pion("Artillerie", TypePion.ARTILLERIE);
-			joueur.getArmee()
+    public void distribuerRenforts(Joueur joueur, int nb) {
+        int artillerie = nb / 10;
+        nb = nb % 10;
+        int cavalerie = nb / 5;
+        nb = nb % 5;
+        int infanterie = nb;
+
+        for (int i = 0; i < artillerie; i++) {
+            Pion pion = new Pion("Artillerie", TypePion.ARTILLERIE);
+            joueur.getArmee()
                     .ajouterPion(pion);
-		}
+        }
 
-		for (int i = 0; i < cavalerie; i++) {
-			Pion pion = new Pion("Cavalerie", TypePion.CAVALERIE);
-			joueur.getArmee()
+        for (int i = 0; i < cavalerie; i++) {
+            Pion pion = new Pion("Cavalerie", TypePion.CAVALERIE);
+            joueur.getArmee()
                     .ajouterPion(pion);
-		}
+        }
 
-		for (int i = 0; i < infanterie; i++) {
-			Pion pion = new Pion("Infanterie", TypePion.INFANTERIE);
-			joueur.getArmee()
+        for (int i = 0; i < infanterie; i++) {
+            Pion pion = new Pion("Infanterie", TypePion.INFANTERIE);
+            joueur.getArmee()
                     .ajouterPion(pion);
-		}
+        }
 
-	}
-	
-	public void echangerCartes(Joueur joueur) {
-		int regimentsADonner = 0;
-		while (true) {
-			List<CarteRisk> listeCartes = joueur.getCartes();
-			for (CarteRisk carte : listeCartes) {
-				System.out.println("1 : " + carte.getTypePion());
-			}
-			System.out.println("Choisir une carte à échanger (écrivez 0 si vous ne voulez pas échanger)");
-			System.out.println("Si vous avez 5 cartes ou plus, vous devez obligatoirement échanger");
+    }
 
-			boolean saisie_correcte = false;
+    public void echangerCartes(Joueur joueur) {
+        int regimentsADonner = 0;
+        while (true) {
+            List<CarteRisk> listeCartes = joueur.getCartes();
+            for (CarteRisk carte : listeCartes) {
+                System.out.println("1 : " + carte.getTypePion());
+            }
+            System.out.println("Choisir une carte à échanger (écrivez 0 si vous ne voulez pas échanger)");
+            System.out.println("Si vous avez 5 cartes ou plus, vous devez obligatoirement échanger");
+
+            boolean saisie_correcte = false;
 
             int choix1 = 0;
             int choix2 = 0;
             int choix3 = 0;
 
             while (!saisie_correcte) {
-				try {
-					choix1 = scanner.nextInt();
-					if (choix1 == 0 && listeCartes.size()<5) {
-						break;
-					}
-					choix2 = scanner.nextInt();
-					choix3 = scanner.nextInt();
-					if (choix1 > 0 && choix1 <= listeCartes.size() &&
-							choix2 > 0 && choix2 <= listeCartes.size() &&
-							choix3 > 0 && choix3 <= listeCartes.size() &&
-							choix1 != choix2 && choix1 != choix3 && choix2 != choix3) {
-						saisie_correcte = true;
-					}
-				} catch (IllegalArgumentException e) {
-					System.out.println("Saisie incorrecte");
-					
-				}
-				if (!saisie_correcte) {
-					System.out.println("Saisie incorrecte, recommencez !");
-				}
-			}
-			if (choix1 > 0) {
-				List<CarteRisk> liste_echange = Stream.of(listeCartes.get(choix1 - 1), listeCartes.get(choix2 - 1), listeCartes.get(choix3 - 1))
+                try {
+                    choix1 = scanner.nextInt();
+                    if (choix1 == 0 && listeCartes.size() < 5) {
+                        break;
+                    }
+                    choix2 = scanner.nextInt();
+                    choix3 = scanner.nextInt();
+                    if (choix1 > 0 && choix1 <= listeCartes.size() &&
+                            choix2 > 0 && choix2 <= listeCartes.size() &&
+                            choix3 > 0 && choix3 <= listeCartes.size() &&
+                            choix1 != choix2 && choix1 != choix3 && choix2 != choix3) {
+                        saisie_correcte = true;
+                    }
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Saisie incorrecte");
+
+                }
+                if (!saisie_correcte) {
+                    System.out.println("Saisie incorrecte, recommencez !");
+                }
+            }
+            if (choix1 > 0) {
+                List<CarteRisk> liste_echange = Stream.of(listeCartes.get(choix1 - 1), listeCartes.get(choix2 - 1), listeCartes.get(choix3 - 1))
                         .collect(Collectors.toList());
-				regimentsADonner += joueur.echangerCartes(liste_echange);
-				joueur.enleverCartes(liste_echange);
-				plateau.ajouterCarte(liste_echange);
-			}
-			System.out.println("Voulez vous encore échanger ? 0 = non/1 = oui");
-			int choix = scanner.nextInt();
-			while (choix < 0 || choix > 1) {
-				System.out.println("Saisie incorrecte");
-				choix = scanner.nextInt();
-			}
-			if (choix == 0) {
-				break;
-			}
-		}
-		distribuerRenforts(joueur, regimentsADonner);
-	}
+                regimentsADonner += joueur.echangerCartes(liste_echange);
+                joueur.enleverCartes(liste_echange);
+                plateau.ajouterCarte(liste_echange);
+            }
+            System.out.println("Voulez vous encore échanger ? 0 = non/1 = oui");
+            int choix = scanner.nextInt();
+            while (choix < 0 || choix > 1) {
+                System.out.println("Saisie incorrecte");
+                choix = scanner.nextInt();
+            }
+            if (choix == 0) {
+                break;
+            }
+        }
+        distribuerRenforts(joueur, regimentsADonner);
+    }
 
     public void fermerScanner() {
         scanner.close();
