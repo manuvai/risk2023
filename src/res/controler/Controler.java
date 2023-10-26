@@ -47,7 +47,7 @@ public class Controler {
 
         // TODO Initialiser
         while (ctrl.getJoueurs().size() > 1) {
-            ctrl.afficherInfos(ctrl.getActualJoueur());
+            ctrl.afficherTourJoueur(ctrl.getActualJoueur());
 
             ctrl.phaseRenforts();
             ctrl.startAttackPhase();
@@ -56,13 +56,18 @@ public class Controler {
             ctrl.eliminerPerdants();
             ctrl.passerAuJoueurSuivant();
         }
-        ctrl.phaseFortification();
 
-        ctrl.startAttackPhase();
+        ctrl.vainqueur(ctrl.getActualJoueur());
 
     }
 
-    private void afficherInfos(Joueur actualJoueur) {
+    private void vainqueur(Joueur actualJoueur) {
+        if (Objects.nonNull(actualJoueur)) {
+            System.out.println("Toutes nos félicitations ".concat(actualJoueur.getPrenom()).concat(" vous avez gagné"));
+        }
+    }
+
+    private void afficherTourJoueur(Joueur actualJoueur) {
         if (Objects.nonNull(actualJoueur)) {
             System.out.println(actualJoueur.getPrenom().concat(" c'est votre tour"));
         }
@@ -287,7 +292,7 @@ public class Controler {
         // Ajouter Cartes
 
         plateau.distribuerCartes(joueurs); // Distribuer les cartes aux joueurs
-        plateau.distribuerCartesAuxTerritoires(); // Distribuer les cartes aux territoires
+//        plateau.distribuerCartesAuxTerritoires(); // Distribuer les cartes aux territoires
         plateau.initialiserParties();
 
 
