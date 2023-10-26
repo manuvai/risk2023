@@ -21,6 +21,11 @@ public class Controler {
 
     }
 
+    /**
+     * Obtenir la liste des joueurs actuels dans le jeu.
+     *
+     * @return Une liste contenant tous les joueurs actuels du jeu.
+     */
     public List<Joueur> getJoueurs() {
         return joueurs;
     }
@@ -73,6 +78,12 @@ public class Controler {
         return nbJoueurs;
     }
 
+    /**
+     * Initialise et retourne une liste de joueurs pour le jeu.
+     *
+     * @param nbJoueurs Le nombre de joueurs à initialiser.
+     * @return Une liste de joueurs prête pour le jeu, ou une liste vide si le nombre de joueurs est incohérent.
+     */
     public List<Joueur> initialiserJoueurs(int nbJoueurs) {
 
         if (nbJoueurs <= 0 || nbJoueurs > 5) {
@@ -347,7 +358,7 @@ public class Controler {
     public void startAttackPhase(Joueur attaquant ) {
 //        while (canAttack(attaquant)) {
             System.out.println("Phase d'attaque pour le joueur : " + attaquant.getNom());
-            
+             
          // Demander au joueur de choisir le territoire source
             System.out.print("Saisissez le nom du territoire source : ");
             String nomTerritoireSource = scanner.nextLine();
