@@ -163,7 +163,7 @@ public class Plateau {
             Territoire territoire = territoires.get(i);
             CarteRisk carte = cartes.get(i % cartes.size());
             // Sélectionnez la carte suivante dans la liste, en boucle
-            territoire.setCarte(carte);
+           // territoire.setCarte(carte);
         }
     }
 

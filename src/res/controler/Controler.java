@@ -44,6 +44,8 @@ public class Controler {
 
         ctrl.initializePlateau();
 
+        testGauthier(ctrl);
+
         ctrl.startAttackPhase();
 
         testFortification(ctrl);
@@ -208,8 +210,6 @@ public class Controler {
         return saisie;
 
     }
-
-
     // Switch Joueur
         /**
          * Passe au joueur suivant dans la liste des joueurs.
@@ -252,7 +252,7 @@ public class Controler {
 //        pl.initialisationCarte(cartes);
 
         // Ajouter Cartes
-        List<CarteRisk> cartes = plateau.initialisationCarte(); // Appel de la méthode pour créer les cartes
+
         plateau.distribuerCartes(joueurs); // Distribuer les cartes aux joueurs
         plateau.distribuerCartesAuxTerritoires(); // Distribuer les cartes aux territoires
         plateau.initialiserParties();
