@@ -42,16 +42,47 @@ public class Controler {
 
         Controler ctrl = new Controler();
 
+//        ctrl.startAttackPhase(ctrl.getActualJoueur());
         ctrl.initializePlateau();
 
-        testGauthier(ctrl);
+        // TODO Initialiser
+        while (ctrl.getJoueurs().size() > 1) {
+            ctrl.afficherInfos(ctrl.getActualJoueur());
+
+            ctrl.phaseRenforts();
+            ctrl.startAttackPhase();
+            ctrl.phaseFortification();
+
+            ctrl.eliminerPerdants();
+            ctrl.passerAuJoueurSuivant();
+        }
+        ctrl.phaseFortification();
 
         ctrl.startAttackPhase();
 
-        testFortification(ctrl);
+    }
 
-        // TODO Décommenter la partie du bas lors de tests
-        // testGauthier(ctrl);
+    private void afficherInfos(Joueur actualJoueur) {
+        if (Objects.nonNull(actualJoueur)) {
+            System.out.println(actualJoueur.getPrenom().concat(" c'est votre tour"));
+        }
+    }
+
+    private void phaseRenforts() {
+        int nbRenforts = getActualJoueur().calculerNbRenforts(plateau);
+        distribuerRenforts(getActualJoueur(), nbRenforts);
+    }
+
+    private void eliminerPerdants() {
+        List<Joueur> perdants = new ArrayList<>();
+
+        for (Joueur joueur : getJoueurs()) {
+             if (joueur.obtenirTerritoires().isEmpty()) {
+                 perdants.add(joueur);
+             }
+        }
+
+        joueurs.removeAll(perdants);
     }
 
 
@@ -164,12 +195,13 @@ public class Controler {
         List<Joueur> joueurs = new ArrayList<>();
         for (int i = 0; i < nbJoueurs; i++) {
             Joueur joueur = new Joueur();
-            String nomJoueur = saisieNomJoueur(i);
+//            String nomJoueur = saisieNomJoueur(i);
             String prenomJoueur = saisiePrenomJoueur(i);
 
-            joueur.setNom(nomJoueur);
+//            joueur.setNom(nomJoueur);
             joueur.setPrenom(prenomJoueur);
             joueurs.add(joueur);
+            joueur.setArmee(new Armee("Couleur ".concat(Integer.toString(i + 1))));
         }
 
         return joueurs;
@@ -301,7 +333,7 @@ public class Controler {
             // 2.Commencer Fortification
             if (resJ == 1) {
                 Territoire tS = demanderTerritoireSource();
-                Territoire tC = demanderTerritoireCible(tS);
+                Territoire tC = demanderTerritoireCible(getActualJoueur(), tS);
                 System.out.println(tS.getNombreUnites());
                 System.out.println(tC.getNombreUnites());
                 int nbRegiment = demanderNbRegimentDeplace(tS);
@@ -389,31 +421,28 @@ public class Controler {
      *
      * @return Le territoire cible sélectionné par le joueur.
      */
-    public Territoire demanderTerritoireCible(Territoire tS) {
+    public Territoire demanderTerritoireCible(Joueur attaquant, Territoire tS) {
         while (true) {
             Scanner sc = new Scanner(System.in);
             System.out.println("Veuillez choisir un numéro de territoireCible :");
             // afficher tous les territoires de joueur
-            for (int i = 0; i < getActualJoueur().obtenirTerritoires().size(); i++) {
+            for (int i = 0; i < getTerritoiresToAttack(attaquant, tS).size(); i++) {
                 int indexT = i + 1;
-                if (getActualJoueur().obtenirTerritoires().get(i) == tS){
-                    continue;
-                } else {
-                    System.out.println(indexT + "." + getActualJoueur().obtenirTerritoires().get(i).getNom() +
-                            " : " + getActualJoueur().obtenirTerritoires().get(i).getNombreUnites());
-                }
+                System.out.println(indexT + "." + getTerritoiresToAttack(attaquant, tS).get(i).getNom() +
+                        " : " + getTerritoiresToAttack(attaquant, tS).get(i).getNombreUnites());
             }
 
             System.out.println("Saisir un numéro de la liste : ");
             int noTerritoireCible = this.scanner.nextInt();
 
-            if (noTerritoireCible > getActualJoueur().obtenirTerritoires().size() || noTerritoireCible <= 0
-                    || noTerritoireCible == getActualJoueur().obtenirTerritoires().indexOf(tS) + 1){
+            if (noTerritoireCible > getTerritoiresToAttack(attaquant, tS).size() || noTerritoireCible <= 0
+                    || noTerritoireCible == getTerritoiresToAttack(attaquant, tS).indexOf(tS) + 1
+            ){
                 System.err.println("Veuillez sélectionner un numéro territoireCible de la liste");
             } else {
-                Territoire TerritoireCible = getActualJoueur().obtenirTerritoires().get(noTerritoireCible - 1);
-                System.out.println("Vous avez choisi un territoireCible : " + TerritoireCible.getNom());
-                return TerritoireCible;
+                Territoire territoireCible = getTerritoiresToAttack(attaquant, tS).get(noTerritoireCible - 1);
+                System.out.println("Vous avez choisi un territoireCible : " + territoireCible.getNom());
+                return territoireCible;
             }
         }
     }
@@ -475,7 +504,7 @@ public class Controler {
         while (true) {
             int resJ = demanderAttaque();
             // while (canAttack(attaquant)) {
-            System.out.println("Phase d'attaque pour le joueur : " + attaquant.getNom());
+            System.out.println("Phase d'attaque pour le joueur : " + attaquant.getPrenom());
 
             if (resJ != 1 && resJ != 2) {
                 throw new Exception("Saissiez numero 1 ou 2 SVP !");
@@ -484,7 +513,7 @@ public class Controler {
             // 2.Commencer Fortification
             if (resJ == 1) {
                 Territoire tS = demanderTerritoireSource();
-                Territoire tC = demanderTerritoireCible(tS);
+                Territoire tC = demanderTerritoireCible(getActualJoueur(), tS);
                 System.out.println(tS.getNombreUnites());
                 System.out.println(tC.getNombreUnites());
                 // Demander au joueur d'obtenir la liste des territoires pour attaquer
@@ -666,11 +695,11 @@ public class Controler {
 
         // Tri des résultats d'attaque et de défense par ordre décroissant
         List<De> sortedAttackResults = resultatsAttaque.parallelStream()
-                        .sorted((o1, o2) -> o1.recupererValeur() - o2.recupererValeur())
-                        .collect(Collectors.toList());
+                .sorted(Comparator.comparingInt(De::recupererValeur))
+                .collect(Collectors.toList());
 
         List<De> sortedDefenseResults = resultatsDefense.parallelStream()
-                .sorted((o1, o2) -> o1.recupererValeur() - o2.recupererValeur())
+                .sorted(Comparator.comparingInt(De::recupererValeur))
                 .collect(Collectors.toList());
 
         // Initialisez le nombre de pertes.
@@ -684,9 +713,7 @@ public class Controler {
         }
 
         // Déterminez le nombre de troupes restantes après l'attaque.
-        int troupesRestantes = resultatsAttaque.size() - pertes;
-
-        return troupesRestantes;
+        return resultatsAttaque.size() - pertes;
     }
 
 
