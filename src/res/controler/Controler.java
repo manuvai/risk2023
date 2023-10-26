@@ -468,19 +468,19 @@ public class Controler {
     public void startAttackPhase()throws Exception {
         Controler ctrl = new Controler();
         Joueur  attaquant = joueurs.get(0);
-        // 1.Demander joueur -> Fortification ?
+        // 1.Demander joueur
         while (true) {
-            System.out.println("--------------------------------");
+            System.out.println("----------------C'est parti pour l'attaque !----------------");
             System.out.println("Phase d'attaque pour le joueur : " + attaquant.getNom());
             int resJ = demanderAttaque();
             // while (canAttack(attaquant)) {
-            System.out.println("Phase d'attaque pour le joueur : " + attaquant.getNom());
+            //System.out.println("Phase d'attaque pour le joueur : " + attaquant.getNom());
 
             if (resJ != 1 && resJ != 2) {
                 throw new Exception("Saissiez numero 1 ou 2 SVP !");
             }
 
-            // 2.Commencer Fortification
+            // 2.Commencer attaque
             if (resJ == 1) {
                 Territoire tS = demanderTerritoireSource();
                 Territoire tC = demanderTerritoireCible(tS);
