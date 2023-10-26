@@ -506,81 +506,147 @@ public class Controler {
          *
          * @throws Exception Si une erreur survient pendant la phase d'attaque, une exception est levée.
          */
-    public void startAttackPhase()throws Exception {
-        Controler ctrl = new Controler();
-        Joueur  attaquant = joueurs.get(0);
-        // 1.Demander joueur -> Fortification ?
-        while (true) {
-            int resJ = demanderAttaque();
-            // while (canAttack(attaquant)) {
-            System.out.println("Phase d'attaque pour le joueur : " + attaquant.getPrenom());
 
-            if (resJ != 1 && resJ != 2) {
-                throw new Exception("Saissiez numero 1 ou 2 SVP !");
+
+        public void startAttackPhase() throws Exception {
+            Joueur attaquant = getActualJoueur();
+            // 1.Demander attack?
+            while (true) {
+                int resJ = demanderAttaque();
+                // while (canAttack(attaquant)) {
+                System.out.println("Phase d'attaque pour le joueur : " + attaquant.getPrenom());
+
+                if (resJ != 1 && resJ != 2) {
+                    throw new Exception("Saissiez numero 1 ou 2 SVP !");
+                }
+
+                // 2.Commencer Attack
+                if (resJ == 1) {
+                    // Demander TerritoireSource
+                    Territoire tS = demanderTerritoireSource();
+//              System.out.println(tS.getNombreUnites());
+
+                    Territoire tC = demanderTerritoireCiblePourAttaquer(attaquant,tS);
+
+                    //S'il n'y a pas de territoires à attaquer, la phase d'attaque est recommencée
+                    if (tC == null){
+                        continue;
+                    }
+
+                /* Obtient des informations sur le regiment du terrtoireSource en cours
+                   et indique le nombre de dés que le joueur peut lancer.
+                   ex. 2 régiments ->  1 régimentAttaque -> 1 dès
+                       3 régiments ->  1/2 régimentAttaque -> 1 ou 2 dès
+                       4+ régiments ->  1/2/3 régimentAttaque -> 1 ou 2 ou 3 dès
+                */
+                    // Demander au joueur le nombre de dés à lancer pour l'attaque
+                    int desAttaque = demanderNbDesAttaque(tS);
+//                System.out.println(desAttaque);
+                    scanner.nextLine(); // Nettoyer la nouvelle ligne.
+
+
+                    // Lancer les dés pour l'attaque
+                    List<De> resultatsAttaque = attaquant.lancerDes(desAttaque);
+
+                    for (De d : resultatsAttaque){
+                        System.out.println(d.recupererValeur());
+                    }
+                    //lancerDes(desAttaque);
+
+                    // Déterminer les troupes restantes
+                    // Entrain de fix !!!
+                    int troupesRestantes = resolveAttack(resultatsAttaque, desAttaque);
+
+                    if (troupesRestantes > 0) {
+                        // L'attaquant a réussi l'attaque
+                        System.out.println("Attaque réussie ! Vous avez conquis le territoire.");
+                        // Territoire territoireCible = recupererTerritoire( tC);
+                        // Retirer le territoire du défenseur
+                        //retirerProprietaireTerritoire();
+
+                        // Ajouter le territoire à l'attaquant
+                        //attaquant.ajouterTerritoire(tC);
+
+                        // Demander la saisie du nombre de troupes à déplacer
+                        System.out.print("Saisissez le nombre de troupes à déplacer : ");
+                        int troupesADeplacer = scanner.nextInt();
+                        scanner.nextLine(); // Nettoyer la nouvelle ligne.
+                        // Déplacer les régiments
+                        //attaquant.deplacerRegiment(tS, tC, troupesADeplacer);
+                    } else {
+                        System.out.println("Attaque échouée. Le territoire est toujours aux mains du défenseur.");
+                    }
+                    int nbRegiment = demanderNbRegimentDeplace(tS);
+//                deplacerRegiment(tS, tC, nbRegiment);
+//                System.out.println(tS.getNombreUnites());
+//                System.out.println(tC.getNombreUnites());
+                    break;
+                } else if (resJ == 2) {
+                    System.out.println("Vous sautez ce tour d'attaque à la prochaine.");
+                    break;
+                }
             }
 
-            // 2.Commencer Fortification
-            if (resJ == 1) {
-                Territoire tS = demanderTerritoireSource();
-                Territoire tC = demanderTerritoireCible(getActualJoueur(), tS);
-                System.out.println(tS.getNombreUnites());
-                System.out.println(tC.getNombreUnites());
-                // Demander au joueur d'obtenir la liste des territoires pour attaquer
-                List<Territoire> territoiresAttaquables = getTerritoiresToAttack(attaquant, tS);
+        }
 
-                if (territoiresAttaquables.isEmpty()) {
-                    System.out.println("Le joueur ne peut plus mener d'attaque. Fin de la phase d'attaque.");
-                    return;
+        private int demanderNbDesAttaque(Territoire tS){
+            while (true){
+                System.out.println("Vous avez " + tS.getNombreUnites() + "régiments ");
+                if (tS.getNombreUnites() == 2){
+                    System.out.println("Pour 2 régiments vous pouvez lancer 1 dès");
+                    int desAttaque = 1;
+                    return desAttaque;
+
+                } else if (tS.getNombreUnites() == 3){
+                    System.out.println("Pour 3 régiments vous pouvez lancer 1 ou 2 dès");
+                    int desAttque = this.scanner.nextInt();
+                    if (desAttque < 1 || desAttque > 2){
+                        System.err.println("Le nombre de dès doit être 1 / 2");
+                        continue;
+                    }
+                    return desAttque;
+                } else if (tS.getNombreUnites() >= 4){
+                    System.out.println("Pour 4+ régiments vous pouvez lancer 1 ou 2 ou 3 dès");
+                    int desAttque = this.scanner.nextInt();
+                    if (desAttque < 1 || desAttque > 3){
+                        System.err.println("Le nombre de dès doit être 1 / 2 / 3");
+                        continue;
+                    }
+                    return desAttque;
                 }
-
-                // Demander au joueur le nombre de dés à lancer pour l'attaque
-                System.out.print("Saisissez le nombre de dés à lancer : ");
-                int desAttaque = scanner.nextInt();
-
-                while (desAttaque > 3) {
-                    System.out.print("Veuillez ressaisir le nombre de dés (entre 1 et 3) : ");
-                    desAttaque = scanner.nextInt();
-                }
-                scanner.nextLine(); // Nettoyer la nouvelle ligne.
-
-                // Lancer les dés pour l'attaque
-                List<De> resultatsAttaque = attaquant.lancerDes(desAttaque);
-                // lancerDes(desAttaque);
-
-                // Déterminer les troupes restantes
-                int troupesRestantes = resolveAttack(resultatsAttaque,desAttaque);
-
-                if (troupesRestantes > 0) {
-                    // L'attaquant a réussi l'attaque
-                    System.out.println("Attaque réussie ! Vous avez conquis le territoire.");
-                   // Territoire territoireCible = recupererTerritoire(nomTerritoireCible);
-                    // Retirer le territoire du défenseur
-                    retirerProprietaireTerritoire(tC);
-
-                    // Ajouter le territoire à l'attaquant
-                    attaquant.ajouterTerritoire(tC);
-
-                    // Demander la saisie du nombre de troupes à déplacer
-                    System.out.print("Saisissez le nombre de troupes à déplacer : ");
-                    int troupesADeplacer = scanner.nextInt();
-                    scanner.nextLine(); // Nettoyer la nouvelle ligne.
-                    // Déplacer les régiments
-                    attaquant.deplacerRegiment(tS, tC, troupesADeplacer);
-                } else {
-                    System.out.println("Attaque échouée. Le territoire est toujours aux mains du défenseur.");
-                }
-                int nbRegiment = demanderNbRegimentDeplace(tS);
-                deplacerRegiment(tS, tC, nbRegiment);
-                System.out.println(tS.getNombreUnites());
-                System.out.println(tC.getNombreUnites());
-                break;
-            } else if (resJ == 2) {
-                System.out.println("Vous sautez ce tour d'attaque à la prochaine.");
-                break;
             }
         }
 
-    }
+        private Territoire demanderTerritoireCiblePourAttaquer(Joueur attaquant, Territoire tS){
+            while (true){
+                // Demander au joueur d'obtenir la liste des territoires pour attaquer
+                List<Territoire> territoiresAttaquables = getTerritoiresToAttack(attaquant, tS);
+                for (int i = 0; i < territoiresAttaquables.size(); i++) {
+                    int indexTerr = i + 1;
+                    System.out.println(indexTerr + " . " + territoiresAttaquables.get(i).getNom());
+                }
+
+                if (territoiresAttaquables.isEmpty()) {
+                    System.out.println("Le joueur ne peut plus mener d'attaque. Fin de la phase d'attaque.");
+                    break;
+                }
+
+                // Demander TerritoireCible dans List -> territoiresAttaquables
+                System.out.println("Veuillez choisir un numéro de territoire pour attaquer : ");
+                int indexTc = this.scanner.nextInt();
+                if ((indexTc < 0) || (indexTc > territoiresAttaquables.size())){
+                    System.err.println("Veuillez saisir un territoire avec un nombre de régiments plus de 1");
+                    continue;
+                } else {
+                    Territoire tC = territoiresAttaquables.get(indexTc - 1);
+                    System.out.println("Vous avez choisi un territoireCible : " + tC.getNom());
+                    return tC;
+                }
+
+            }
+
+            return null;
+        }
 
 
         /**
@@ -597,6 +663,34 @@ public class Controler {
 
     }
 
+
+        public boolean verifierTerritoireAvecUnSeulRegiment(Territoire territoire) {
+            return territoire.getNombreUnites() == 1;
+        }
+
+        public Territoire demanderTerritoireAvecPlusieursRegiments(Joueur joueur) {
+            Territoire territoireChoisi = null;
+            boolean choixValide = false;
+
+            while (!choixValide) {
+                System.out.print("Sélectionnez un territoire avec plus d'un régiment : ");
+                String nomTerritoire = scanner.nextLine();
+
+                for (Territoire t : joueur.obtenirTerritoires()) {
+                    if (t.getNom().equalsIgnoreCase(nomTerritoire) && t.getNombreUnites() > 1) {
+                        territoireChoisi = t;
+                        choixValide = true;
+                        break;
+                    }
+                }
+
+                if (!choixValide) {
+                    System.out.println("Le territoire choisi est invalide. Assurez-vous de choisir un territoire avec plus d'un régiment.");
+                }
+            }
+
+            return territoireChoisi;
+        }
 
     /**
      * Retire un territoire de la liste des territoires possédés par le joueur.
