@@ -227,8 +227,6 @@ public class Controler {
 
         // Ajouter Cartes
 
-        plateau.distribuerCartes(joueurs); // Distribuer les cartes aux joueurs
-        plateau.distribuerCartesAuxTerritoires(); // Distribuer les cartes aux territoires
         plateau.initialiserParties();
 
 
@@ -438,6 +436,7 @@ public class Controler {
         Joueur  attaquant = joueurs.get(0);
         // 1.Demander joueur -> Fortification ?
         while (true) {
+            System.out.println("Phase d'attaque pour le joueur : " + attaquant.getNom());
             int resJ = demanderAttaque();
             // while (canAttack(attaquant)) {
             System.out.println("Phase d'attaque pour le joueur : " + attaquant.getNom());
