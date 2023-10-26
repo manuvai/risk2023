@@ -26,6 +26,27 @@ public class Controler {
         Controler ctrl = new Controler();
 //        ctrl.startAttackPhase(ctrl.getActualJoueur());
         ctrl.initializePlateau();
+
+        //tester distribuer Territoires
+        System.out.println("tous les territories: ");
+        List<String> ttTerr = new ArrayList<String>();
+        for (Continent c : ctrl.plateau.getContinents()) {
+            for (Territoire t : c.getTerritories()) {
+                ttTerr.add(t.getNom());
+            }
+        }
+        System.out.println(Arrays.toString(ttTerr.toArray()));
+
+        System.out.println("apres distribution, pour chanque joueur: ");
+        for (Joueur j : ctrl.joueurs){
+            List<String> terrJoueur = new ArrayList<String>();
+
+            for (Territoire t : j.obtenirTerritoires()) {
+                terrJoueur.add(t.getNom());
+            }
+            System.out.println(Arrays.toString(terrJoueur.toArray()));
+        }
+
         ctrl.phaseFortification();
 
     }
@@ -141,6 +162,7 @@ public class Controler {
 //                System.out.println(t.getNombreUnites());
 //            }
 //        }
+
     }
 
     public void setJoueurs(List<Joueur> joueurs){
