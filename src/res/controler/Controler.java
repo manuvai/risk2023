@@ -11,6 +11,11 @@ public class Controler {
     
     private Plateau plateau;//TODO Besoin d'une instance d'objet plateau pour méthodes
 
+    private List<Joueur> joueurs;
+
+    private Joueur actualJoueur;
+
+
     public Controler() {
         this.scanner = new Scanner(System.in);
 
@@ -20,13 +25,27 @@ public class Controler {
 
         Controler ctrl = new Controler();
 //        ctrl.startAttackPhase(ctrl.getActualJoueur());
-
         ctrl.initializePlateau();
+        ctrl.phaseFortification();
 
     }
+
+
+    // Switch Joueur
+    public void passerAuJoueurSuivant() {
+        int currentIndex = joueurs.indexOf(actualJoueur);
+        if (currentIndex < joueurs.size() - 1) {
+            actualJoueur = joueurs.get(currentIndex + 1);
+        } else {
+            actualJoueur = joueurs.get(0); // Retourner au permier joueur
+        }
+    }
+
+
     // Phase Préparation
-    public void initializePlateau(){
+    public void initializePlateau() throws Exception {
         Plateau pl = new Plateau();
+        this.plateau = pl;
 
         Joueur j1 = new Joueur();
         Joueur j2 = new Joueur();
@@ -39,13 +58,15 @@ public class Controler {
         joueurs.add(j3);
         joueurs.add(j4);
 
-        pl.setJoueurs(joueurs);
+        plateau.setJoueurs(joueurs);
+        this.joueurs = joueurs;
+        this.actualJoueur = joueurs.get(0);
 
 
         // Ajouter Cartes
 //        List<CarteRisk> cartes = new ArrayList<CarteRisk>();
 //        pl.initialisationCarte(cartes);
-        pl.initialiserParties();
+        plateau.initialiserParties();
 //        for (Joueur j : joueurs){
 //            System.out.println(j.obtenirTerritoires());
 //        }
@@ -56,6 +77,10 @@ public class Controler {
 //                System.out.println(t.getNombreUnites());
 //            }
 //        }
+    }
+
+    public void setJoueurs(List<Joueur> joueurs){
+        this.joueurs = joueurs;
     }
 
 
@@ -105,18 +130,7 @@ public class Controler {
     }
 
     public Joueur getActualJoueur() {
-        Joueur joueur = new Joueur();
-
-        // TODO Permettre de savoir de quel joueur il s'agit
-        joueur.ajouterTerritoire(new Territoire("Affique du nord"));
-        joueur.ajouterTerritoire(new Territoire("Affique du sud"));
-        joueur.ajouterTerritoire(new Territoire("Europe"));
-
-        joueur.setArmee(new Armee("Bleu"));
-        joueur.getArmee().ajouterPion(new Pion("Pion", TypePion.INFANTERIE));
-        joueur.getArmee().ajouterPion(new Pion("Chouval", TypePion.CAVALERIE));
-
-        return joueur;
+        return this.actualJoueur;
     }
     
     /**
