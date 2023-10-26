@@ -9,6 +9,9 @@ import java.util.*;
 
 /**
  * Cette classe représente un joueur dans un jeu de Risk.
+ *
+ *  @author Manuvai REHUA
+ *  @since 21/10/23
  */
 
 public class Joueur {

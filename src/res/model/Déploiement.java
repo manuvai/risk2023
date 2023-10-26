@@ -6,6 +6,10 @@ import res.model.exceptions.InvalidQuantityDeploymentException;
 
     /**
      * Cette classe représente un déploiement d'unités sur un territoire.
+     *
+     *  @author Fatima MOUSLIM
+     *  @since 21/10/23
+     *
      */
 public class Déploiement {
     private int qtéDéployée;

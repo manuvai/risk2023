@@ -6,6 +6,9 @@ import java.util.Objects;
 
     /**
      * Cette classe représente une armée dans un jeu.
+     *
+     * @author Manuvai REHUA
+     * @since 21/10/23
      */
 
 public class Armee {

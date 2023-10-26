@@ -9,11 +9,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-
     /**
      * Cette classe représente un territoire dans un jeu.
+     *
+     * @author Fatima MOUSLIM
+     * @since 21/10/23
      */
-
 
 public class Territoire {
     private String nom;
