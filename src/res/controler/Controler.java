@@ -63,7 +63,7 @@ public class Controler {
 
     private static void testFortification(Controler ctrl) throws Exception {
         //tester distribuer Territoires
-        System.out.println("tous les territories: ");
+        System.out.println("La liste des territories dans les continents: ");
         List<String> ttTerr = new ArrayList<String>();
         for (Continent c : ctrl.plateau.getContinents()) {
             for (Territoire t : c.getTerritories()) {
@@ -72,8 +72,9 @@ public class Controler {
         }
         System.out.println(Arrays.toString(ttTerr.toArray()));
 
-        System.out.println("apres distribution, pour chanque joueur: ");
+        System.out.println("apres distribution des territoires pour chanque joueur: ");
         for (Joueur j : ctrl.joueurs){
+            System.out.println("Joueur : " + j.getNom()); // Affiche le nom du joueur
             List<String> terrJoueur = new ArrayList<String>();
 
             for (Territoire t : j.obtenirTerritoires()) {
@@ -135,7 +136,7 @@ public class Controler {
      * @return
      */
     public int getNbJoueurs() {
-        System.out.print("Combien de joueurs ? (1 à 5) : ");
+        System.out.print("Combien de joueurs jouents dans cette partie ? (1 à 5) : ");
 
         int nbJoueurs = Integer.parseInt(scanner.nextLine());
 
@@ -156,7 +157,7 @@ public class Controler {
     public List<Joueur> initialiserJoueurs(int nbJoueurs) {
 
         if (nbJoueurs <= 0 || nbJoueurs > 5) {
-            System.out.println("Vous devez donner un nombre cohérent de joueurs");
+            System.out.println("Vous devez donner un nombre cohérent des joueurs");
             return new ArrayList<>();
         }
 
@@ -294,7 +295,7 @@ public class Controler {
             int resJ = demanderFortification();
 
             if (resJ != 1 && resJ != 2) {
-                throw new Exception("Saissiez numero 1 ou 2 SVP !");
+                throw new Exception("Saissiez un numero 1 ou 2 SVP !");
             }
 
             // 2.Commencer Fortification
@@ -309,7 +310,7 @@ public class Controler {
                 System.out.println(tC.getNombreUnites());
                 break;
             } else if (resJ == 2) {
-                System.out.println("Vous sautez ce tour de fortificqtion.");
+                System.out.println("Vous sautez ce tour de fortification à la prochaine.");
                 break;
             }
         }
@@ -325,7 +326,7 @@ public class Controler {
 
     public int demanderFortification() throws Exception {
         // Demander si joueur va commencer l'étape de fortification
-        System.out.println("Est-ce que vous voulez fortifier(1/2) ? (Reponse : 1 - Oui, 2 - Non)");
+        System.out.println("Est-ce que vous voulez fortifier ? ( 1 - Oui, 2 - Non)");
         int resJ = this.scanner.nextInt();
         return resJ;
 
@@ -362,7 +363,7 @@ public class Controler {
      */
     public Territoire demanderTerritoireSource() {
         while (true) {
-            System.out.println("Veuillez sélectionner un numéro territoireSource :");
+            System.out.println("Veuillez choisir un numéro territoireSource de la liste :");
             // afficher tous les territoires de joueur
             for (int i = 0; i < getActualJoueur().obtenirTerritoires().size(); i++) {
                 int indexT = i + 1;
@@ -373,7 +374,7 @@ public class Controler {
             int noTerritoireSource = this.scanner.nextInt();
 
             if (noTerritoireSource > getActualJoueur().obtenirTerritoires().size() || noTerritoireSource <= 0){
-                System.err.println("Veuillez sélectionner un numéro territoireSource de la liste");
+                System.err.println("Veuillez choisir un numéro territoireSource de la liste");
             } else {
                 Territoire territoireSource = getActualJoueur().obtenirTerritoires().get(noTerritoireSource - 1);
                 System.out.println("Vous avez choisi un territoireSource : " + territoireSource.getNom());
@@ -391,7 +392,7 @@ public class Controler {
     public Territoire demanderTerritoireCible(Territoire tS) {
         while (true) {
             Scanner sc = new Scanner(System.in);
-            System.out.println("Veuillez sélectionner un numéro de territoireCible :");
+            System.out.println("Veuillez choisir un numéro de territoireCible :");
             // afficher tous les territoires de joueur
             for (int i = 0; i < getActualJoueur().obtenirTerritoires().size(); i++) {
                 int indexT = i + 1;
@@ -427,14 +428,14 @@ public class Controler {
     public int demanderNbRegimentDeplace(Territoire tS) {
         while (true) {
             System.out.println("Vous avez " + tS.getNombreUnites() + " regiments dans " + tS.getNom() + " !");
-            System.out.println("Vous pouvez deplacer 0 -> " + (tS.getNombreUnites() - 1) + " régiments");
-            System.out.println("Veuillez choisir nb de régiment pour deplacer : ");
+            System.out.println("Vous pouvez deplacer  " + (tS.getNombreUnites() - 1) + " régiments");
+            System.out.println("Veuillez choisir un nombre de régiment pour le déplacer dans : "+ tS.getNom());
             int nbRegiment = this.scanner.nextInt();
 
             if (nbRegiment > (tS.getNombreUnites() - 1)) {
                 System.err.println("Vous n'avez pas assez de regiments");
             } else if (nbRegiment < 0) {
-                System.err.println("nbRegiment ne peut pas < 0");
+                System.err.println("nombre de regiment ne peut pas etre moins de 0");
             } else {
                 System.out.println("Vous avez déplacé " + nbRegiment + " régiment(s) de " + tS.getNom());
                 return nbRegiment;
@@ -552,7 +553,7 @@ public class Controler {
          */
     private int demanderAttaque() throws Exception {
         // Demander si joueur va commencer l'étape d'attaque
-        System.out.println("Est-ce que vous voulez Attaquer(1/2) ? (Reponse : 1 - Oui, 2 - Non)");
+        System.out.println("Est-ce que vous voulez Attaquer ? (Reponse : 1 - Oui, 2 - Non)");
         int resJ = this.scanner.nextInt();
         return resJ;
 
