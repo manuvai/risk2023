@@ -43,12 +43,14 @@ public class Controler {
         Controler ctrl = new Controler();
 
         ctrl.initializePlateau();
-
+        System.out.println("Démarrage de la partie");
         testGauthier(ctrl);
 
         ctrl.startAttackPhase();
 
         testFortification(ctrl);
+
+        System.out.println("Fin de la partie");
 
         // TODO Décommenter la partie du bas lors de tests
         // testGauthier(ctrl);
