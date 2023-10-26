@@ -2,6 +2,9 @@ package res.model;
 
 /**
  * Représente une carte dans le jeu Risk, associant un type de pion à un territoire.
+ *
+ * @author Yifan SHI
+ * @since 21/10/23
  */
 
 public class CarteRisk {

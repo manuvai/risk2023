@@ -5,8 +5,11 @@ import java.util.List;
 import java.util.Objects;
 
 /**
-     * Cette classe représente un continent dans un jeu.
-     */
+ * Cette classe représente un continent dans un jeu.
+ *
+ * @author Han PANG
+ * @since 21/10/23
+ */
 public class Continent {
     private String nomCtint;
     private int bonusRenforts;

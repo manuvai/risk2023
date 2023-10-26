@@ -174,6 +174,12 @@ public class Controler {
         return joueurs;
     }
 
+        /**
+         * Demande et saisit le nom d'un joueur en utilisant l'entrée du scanner.
+         *
+         * @param i Le numéro du joueur (utilisé pour afficher le message).
+         * @return Le nom du joueur saisi.
+         */
     private String saisieNomJoueur(int i) {
         System.out.print("Veuillez entrer le nom du joueur ".concat(Integer.toString(i + 1)).concat(" : "));
         String saisie = scanner.nextLine();
@@ -186,6 +192,12 @@ public class Controler {
         return saisie;
     }
 
+        /**
+         * Demande et saisit le prénom d'un joueur en utilisant l'entrée du scanner.
+         *
+         * @param i Le numéro du joueur (utilisé pour afficher le message).
+         * @return Le prénom du joueur saisi.
+         */
     private String saisiePrenomJoueur(int i) {
         System.out.print("Veuillez entrer le prenom du joueur ".concat(Integer.toString(i + 1)).concat(" : "));
         String saisie = scanner.nextLine();
@@ -199,6 +211,10 @@ public class Controler {
 
     }
     // Switch Joueur
+        /**
+         * Passe au joueur suivant dans la liste des joueurs.
+         *Si le joueur actuel est le dernier de la liste, la méthode revient au premier joueur.
+         */
     public void passerAuJoueurSuivant() {
         int currentIndex = joueurs.indexOf(actualJoueur);
         if (currentIndex < joueurs.size() - 1) {
@@ -210,6 +226,16 @@ public class Controler {
 
 
     // Phase Préparation
+
+        /**
+         * Initialise le plateau de jeu, y compris les joueurs, les cartes Risk, et les territoires.
+         *
+         * Cette méthode initialise un nouveau plateau de jeu en créant les joueurs, en attribuant des cartes Risk aux joueurs,
+         * et en préparant les territoires pour le début de la partie.
+         *
+         * @throws Exception si une exception se produit lors de l'initialisation du plateau.
+         */
+
     public void initializePlateau() throws Exception {
         plateau = new Plateau();
 
@@ -230,10 +256,6 @@ public class Controler {
         plateau.initialiserParties();
 
 
-
-
-
-
 //        for (Joueur j : joueurs){
 //            System.out.println(j.obtenirTerritoires());
 //        }
@@ -247,6 +269,12 @@ public class Controler {
 
     }
 
+
+        /**
+         * Définit la liste des joueurs pour cette instance de Plateau.
+         *
+         * @param joueurs La liste des joueurs à associer à ce plateau.
+         */
     public void setJoueurs(List<Joueur> joueurs){
         this.joueurs = joueurs;
     }
@@ -431,6 +459,12 @@ public class Controler {
     //Phase d'attaque 
 
 
+        /**
+         * Démarre la phase d'attaque du jeu. Cette méthode gère les actions associées à la phase d'attaque, y compris la sélection
+         * des territoires source et cible, le lancement des dés, la résolution de l'attaque et le déplacement des troupes.
+         *
+         * @throws Exception Si une erreur survient pendant la phase d'attaque, une exception est levée.
+         */
     public void startAttackPhase()throws Exception {
         Controler ctrl = new Controler();
         Joueur  attaquant = joueurs.get(0);
@@ -508,6 +542,13 @@ public class Controler {
 
     }
 
+
+        /**
+         * Demande au joueur s'il souhaite commencer l'étape d'attaque.
+         *
+         * @return 1 si le joueur souhaite attaquer, 2 s'il souhaite sauter son tour.
+         * @throws Exception Si une réponse invalide est donnée, une exception est levée.
+         */
     private int demanderAttaque() throws Exception {
         // Demander si joueur va commencer l'étape d'attaque
         System.out.println("Est-ce que vous voulez Attaquer(1/2) ? (Reponse : 1 - Oui, 2 - Non)");
@@ -515,6 +556,8 @@ public class Controler {
         return resJ;
 
     }
+
+
     /**
      * Retire un territoire de la liste des territoires possédés par le joueur.
      *
@@ -543,6 +586,12 @@ public class Controler {
 
     }
 
+        /**
+         * Vérifie si le joueur attaquant peut initier une attaque.
+         *
+         * @param attaquant Le joueur qui souhaite attaquer.
+         * @return True si le joueur peut attaquer, sinon False.
+         */
     private boolean canAttack(Joueur attaquant ) {
     	// Vérification du nombre de territoires du joueur attaquant
         if (attaquant.obtenirTerritoires().size() < 2) {
@@ -562,6 +611,13 @@ public class Controler {
         return true;
     }
 
+        /**
+         * Obtient la liste des territoires voisins du territoire source qui peuvent être attaqués par le joueur attaquant.
+         *
+         * @param attaquant Le joueur attaquant.
+         * @param territoireSource Le territoire source à partir duquel l'attaque est lancée.
+         * @return Une liste de territoires attaquables par le joueur attaquant, qui sont des voisins non possédés par le joueur.
+         */
     private List<Territoire> getTerritoiresToAttack(Joueur attaquant, Territoire territoireSource) {
         // Recherche du territoire source
         if (territoireSource == null) {
@@ -576,7 +632,12 @@ public class Controler {
                 .collect(Collectors.toList());
     }
 
-
+        /**
+         * Lance un certain nombre de dés pour la phase de défense.
+         *
+         * @param nombreDes Le nombre de dés à lancer pour la défense.
+         * @return Une liste des résultats obtenus après le lancer de dés pour la défense.
+         */
     private List<De> lancerDesDefense(int nombreDes) {
         List<De> resultatsDefense = new ArrayList<>();
 
@@ -590,7 +651,13 @@ public class Controler {
         return resultatsDefense;
     }
 
-
+        /**
+         * Résout le résultat d'une attaque en comparant les résultats des dés d'attaque et de défense.
+         *
+         * @param resultatsAttaque     Liste des résultats des dés lancés par l'attaquant.
+         * @param desDefense           Le nombre de dés lancés par le défenseur pour la phase de défense.
+         * @return Le nombre de troupes restantes après l'attaque.
+         */
     private int resolveAttack(List<De> resultatsAttaque, int desDefense) {
         // Lancez les dés de défense pour obtenir les résultats du défenseur.
         List<De> resultatsDefense = lancerDesDefense(desDefense);
@@ -643,9 +710,15 @@ public class Controler {
 
         return troupesRestantes;
     }
-
-
      */
+
+        /**
+         * Obtient la liste des territoires accessibles depuis un territoire source donné pour un joueur donné.
+         *
+         * @param territoireSource Le nom du territoire source à partir duquel on souhaite accéder à d'autres territoires.
+         * @param joueur           Le joueur pour lequel on recherche les territoires accessibles.
+         * @return Une liste de territoires accessibles à partir du territoire source pour le joueur.
+         */
     private List<Territoire> getTerritoiresAccessiblesDepuis(String territoireSource, Joueur joueur) {
         List<Territoire> territoiresAccessibles = new ArrayList<>();
 
@@ -662,6 +735,14 @@ public class Controler {
         return territoiresAccessibles;
     }
 
+        /**
+         * Distribue des renforts à un joueur en fonction du nombre total de renforts (nb).
+         * Les renforts sont répartis en artillerie, cavalerie et infanterie en respectant les ratios
+         * de 10 renforts par artillerie, 5 renforts par cavalerie et 1 renfort par infanterie.
+         *
+         * @param joueur Le joueur auquel les renforts sont distribués.
+         * @param nb     Le nombre total de renforts à distribuer.
+         */
 	public void distribuerRenforts(Joueur joueur, int nb) {
 		int artillerie = nb / 10;
 		nb = nb % 10;
@@ -688,7 +769,12 @@ public class Controler {
 		}
 
 	}
-	
+
+        /**
+         * Permet au joueur d'échanger des cartes et de recevoir des renforts en fonction des cartes échangées.
+         *
+         * @param joueur Le joueur qui effectue l'échange de cartes.
+         */
 	public void echangerCartes(Joueur joueur) {
 		int regimentsADonner = 0;
 		while (true) {

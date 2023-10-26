@@ -6,8 +6,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
-     * Cette classe représente le plateau de jeu pour un jeu de Risk.
-     */
+ * Cette classe représente le plateau de jeu pour un jeu de Risk.
+ */
 
 
 public class Plateau {
