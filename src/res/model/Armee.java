@@ -42,6 +42,15 @@ public class Armee {
         return couleur;
 
     }
+    
+    /**
+     * Récupère la liste de pions d'une armée
+     * '
+     * @return
+     */
+    public List<Pion> getPions(){
+    	return pions;
+    }
 
     /**
      * Retire un pion de l'armée.
