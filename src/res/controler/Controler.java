@@ -46,6 +46,51 @@ public class Controler {
         }
 
         return nbJoueurs;
+    }
+
+    public List<Joueur> initialiserJoueurs(int nbJoueurs) {
+
+        if (nbJoueurs <= 0 || nbJoueurs > 5) {
+            System.out.println("Vous devez donner un nombre cohérent de joueurs");
+            return new ArrayList<>();
+        }
+
+        List<Joueur> joueurs = new ArrayList<>();
+        for (int i = 0; i < nbJoueurs; i++) {
+            Joueur joueur = new Joueur();
+            String nomJoueur = saisieNomJoueur(i);
+            String prenomJoueur = saisiePrenomJoueur(i);
+
+            joueur.setNom(nomJoueur);
+            joueur.setPrenom(prenomJoueur);
+            joueurs.add(joueur);
+        }
+
+        return joueurs;
+    }
+
+    private String saisieNomJoueur(int i) {
+        System.out.print("Veuillez entrer le nom du joueur ".concat(Integer.toString(i + 1)).concat(" : "));
+        String saisie = scanner.nextLine();
+
+        while ("".equals(saisie)) {
+            System.out.print("Veuillez saisir un nom valide : ");
+            saisie = scanner.nextLine();
+        }
+
+        return saisie;
+    }
+
+    private String saisiePrenomJoueur(int i) {
+        System.out.print("Veuillez entrer le prenom du joueur ".concat(Integer.toString(i + 1)).concat(" : "));
+        String saisie = scanner.nextLine();
+
+        while ("".equals(saisie)) {
+            System.out.print("Veuillez saisir un prenom valide : ");
+            saisie = scanner.nextLine();
+        }
+
+        return saisie;
 
     }
 
