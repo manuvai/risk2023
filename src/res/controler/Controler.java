@@ -470,6 +470,7 @@ public class Controler {
         Joueur  attaquant = joueurs.get(0);
         // 1.Demander joueur -> Fortification ?
         while (true) {
+            System.out.println("--------------------------------");
             System.out.println("Phase d'attaque pour le joueur : " + attaquant.getNom());
             int resJ = demanderAttaque();
             // while (canAttack(attaquant)) {
