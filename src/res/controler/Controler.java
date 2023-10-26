@@ -4,15 +4,19 @@ import res.model.*;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import res.model.loader.*;
 
 
 public class Controler {
     private Scanner scanner;
-    
-    private Plateau plateau;//TODO Besoin d'une instance d'objet plateau pour méthodes
+    private Plateau plateau; 
+    private static List<Joueur> joueurs = new ArrayList();
 
     public Controler() {
         this.scanner = new Scanner(System.in);
+      //  this.joueurs=new ArrayList();
+        
+        plateau = new Plateau(joueurs.size());
 
     }
 
@@ -242,28 +246,46 @@ public class Controler {
     
      public static void main(String[] args) {
     	
-    	System.out.println("--------------------Phase d'attaque ------------------");
     	
+    	
+    	
+    	MainLoader loader = new MainLoader();
     	Controler ctrl = new Controler();
+    	Plateau plateau1 = new Plateau(2);
+    	
+    	//plateau1.initialiserParties();
         // Remplacez "nomJoueur" par le nom du joueur que vous souhaitez tester.
         Joueur attaquant = new Joueur();
         
         
+        List<Territoire> territoire1 = loader.getTerritoireList();
+        //attaquant.obtenirTerritoires(territoire1);
+       // attaquant.ajouterTroupes();
+        
+        
         // Appelez la méthode startAttackPhase en mode test.
         ctrl.startAttackPhase(attaquant);
+       // System.out.println(ctrl.recupererNomsTerritoires());
+       
+      // System.out.println(loader.getContinentList());
+       //System.out.println(loader.getTerritoireList());
 
 
     }
 
+     
 
     public void startAttackPhase(Joueur attaquant) {
+    	Controler ctrl = new Controler();
 
-        while (canAttack(attaquant)) {
+       // while (canAttack(attaquant)) {
             System.out.println("--------------------Phase d'attaque ------------------");
             System.out.println("Phase d'attaque pour le joueur : " + attaquant.getNom());
+            
 
             // Demander au joueur de choisir le territoire source
-            System.out.print("Saisissez le nom du territoire source : ");
+            System.out.print("Saisissez le nom du territoire source de la liste suivante : \n");
+            System.out.println(ctrl.recupererNomsTerritoires());
             String nomTerritoireSource = scanner.nextLine();
             Territoire territoireSource = recupererTerritoire(nomTerritoireSource);
 
@@ -277,7 +299,8 @@ public class Controler {
             }
 	*/
             // Demander au joueur de choisir le territoire cible
-            System.out.print("Saisissez le nom du territoire cible d'attaque : ");
+            System.out.print("Saisissez le nom du territoire cible d'attaque de la liste suivant : \n");
+            System.out.println(ctrl.recupererNomsTerritoires());
             String nomTerritoireCible = scanner.nextLine();
 
             // Demander au joueur le nombre de dés à lancer pour l'attaque
@@ -309,10 +332,41 @@ public class Controler {
                 scanner.nextLine(); // Nettoyer la nouvelle ligne.
                 // Déplacer les régiments
                 attaquant.deplacerRegiment(territoireSource, territoireCible, troupesADeplacer);
+                System.out.print("ok tout va bien va dormir : ");
             } else {
                 System.out.println("Attaque échouée. Le territoire est toujours aux mains du défenseur.");
+                System.out.println("tours du prochain joueur .");
             }
         }
+   // }
+    
+    
+
+    public Territoire recupererTerritoire(String nomTerritoire) {
+    	MainLoader loader = new MainLoader();
+        Territoire territoire = null; // Initialisez à null car il peut ne pas y avoir de correspondance
+
+        for (Territoire territoireDansListe : loader.getTerritoireList()) {
+            if (territoireDansListe.getNom().equals(nomTerritoire)) {
+                territoire = territoireDansListe; // Affectez le territoire correspondant
+                break; // Sortez de la boucle dès que vous avez trouvé une correspondance
+            }
+        }
+
+        return territoire; // Retournez le territoire trouvé (ou null s'il n'y a pas de correspondance)
+    }
+
+    
+    
+    public List<String> recupererNomsTerritoires() {
+        MainLoader loader = new MainLoader();
+        List<String> nomsTerritoires = new ArrayList<>();
+
+        for (Territoire territoire : loader.getTerritoireList()) {
+            nomsTerritoires.add(territoire.getNom());
+        }
+
+        return nomsTerritoires;
     }
 
     /**
@@ -376,27 +430,17 @@ public class Controler {
                 .collect(Collectors.toList());
     }
 
-
+    
     private int resolveAttack (List < De > resultatsAttaque) {
-        // Tri des résultats d'attaque par ordre décroissant
-        Collections.sort(resultatsAttaque, Collections.reverseOrder());
-
-        // Initialisez le nombre de pertes.
-        int pertes = 0;
-
-        // Déterminez le nombre de pertes en comparant les dés.
-        for (int i = 0; i < resultatsAttaque.size(); i++) {
-            // Par exemple, si 6 est le résultat d'un dé, cela signifie une victoire.
-            // Vous pouvez personnaliser ces règles en fonction de votre jeu.
-            if (resultatsAttaque.get(i).recupererValeur() < 6) {
-                pertes++;
-            }
-        }
-
-        // Déterminez le nombre de troupes restantes après l'attaque.
-        int troupesRestantes = resultatsAttaque.size() - pertes;
-
-        return troupesRestantes;
+    	int pertes=0;  
+    	
+    	for(De de : resultatsAttaque) {
+    		if (de.recupererValeur()<6) {
+    			pertes++;
+    		}
+    	}
+    	return resultatsAttaque.size() - pertes;
+    	
     }
 
     private List<Territoire> getTerritoiresAccessiblesDepuis(String territoireSource, Joueur joueur) {
