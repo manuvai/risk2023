@@ -19,6 +19,11 @@ public class Joueur {
     private List<Territoire> territoires = new ArrayList<>();
     private List<CarteRisk> cartes = new ArrayList<>();
 
+//    public Joueur(String nom, String prenom){
+//        this.nom = nom;
+//        this.prenom = prenom;
+//    }
+
     public String getNom() {
         return nom;
     }

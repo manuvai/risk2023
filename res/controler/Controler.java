@@ -19,18 +19,44 @@ public class Controler {
     public static void main(String... args) throws Exception {
 
         Controler ctrl = new Controler();
-        ctrl.startAttackPhase(ctrl.getActualJoueur());
+//        ctrl.startAttackPhase(ctrl.getActualJoueur());
+
+        ctrl.initializePlateau();
+
     }
     // Phase Préparation
     public void initializePlateau(){
         Plateau pl = new Plateau();
-        // Ajouter contient et territoire
-        //...
+
+        Joueur j1 = new Joueur();
+        Joueur j2 = new Joueur();
+        Joueur j3 = new Joueur();
+        Joueur j4 = new Joueur();
+
+        List<Joueur> joueurs = new ArrayList<Joueur>();
+        joueurs.add(j1);
+        joueurs.add(j2);
+        joueurs.add(j3);
+        joueurs.add(j4);
+
+        pl.setJoueurs(joueurs);
+
+
         // Ajouter Cartes
-        ArrayList<CarteRisk> cartes = new ArrayList<CarteRisk>();
-        pl.initialisationCarte(cartes);
+//        List<CarteRisk> cartes = new ArrayList<CarteRisk>();
+//        pl.initialisationCarte(cartes);
         pl.initialiserParties();
-    }
+//        for (Joueur j : joueurs){
+//            System.out.println(j.obtenirTerritoires());
+//        }
+
+
+//        for (Continent c: pl.getContinents()){
+//            for (Territoire t : c.getTerritories()){
+//                System.out.println(t.getNombreUnites());
+//            }
+//        }
+//    }
 
 
     // Phase Fortification
