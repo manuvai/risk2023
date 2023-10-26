@@ -21,6 +21,17 @@ public class Controler {
         Controler ctrl = new Controler();
         ctrl.startAttackPhase(ctrl.getActualJoueur());
     }
+    // Phase Préparation
+    public void initializePlateau(){
+        Plateau pl = new Plateau();
+        // Ajouter contient et territoire
+        //...
+        // Ajouter Cartes
+        ArrayList<CarteRisk> cartes = new ArrayList<CarteRisk>();
+        pl.initialisationCarte(cartes);
+        pl.initialiserParties();
+    }
+
 
     // Phase Fortification
     /**

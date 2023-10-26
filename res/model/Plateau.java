@@ -30,15 +30,40 @@ public class Plateau {
      */
 
     public void initialisationRegiment() {
-        // 5 joueurs -> 25 pions infanterie
-        if (joueurs.size() == 5){
-            placerPionDansTerritoire(25);
-
-        } else if (joueurs.size() == 4){ // 4 joueurs -> 30 pions infanterie
-
-        } else if (joueurs.size() == 3){ // 3 joueurs -> 35 pions infanterie
-
+        if (joueurs.size() == 3){ // 35 pions -> infanterie
+            placementAuto(35);
+        } else if (joueurs.size() == 4){ // 30 pions -> infanterie
+            placementAuto(30);
+        } else if (joueurs.size() == 5) { // 25 pions -> infanterie
+            placementAuto(25);
         }
+    }
+
+    public void placementAuto(int nbRegiment){
+        for (Joueur j : joueurs){
+            for (Territoire t : j.obtenirTerritoires()){
+                Pion p = new Pion("pionDebut",TypePion.INFANTERIE);
+                t.ajouterRegiment(p,1);
+                nbRegiment --;
+            }
+        }
+
+        // placement random
+        Random rand = new Random();
+        for (Joueur j : joueurs){
+            List<Territoire> listeTerritoire = j.obtenirTerritoires();
+            for (int i = 0; i < nbRegiment; i++){
+                int randomIndex = rand.nextInt(listeTerritoire.size());
+                Pion p = new Pion("pionPlaceAuto",TypePion.INFANTERIE);
+                listeTerritoire.get(randomIndex).ajouterRegiment(p,1);
+            }
+        }
+
+
+    }
+
+    public void initialisationCarte(ArrayList<CarteRisk> cartes){
+        this.cartesPille = cartes;
     }
 
 
