@@ -124,10 +124,11 @@ public class Plateau {
         return cartes;
     }
     
-    // pluetôt distribuerTerritoires
+    // pluetôt distribuer Territoires
     public void distribuerCartes(List<Joueur> js) {
 
         // 1. Créez une liste de territoires
+        // Cette liste comprend les territoires de tous les continents du plateau de jeu.
         List<Territoire> listeTtTerritoire = new ArrayList<Territoire>();
         for (Continent c : continents) {
             listeTtTerritoire.addAll(c.getTerritories());
