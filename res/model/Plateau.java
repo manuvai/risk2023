@@ -40,7 +40,7 @@ public class Plateau {
         //Pour chaque territoire existant, on crée une carte représentant le territoire et un type de régiment aléatoirement
         for (Territoire territoire : listeTerritoire) {
         	
-        	int random = (int)(Math.random()*((type.size()-1)+1));
+        	int random = (int)(Math.random()*type.size());
         	//On crée la carte qui associe un territoire à un type de pion, puis on enlève le type de pion des possibilités car on estime que sur 42 cartes, on aura 14 de chaque type
 			CarteRisk carte = new CarteRisk(type.get(random), territoire);
 			type.remove(random);
