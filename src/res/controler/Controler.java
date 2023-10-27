@@ -46,10 +46,10 @@ public class Controler {
         System.out.println("Démarrage de la partie");
         // TODO Initialiser
         while (ctrl.getJoueurs().size() > 1) {
-           ctrl.afficherTourJoueur(ctrl.getActualJoueur());
+            ctrl.afficherTourJoueur(ctrl.getActualJoueur());
 
-           ctrl.phaseRenforts();
-           ctrl.startAttackPhase();
+            ctrl.phaseRenforts();
+            ctrl.startAttackPhase();
             ctrl.phaseFortification();
 
             ctrl.eliminerPerdants();
@@ -423,7 +423,13 @@ public class Controler {
             System.out.println("Saisir un numéro de la liste : ");
             int noTerritoireSource = this.scanner.nextInt();
 
-            if (noTerritoireSource > getActualJoueur().obtenirTerritoires().size() || noTerritoireSource <= 0){
+            // si'l y a un seul regiment dans territoireSource, il bouge pas(attaquer non, fortifier non)
+            if (getActualJoueur().obtenirTerritoires().get(noTerritoireSource - 1).getNombreUnites() == 1){
+                System.err.println("Ce régiment est le dernier à tenir le coup ici. Il ne peut être déplacé.");
+                continue;
+            }
+
+            if (noTerritoireSource > getActualJoueur().obtenirTerritoires().size() || noTerritoireSource <= 0) {
                 System.err.println("Veuillez choisir un numéro territoireSource de la liste");
             } else {
                 Territoire territoireSource = getActualJoueur().obtenirTerritoires().get(noTerritoireSource - 1);
@@ -450,10 +456,14 @@ public class Controler {
         while (true) {
             System.out.println("Veuillez choisir un numéro de territoireCible :");
             // afficher tous les territoires de joueur
-            for (int i = 0; i < listeTerritoires.size(); i++) {
+            for (int i = 0; i < getActualJoueur().obtenirTerritoires().size(); i++) {
                 int indexT = i + 1;
-                System.out.println(indexT + "." + listeTerritoires.get(i).getNom() +
-                        " : " + listeTerritoires.get(i).getNombreUnites());
+                if (getActualJoueur().obtenirTerritoires().get(i) == tS){
+                    continue;
+                } else {
+                    System.out.println(indexT + "." + getActualJoueur().obtenirTerritoires().get(i).getNom() +
+                            " : " + getActualJoueur().obtenirTerritoires().get(i).getNombreUnites());
+                }
             }
 
             System.out.println("Saisir un numéro de la liste : ");
