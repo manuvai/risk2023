@@ -42,7 +42,6 @@ public class Controler {
 
         Controler ctrl = new Controler();
 
-//        ctrl.startAttackPhase(ctrl.getActualJoueur());
         ctrl.initializePlateau();
         System.out.println("Démarrage de la partie");
         // TODO Initialiser
@@ -67,19 +66,21 @@ public class Controler {
 
     private void vainqueur(Joueur actualJoueur) {
         if (Objects.nonNull(actualJoueur)) {
-            System.out.println("Toutes nos félicitations ".concat(actualJoueur.getPrenom()).concat(" vous avez gagné"));
+            System.out.println("\nToutes nos félicitations ".concat(actualJoueur.getPrenom()).concat(" vous avez gagné\n"));
         }
     }
 
     private void afficherTourJoueur(Joueur actualJoueur) {
         if (Objects.nonNull(actualJoueur)) {
-            System.out.println(actualJoueur.getPrenom().concat(" c'est votre tour"));
+            System.out.println("\n".concat(actualJoueur.getPrenom()).concat(", c'est votre tour\n"));
         }
     }
 
     private void phaseRenforts() {
+        System.out.println("Vous allez procéder à la phase de renfort");
         int nbRenforts = getActualJoueur().calculerNbRenforts(plateau);
         distribuerRenforts(getActualJoueur(), nbRenforts);
+        System.out.println("Fin de la phase de renfort");
     }
 
     private void eliminerPerdants() {
@@ -91,8 +92,20 @@ public class Controler {
              }
         }
 
+        afficherPerdants(perdants);
+
         joueurs.removeAll(perdants);
     }
+
+        private void afficherPerdants(List<Joueur> perdants) {
+            List<String> nomPerdants = perdants.parallelStream()
+                    .map(Joueur::getPrenom)
+                    .collect(Collectors.toList());
+
+            if (!nomPerdants.isEmpty()) {
+                System.out.println("Joueurs éliminés :".concat(String.join(", ", nomPerdants)));
+            }
+        }
 
 
         /**
@@ -176,7 +189,8 @@ public class Controler {
      * @return
      */
     public int getNbJoueurs() {
-        System.out.print("Combien de joueurs jouents dans cette partie ? (1 à 5) : ");
+        System.out.println("Pour commencer une partie, vous devez définir le nombre de joueurs");
+        System.out.print("Combien de joueurs jouent dans cette partie ? (1 à 5) : ");
 
         int nbJoueurs = Integer.parseInt(scanner.nextLine());
 
@@ -185,6 +199,7 @@ public class Controler {
             nbJoueurs = Integer.parseInt(scanner.nextLine());
         }
 
+        System.out.println("Vous avez choisi d'initialiser une partie à ".concat(Integer.toString(nbJoueurs)).concat(" joueurs."));
         return nbJoueurs;
     }
 
@@ -201,13 +216,12 @@ public class Controler {
             return new ArrayList<>();
         }
 
+        System.out.println("\nVous devez maintenant procéder à l'initialisation des joueurs.\n");
         List<Joueur> joueurs = new ArrayList<>();
         for (int i = 0; i < nbJoueurs; i++) {
             Joueur joueur = new Joueur();
-//            String nomJoueur = saisieNomJoueur(i);
             String prenomJoueur = saisiePrenomJoueur(i);
 
-//            joueur.setNom(nomJoueur);
             joueur.setPrenom(prenomJoueur);
             joueurs.add(joueur);
             joueur.setArmee(new Armee("Couleur ".concat(Integer.toString(i + 1))));
@@ -258,12 +272,13 @@ public class Controler {
          *Si le joueur actuel est le dernier de la liste, la méthode revient au premier joueur.
          */
     public void passerAuJoueurSuivant() {
+
+        System.out.println("\nFin du tour de ".concat(getActualJoueur().getPrenom()).concat("\n"));
         int currentIndex = joueurs.indexOf(actualJoueur);
-        if (currentIndex < joueurs.size() - 1) {
-            actualJoueur = joueurs.get(currentIndex + 1);
-        } else {
-            actualJoueur = joueurs.get(0); // Retourner au permier joueur
-        }
+
+        actualJoueur = joueurs.get((currentIndex + 1) % joueurs.size());
+
+        System.out.println("\nDébut du tour de ".concat(getActualJoueur().getPrenom()).concat("\n"));
     }
 
 
@@ -280,7 +295,15 @@ public class Controler {
 
     public void initializePlateau() throws Exception {
         plateau = new Plateau();
+        System.out.println("  _____  _     _      ___   ___ ___  ____  \n" +
+                " |  __ \\(_)   | |    |__ \\ / _ \\__ \\|___ \\ \n" +
+                " | |__) |_ ___| | __    ) | | | | ) | __) |\n" +
+                " |  _  /| / __| |/ /   / /| | | |/ / |__ < \n" +
+                " | | \\ \\| \\__ \\   <   / /_| |_| / /_ ___) |\n" +
+                " |_|  \\_\\_|___/_|\\_\\ |____|\\___/____|____/ \n" +
+                "                                           \n");
 
+        System.out.println("Bienvenue au jeu du Risk\n");
         int nbJoueurs = getNbJoueurs();
         List<Joueur> joueurs = initialiserJoueurs(nbJoueurs);
 
@@ -288,28 +311,8 @@ public class Controler {
         this.joueurs = joueurs;
         this.actualJoueur = joueurs.get(0);
 
-
-        // Ajouter Cartes
-//        List<CarteRisk> cartes = new ArrayList<CarteRisk>();
-//        pl.initialisationCarte(cartes);
-
-        // Ajouter Cartes
-
         plateau.distribuerCartes(joueurs); // Distribuer les cartes aux joueurs
-//        plateau.distribuerCartesAuxTerritoires(); // Distribuer les cartes aux territoires
         plateau.initialiserParties();
-
-
-//        for (Joueur j : joueurs){
-//            System.out.println(j.obtenirTerritoires());
-//        }
-
-
-//        for (Continent c: pl.getContinents()){
-//            for (Territoire t : c.getTerritories()){
-//                System.out.println(t.getNombreUnites());
-//            }
-//        }
 
     }
 
@@ -331,6 +334,7 @@ public class Controler {
      * @throws Exception Lorsque le joueur entre une option invalide.
      */
     public void phaseFortification() throws Exception {
+        System.out.println("\nVous allez maintenant procéder à la fortification\n");
         // 1.Demander joueur -> Fortification ?
         while (true) {
             int resJ = demanderFortification();
@@ -342,7 +346,7 @@ public class Controler {
             // 2.Commencer Fortification
             if (resJ == 1) {
                 Territoire tS = demanderTerritoireSource();
-                Territoire tC = demanderTerritoireCible(getActualJoueur(), tS);
+                Territoire tC = demanderTerritoireCiblePossede(getActualJoueur(), tS);
                 System.out.println(tS.getNombreUnites());
                 System.out.println(tC.getNombreUnites());
                 int nbRegiment = demanderNbRegimentDeplace(tS);
@@ -355,6 +359,8 @@ public class Controler {
                 break;
             }
         }
+        System.out.println("\nFin de la phase de fortification\n");
+
     }
 
     /**
@@ -426,35 +432,51 @@ public class Controler {
     }
 
     /**
-     * Demande au joueur de sélectionner un territoire cible pour la phase de fortification.
+     * Demande au joueur de sélectionner un territoire cible pour la phase d'attaque.
      *
      * @return Le territoire cible sélectionné par le joueur.
      */
     public Territoire demanderTerritoireCible(Joueur attaquant, Territoire tS) {
+        return demanderTerritoireCible(tS, getTerritoiresToAttack(attaquant, tS));
+    }
+
+    /**
+     * Demande au joueur de sélectionner un territoire cible pour la phase de fortification.
+     *
+     * @param joueur
+     * @param tS
+     * @return Le territoire cible sélectionné par le joueur.
+     */
+    public Territoire demanderTerritoireCiblePossede(Joueur joueur, Territoire tS) {
+        return demanderTerritoireCible(tS, joueur.obtenirTerritoires());
+    }
+
+    public Territoire demanderTerritoireCible(Territoire tS, List<Territoire> listeTerritoires) {
         while (true) {
-            Scanner sc = new Scanner(System.in);
             System.out.println("Veuillez choisir un numéro de territoireCible :");
             // afficher tous les territoires de joueur
-            for (int i = 0; i < getTerritoiresToAttack(attaquant, tS).size(); i++) {
+            for (int i = 0; i < listeTerritoires.size(); i++) {
                 int indexT = i + 1;
-                System.out.println(indexT + "." + getTerritoiresToAttack(attaquant, tS).get(i).getNom() +
-                        " : " + getTerritoiresToAttack(attaquant, tS).get(i).getNombreUnites());
+                System.out.println(indexT + "." + listeTerritoires.get(i).getNom() +
+                        " : " + listeTerritoires.get(i).getNombreUnites());
             }
 
             System.out.println("Saisir un numéro de la liste : ");
             int noTerritoireCible = this.scanner.nextInt();
 
-            if (noTerritoireCible > getTerritoiresToAttack(attaquant, tS).size() || noTerritoireCible <= 0
-                    || noTerritoireCible == getTerritoiresToAttack(attaquant, tS).indexOf(tS) + 1
+            if (noTerritoireCible > listeTerritoires.size() || noTerritoireCible <= 0
+                    || noTerritoireCible == listeTerritoires.indexOf(tS) + 1
             ){
                 System.err.println("Veuillez sélectionner un numéro territoireCible de la liste");
             } else {
-                Territoire territoireCible = getTerritoiresToAttack(attaquant, tS).get(noTerritoireCible - 1);
+                Territoire territoireCible = listeTerritoires.get(noTerritoireCible - 1);
                 System.out.println("Vous avez choisi un territoireCible : " + territoireCible.getNom());
                 return territoireCible;
             }
         }
     }
+
+
 
 
     /**
@@ -507,7 +529,7 @@ public class Controler {
          * @throws Exception Si une erreur survient pendant la phase d'attaque, une exception est levée.
          */
     public void startAttackPhase()throws Exception {
-        Controler ctrl = new Controler();
+        System.out.println("\nVous allez maintenant procéder à la phase d'attaque\n");
         Joueur  attaquant = joueurs.get(0);
         // 1.Demander joueur -> Fortification ?
         while (true) {
@@ -580,6 +602,7 @@ public class Controler {
             }
         }
 
+        System.out.println("\nFin de la phase d'attaque");
     }
 
 
