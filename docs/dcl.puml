@@ -1,0 +1,160 @@
+@startuml
+
+!includeurl https://raw.githubusercontent.com/manuvai/plantuml-utils/master/class_diagram_utils.puml
+
+class Armee {
+    - string(couleur)
+
+    +void("ajouterPion(Pion)")
+    +string("getCouleur()")
+    +list("Pion", "getPions()")
+    +void("retirerPion(Pion) ") 
+}
+
+Armee o-- Pion : list(Pion, "pions") 
+
+class De {
+    - int("valeur")
+    - {static} int(MAX_VALEUR)
+    - {static} int(MIN_VALEUR)
+
+    +int("recupererValeur()")
+    +void("lancerDe()")
+    +void("setValeur(int)")
+}
+
+class Pion { 
+    - string(nomPion)
+
+    +string("getNomPion()")
+    +member(TypePion, "getTypePion()")
+    +int("obtenirNbRegiment()") 
+    +boolean("equals(Object )")
+    +int("hashCode()") 
+}
+
+Pion -- TypePion : member(TypePion, typePion)
+
+enum TypePion { 
+    CAVALERIE
+    INFANTERIE
+    ARTILLERIE
+
+    +int("compare(TypePion , TypePion )  ")
+}
+
+class Deploiement  {
+
+    - int("qtéDéployée")
+
+    +int("getQtéDéployée() ")
+    +member(Pion, "getPionRattachee()")
+    +void("ajouterQuantites(int)")
+    +void("retirerQuantites(int)")
+}
+
+Deploiement -- Pion : member(Pion, pionRattachee)
+
+class Territoire {
+
+    - string(nom) 
+
+    +string("getNom()")
+    +int("getNombreUnites()")
+    +list("Territoire", "getVoisins()")
+    +void("setVoisins(List<Territoire>)")
+    +boolean("estVoisin(Territoire)")
+    +void("ajouterRegiment(Pion,int)")
+    +void("retirerRegiment(Pion,int)")
+    +list("Déploiement", "retirerRegiment(int):")
+    +int("getNombreUnites(List<Déploiement>)")
+    +boolean("equals(Object )")
+    +int("hashCode()") 
+}
+
+Territoire -- Deploiement : list("Déploiement", "unitésDéployées")
+Territoire o-- Territoire : list(Territoire, "voisins")
+
+class Continent { 
+    - string(nomCtint)
+    - int("bonusRenforts")
+    +list("Territoire", "getTerritories()")
+    +int("getBonusTerritories()")
+    +void("addTerritoire(Territoire)")
+}
+
+Continent -d- Territoire : list(Territoire, "territoires")
+
+class Plateau {
+
+    +void("initialiserParties()")
+    +void("initialisationRegiment()")
+    +int("placementAuto(int)")
+    +void("initialisationCarte(ArrayList<CarteRisk>)") 
+    +list(CarteRisk, "creerCartes()")
+    +void("distribuerCartes(List<Joueur>)")
+    +void("distribuerCartesAuxTerritoires()")
+    +getProprietaire(Territoire):Joueur
+    +list(Continent, "getContinents()")
+    +list(CarteRisk, "getCartesPille()")
+    +list(Joueur, "getJoueurs()")
+    +void("setJoueurs(List<Joueur>)")
+    +void("enleverJoueur(Joueur)")
+    +void("ajouterCarte(List<CarteRisk>)")
+    +list(Territoire, "getTerritoires()")
+}
+
+Plateau *-l- Continent : list("Continent", continents)
+Plateau *-- Joueur : list("Joueur", joueurs)
+Plateau *-- CarteRisk : list("CarteRisk", cartesPille)
+
+
+class CarteRisk {
+
+    +member(TypePion, "getTypePion()")
+    +member(Territoire, "getTerritoire()")
+}
+
+CarteRisk -- TypePion : member(TypePion, typePion) 
+CarteRisk -- Territoire : member(Territoire, territoire)
+
+
+class Joker extends CarteRisk
+
+
+class Joueur {
+    -string(nom) 
+    -string(prenom) 
+    -list(Pion, pionsAPlacer)
+
+    +string("getNom()")
+    +string("getPrenom()")
+    +member(Armee, "getArmee()")
+    +list(CarteRisk, "getCartes()")
+    +list(De, "lancerDes(int)")
+    +int("calculerNbRenforts(Plateau)")
+    +obtenirTerritoires(): List<Territoire>
+    +void("ajouterCarte(CarteRisk)")
+    +list(Continent, "determinerContinentsComplets(Plateau)")
+    +int("echangerCartes(List<CarteRisk>)")
+    +void("deplacerRegiment(Territoire, Territoire ,int)")
+    +void("ajouterTerritoire(Territoire)")
+    +int("getNbRegimentGained(List<CarteRisk>)")
+    +boolean("isPossessed(Territoire)")
+    +int("getRenfortsParContinents(Plateau)")
+    +void("setArmee(Armee)")
+    +void("retirerTerritoire(Territoire)")
+    +void("enleverCartes(List<CarteRisk>)")
+    +void("setNom(String)")
+    +void("setPrenom(String)")
+    +list(Pion, "getPionsAPlacer()") 
+    +void("addPionsAPlacer(Pion)") 
+    +void("supprPionsAPlacer(int)")  
+    +void("clearPionsAPlacer()")
+} 
+Joueur -- Armee : member(Armee, armee)
+
+Joueur -l- Territoire : list("Territoire", territoires)
+Joueur -- CarteRisk : list("CarteRisk", cartes)
+
+@enduml
