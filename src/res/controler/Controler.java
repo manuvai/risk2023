@@ -329,7 +329,7 @@ public class Controler {
         this.joueurs = joueurs;
     }
 
-
+    //---------------------------------------------------------------------------------
     // Phase Fortification
     /**
      * Effectue la phase de fortification, permettant aux joueurs de déplacer des régiment pour renforcer leurs territoires.
@@ -434,14 +434,6 @@ public class Controler {
         }
     }
 
-    /**
-     * Demande au joueur de sélectionner un territoire cible pour la phase d'attaque.
-     *
-     * @return Le territoire cible sélectionné par le joueur.
-     */
-    public Territoire demanderTerritoireCible(Joueur attaquant, Territoire tS) {
-        return demanderTerritoireCible(tS, getTerritoiresToAttack(attaquant, tS));
-    }
 
     /**
      * Demande au joueur de sélectionner un territoire cible pour la phase de fortification.
@@ -522,9 +514,9 @@ public class Controler {
             int nombreRegiment) {
         getActualJoueur().deplacerRegiment(territoireSource, territoireCible, nombreRegiment);
     }
-    
-    //Phase d'attaque 
 
+    //---------------------------------------------------------------------------------
+    //Phase d'attaque 
 
         /**
          * Démarre la phase d'attaque du jeu. Cette méthode gère les actions associées à la phase d'attaque, y compris la sélection
@@ -532,7 +524,6 @@ public class Controler {
          *
          * @throws Exception Si une erreur survient pendant la phase d'attaque, une exception est levée.
          */
-
 
         public void startAttackPhase() throws Exception {
             Joueur attaquant = getActualJoueur();
