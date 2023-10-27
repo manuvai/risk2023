@@ -2,7 +2,7 @@
 
 hide footbox
 participant "Controler" as ctrl
-actor "Joueur" as user
+participant "Joueur" as user
 
 
 alt Si le joueur veut fortifier un territoire

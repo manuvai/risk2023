@@ -2,60 +2,31 @@
 hide footbox
 
 participant "Controler" as ctrl
-actor "Joueur" as user
+participant "Joueur" as user
 
-alt Si le joueur veut attaquer
-    loop Tant que le joueur peut mener une attaque
-        ctrl -> user ++: obtenirTerritoires()
-        return List<Territoire>
+alt Si le joueur veut lancer une attaque
+    
+    ctrl -> user++ : demanderTerritoireSource()
+    return
+    ctrl -> ctrl: choisirTerritoireSource()
+    ctrl -> user++ : demanderTerritoireCiblePourAttaquer(attaquant,tS)
+    return
+    ctrl -> ctrl: choisirTerrioireCible()
+    ctrl -> user++ : demanderNbDesAttaque(tS)()
+    return
+    ctrl -> ctrl: choisirNbDesAttaque()
+    ctrl -> user++ :lancerDes(desAttaque)
+    return
+    user -> ctrl : List<Dé> attaquant et défenseur 
+    return
+    ctrl -> user++ : resolveAttack(resultatsAttaque, desAttaque)
+    return
 
-        ctrl -> ctrl : choisirTerritoirePourAttaque()
-        note right
-            Afficher une liste de 
-            proposition des territoires pour lancer l'attaque
-            et saisir le choix d'utilisateur
-        end note
 
-        ctrl -> user ++: getTerritoire(int)
-        return Territoire
+    alt si l'attaquant à réussi l'attaque
 
-        ctrl -> ctrl : choisirNbDés()
-        note right
-            Demander à l'utilisateur le nombre de dés
-        end note
-
-        ctrl -> user++ : lancerDés(int)
-        return List<Dé>
-
-        ctrl -> ctrl : Lancer les dés de la défense adverse
-        note right
-            Il faudra penser à obtenir le nombre de 
-            dés que le joueur adverse peut jeter
-        end note
-
-        ctrl -> ctrl : Déterminer les troupes restantes
-        note left
-            /!\ Attention, la détermination de la victoire 
-            entre deux dés n'est pas faite
-        end note
-
-        alt L'attaquant a réussi l'attaque
-            ctrl -> ctrl : retirerTerritoireAdversaire()
-            note right
-                Retire le territoire du défenseur
-            end note
-
-            ctrl -> user ++: ajouterTerritoire(Territoire)
-            return
-
-            ctrl -> ctrl : choisirNombreTroupesDeplacement()
-            note right
-                Demander la saisie du nombre 
-                de troupes à déplacer
-            end note
-            ctrl -> user ++: deplacerRegiment(\n\tTerritoireSource, \n\tTerritoireCible, \n\tnombreRégiments)
-            return
-
-        end
+        ctrl -> user++ :demanderNbRegimentDeplace(tS, tC)
+        return
+        ctrl -> ctrl:choisrNbRegimentDeplace()
     end
 end
