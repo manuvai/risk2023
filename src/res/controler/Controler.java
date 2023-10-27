@@ -80,6 +80,7 @@ public class Controler {
         System.out.println("Vous allez procéder à la phase de renfort");
         int nbRenforts = getActualJoueur().calculerNbRenforts(plateau);
         distribuerRenforts(getActualJoueur(), nbRenforts);
+        placerRenforts(getActualJoueur());
         System.out.println("Fin de la phase de renfort");
     }
 
