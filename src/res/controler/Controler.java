@@ -60,7 +60,7 @@ public class Controler {
         System.out.println("Fin de la partie");
 
         // TODO Décommenter la partie du bas lors de tests
-        // testGauthier(ctrl);
+        testGauthier(ctrl);
 
     }
 
@@ -1010,10 +1010,10 @@ public class Controler {
 		int i = 0;
 		for (Territoire territoires : j1.obtenirTerritoires()) {
 			//Si on a atteint le dernier territoire et qu'il reste des pions à placer, alors on les met tous dans le dernier territoire
-			if (i>=j1.obtenirTerritoires().size()-1 || j1.getPionsAPlacer().size()>0) {
-				System.out.println("Ayant atteint votre dernier territoire ("+j1.obtenirTerritoires().get(i).getNom()+"), nous y plaçons tous vos régiments bonus");
+			if (i>=j1.obtenirTerritoires().size()-1 && j1.getPionsAPlacer().size()>0) {
+				System.out.println("Ayant atteint votre dernier territoire ("+j1.obtenirTerritoires().get(j1.obtenirTerritoires().size()-1).getNom()+"), nous y plaçons tous vos régiments bonus");
 				for (Pion pion: j1.getPionsAPlacer()) {
-					j1.obtenirTerritoires().get(i).ajouterRegiment(pion, 1);
+					j1.obtenirTerritoires().get(j1.obtenirTerritoires().size()-1).ajouterRegiment(pion, 1);
 				}
 				j1.clearPionsAPlacer();
 				
@@ -1048,8 +1048,11 @@ public class Controler {
 					
 				} else {
 					//Si on n'a plus de pions à placer, on sort de la boucle
-					System.out.println("Plus de pions à placer");
-					i=j1.obtenirTerritoires().size()-1;
+					if (i<j1.obtenirTerritoires().size()-1) {
+						System.out.println("Plus de pions à placer");
+						
+						i=j1.obtenirTerritoires().size()-1;
+					}
 				}
 			}
 			
