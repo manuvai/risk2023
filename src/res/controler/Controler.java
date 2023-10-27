@@ -46,10 +46,10 @@ public class Controler {
         System.out.println("Démarrage de la partie");
         // TODO Initialiser
         while (ctrl.getJoueurs().size() > 1) {
-            ctrl.afficherTourJoueur(ctrl.getActualJoueur());
+           ctrl.afficherTourJoueur(ctrl.getActualJoueur());
 
-            ctrl.phaseRenforts();
-            ctrl.startAttackPhase();
+           ctrl.phaseRenforts();
+           ctrl.startAttackPhase();
             ctrl.phaseFortification();
 
             ctrl.eliminerPerdants();
@@ -349,7 +349,7 @@ public class Controler {
                 Territoire tC = demanderTerritoireCiblePossede(getActualJoueur(), tS);
                 System.out.println(tS.getNombreUnites());
                 System.out.println(tC.getNombreUnites());
-                int nbRegiment = demanderNbRegimentDeplace(tS);
+                int nbRegiment = demanderNbRegimentDeplace(tS,tC);
                 deplacerRegiment(tS, tC, nbRegiment);
                 System.out.println(tS.getNombreUnites());
                 System.out.println(tC.getNombreUnites());
@@ -485,11 +485,11 @@ public class Controler {
      * @param tS Le territoire source depuis lequel le joueur souhaite déplacer des régiments.
      * @return Le nombre de régiments à déplacer, saisi par le joueur.
      */
-    public int demanderNbRegimentDeplace(Territoire tS) {
+    public int demanderNbRegimentDeplace(Territoire tS,Territoire tC) {
         while (true) {
             System.out.println("Vous avez " + tS.getNombreUnites() + " regiments dans " + tS.getNom() + " !");
             System.out.println("Vous pouvez deplacer  " + (tS.getNombreUnites() - 1) + " régiments");
-            System.out.println("Veuillez choisir un nombre de régiment pour le déplacer dans : "+ tS.getNom());
+            System.out.println("Veuillez choisir un nombre de régiment pour le déplacer dans "+ tC.getNom());
             int nbRegiment = this.scanner.nextInt();
 
             if (nbRegiment > (tS.getNombreUnites() - 1)) {
@@ -497,7 +497,7 @@ public class Controler {
             } else if (nbRegiment < 0) {
                 System.err.println("nombre de regiment ne peut pas etre moins de 0");
             } else {
-                System.out.println("Vous avez déplacé " + nbRegiment + " régiment(s) de " + tS.getNom());
+                System.out.println("Vous avez déplacé " + nbRegiment + " régiment(s) de " + tC.getNom());
                 return nbRegiment;
             }
         }
@@ -599,7 +599,7 @@ public class Controler {
                     } else {
                         System.out.println("Attaque échouée. Le territoire est toujours aux mains du défenseur.");
                     }
-                    int nbRegiment = demanderNbRegimentDeplace(tS);
+                    int nbRegiment = demanderNbRegimentDeplace(tS, tC);
 //                deplacerRegiment(tS, tC, nbRegiment);
 //                System.out.println(tS.getNombreUnites());
 //                System.out.println(tC.getNombreUnites());
