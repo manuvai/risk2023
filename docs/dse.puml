@@ -1,5 +1,15 @@
 @startuml
 
-!include inc/tour.puml
+hide footbox
+participant "Joueur" as user
+participant "Controler" as ctrl
+ref over user, ctrl
+    Initialisation du plateau et des joueurs
+end ref
 
+loop Tant qu'il n'y a pas de vainqueur
+    
+    !include inc/tour.puml
+
+end 
 @enduml
