@@ -21,6 +21,7 @@ public class Joueur {
 
     private List<Territoire> territoires = new ArrayList<>();
     private List<CarteRisk> cartes = new ArrayList<>();
+    private List<Pion>pionsAPlacer = new ArrayList<Pion>();
 
 //    public Joueur(String nom, String prenom){
 //        this.nom = nom;
@@ -282,4 +283,21 @@ public class Joueur {
     public void setPrenom(String prenomJoueur) {
         prenom = prenomJoueur;
     }
+    
+    public List<Pion> getPionsAPlacer(){
+    	return pionsAPlacer;
+    }
+
+	public void addPionsAPlacer(Pion pion) {
+		pionsAPlacer.add(pion);
+		
+	}
+	
+	public void supprPionsAPlacer(int x) {
+		pionsAPlacer.remove(x);
+	}
+	
+	public void clearPionsAPlacer() {
+		pionsAPlacer.clear();
+	}
 }
