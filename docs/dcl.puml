@@ -125,6 +125,7 @@ class Joker extends CarteRisk
 class Joueur {
     -string(nom) 
     -string(prenom) 
+    -list(Pion, pionsAPlacer)
 
     +string("getNom()")
     +string("getPrenom()")
@@ -146,6 +147,10 @@ class Joueur {
     +void("enleverCartes(List<CarteRisk>)")
     +void("setNom(String)")
     +void("setPrenom(String)")
+    +list(Pion, "getPionsAPlacer()") 
+    +void("addPionsAPlacer(Pion)") 
+    +void("supprPionsAPlacer(int)")  
+    +void("clearPionsAPlacer()")
 } 
 Joueur -- Armee : member(Armee, armee)
 
