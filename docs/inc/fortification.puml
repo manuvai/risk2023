@@ -1,0 +1,21 @@
+
+
+hide footbox
+participant "Controler" as ctrl
+actor "Joueur" as user
+
+
+alt Si le joueur veut fortifier un territoire
+    ctrl -> user ++: obtenirTerritoires()
+    return List<Territoire>
+
+    ctrl -> ctrl : Afficher une proposition des territoires
+
+    ctrl -> ctrl : choixTerritoireSource()
+    ctrl -> ctrl : choixTerritoireCible()
+    ctrl -> ctrl : choixNbRegiments()
+
+    ctrl -> user++ : déplacerRégiment(\n\tTerritoireSource, \n\tTerritoireCible, \n\tnombreRégiments)
+    return
+
+end
