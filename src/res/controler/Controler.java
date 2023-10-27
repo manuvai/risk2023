@@ -591,9 +591,9 @@ public class Controler {
                         //attaquant.ajouterTerritoire(tC);
 
                         // Demander la saisie du nombre de troupes à déplacer
-                        System.out.print("Saisissez le nombre de troupes à déplacer : ");
-                        int troupesADeplacer = scanner.nextInt();
-                        scanner.nextLine(); // Nettoyer la nouvelle ligne.
+                        //System.out.print("Saisissez le nombre de troupes à déplacer : ");
+                        //int troupesADeplacer = scanner.nextInt();
+                       // scanner.nextLine(); // Nettoyer la nouvelle ligne.
                         // Déplacer les régiments
                         //attaquant.deplacerRegiment(tS, tC, troupesADeplacer);
                     } else {
@@ -614,7 +614,7 @@ public class Controler {
 
         private int demanderNbDesAttaque(Territoire tS){
             while (true){
-                System.out.println("Vous avez " + tS.getNombreUnites() + "régiments ");
+                System.out.println("Vous avez " + tS.getNombreUnites() + " régiments ");
                 if (tS.getNombreUnites() == 2){
                     System.out.println("Pour 2 régiments vous pouvez lancer 1 dès");
                     int desAttaque = 1;
