@@ -329,7 +329,7 @@ public class Controler {
         this.joueurs = joueurs;
     }
 
-
+    //---------------------------------------------------------------------------------
     // Phase Fortification
     /**
      * Effectue la phase de fortification, permettant aux joueurs de déplacer des régiment pour renforcer leurs territoires.
@@ -434,14 +434,6 @@ public class Controler {
         }
     }
 
-    /**
-     * Demande au joueur de sélectionner un territoire cible pour la phase d'attaque.
-     *
-     * @return Le territoire cible sélectionné par le joueur.
-     */
-    public Territoire demanderTerritoireCible(Joueur attaquant, Territoire tS) {
-        return demanderTerritoireCible(tS, getTerritoiresToAttack(attaquant, tS));
-    }
 
     /**
      * Demande au joueur de sélectionner un territoire cible pour la phase de fortification.
@@ -481,13 +473,14 @@ public class Controler {
 
 
 
-
-    /**
-     * Demande au joueur de saisir le nombre de régiments à déplacer depuis le territoire source donné.
-     *
-     * @param tS Le territoire source depuis lequel le joueur souhaite déplacer des régiments.
-     * @return Le nombre de régiments à déplacer, saisi par le joueur.
-     */
+        /**
+         * Cette méthode permet de demander à l'utilisateur de choisir combien de régiments il souhaite déplacer d'un territoire source (tS) vers un territoire cible (tC).
+         * Le nombre de régiments déplacés ne peut pas être supérieur au nombre total de régiments dans le territoire source, et il doit être au moins de 0.
+         *
+         * @param tS Le territoire source à partir duquel les régiments seront déplacés.
+         * @param tC Le territoire cible vers lequel les régiments seront déplacés.
+         * @return Le nombre de régiments que l'utilisateur souhaite déplacer.
+         */
     public int demanderNbRegimentDeplace(Territoire tS,Territoire tC) {
         while (true) {
             System.out.println("Vous avez " + tS.getNombreUnites() + " regiments dans " + tS.getNom() + " !");
@@ -521,9 +514,9 @@ public class Controler {
             int nombreRegiment) {
         getActualJoueur().deplacerRegiment(territoireSource, territoireCible, nombreRegiment);
     }
-    
-    //Phase d'attaque 
 
+    //---------------------------------------------------------------------------------
+    //Phase d'attaque 
 
         /**
          * Démarre la phase d'attaque du jeu. Cette méthode gère les actions associées à la phase d'attaque, y compris la sélection
@@ -531,7 +524,6 @@ public class Controler {
          *
          * @throws Exception Si une erreur survient pendant la phase d'attaque, une exception est levée.
          */
-
 
         public void startAttackPhase() throws Exception {
             Joueur attaquant = getActualJoueur();
