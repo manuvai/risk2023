@@ -2,6 +2,9 @@ package res.model;
 
 /**
  * Représente une carte Joker dans le jeu Risk, qui est une sous-classe de {@link CarteRisk}.
+ *
+ * @author Yifan SHI
+ * @since 21/10/23
  */
 
 public class Joker extends CarteRisk {
